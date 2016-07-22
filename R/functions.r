@@ -557,12 +557,12 @@ LBSPRfit_ <- function(yr=1, LB_pars=NULL, LB_lengths=NULL, Control=list(), pen=T
 	LMids <- SingYear@LMids
     LBins <- seq(from=LMids[1]-0.5*By, by=By, length.out=length(SingYear@LMids)+1)
 	LDat <- SingYear@LData
-	if (LBins[1] !=0) {
+	if (LBins[1] !=0 & (LBins[1] -By) > 0) {
 	  fstBins <- seq(from=0, by=By, to=LBins[1]-By)
 	  fstMids <- seq(from=0.5*By, by=By, to=LMids[1]-By)
 	  ZeroDat <- rep(0, length(fstMids))
 	  LMids <- c(fstMids, LMids)
-	  LBins <- c(fstMids, LBins)
+	  LBins <- c(fstBins, LBins)
 	  LDat <- c(ZeroDat, LDat)
 	}
     SDLinf <- LB_pars@CVLinf * LB_pars@Linf
