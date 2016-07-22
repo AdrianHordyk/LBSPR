@@ -132,7 +132,7 @@ LBSPRsim_ <- function(LB_pars=NULL, Control=list(), msg=TRUE, doCheck=TRUE) {
   LMids <- seq(from=LBins[1] + 0.5*BinWidth, by=BinWidth, length.out=length(LBins)-1)
 
   By <- BinWidth
-  if (MinL > 0) { # the simulation model must start from 0 size class
+  if (MinL > 0 & (MinL-By) > 0) { # the simulation model must start from 0 size class
 	  fstBins <- rev(seq(from=MinL-By, to=0, by=-By))
 	  LBins <- c(fstBins, LBins)
 	  LMids <- seq(from=LBins[1] + 0.5*BinWidth, by=BinWidth, length.out=length(LBins)-1)
