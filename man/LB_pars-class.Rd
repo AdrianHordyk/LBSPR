@@ -12,40 +12,40 @@ An S4 class containing life history and other parameters
 \describe{
 \item{\code{Species}}{Character vector of species name}
 
-\item{\code{MK}}{A length-one numeric vector}
+\item{\code{MK}}{A length-one numeric vector for M/K ratio}
 
-\item{\code{Linf}}{A length-one numeric vector}
+\item{\code{Linf}}{A length-one numeric vector for Linf}
 
-\item{\code{CVLinf}}{A length-one numeric vector}
+\item{\code{CVLinf}}{A length-one numeric vector for CV of length-at-age}
 
-\item{\code{L50}}{A length-one numeric vector}
+\item{\code{L50}}{A length-one numeric vector for length at 50\% maturity}
 
-\item{\code{L95}}{A length-one numeric vector}
+\item{\code{L95}}{A length-one numeric vector for length at 95\% maturity}
 
-\item{\code{Walpha}}{A length-one numeric vector}
+\item{\code{Walpha}}{A length-one numeric vector for alpha parameter of length-weight relationship}
 
-\item{\code{Wbeta}}{A length-one numeric vector}
+\item{\code{Wbeta}}{A length-one numeric vector for beta parameter of length-weight relationship}
 
-\item{\code{FecB}}{A length-one numeric vector}
+\item{\code{FecB}}{A length-one numeric vector for beta parameter of length-fecundity relationship}
 
-\item{\code{Steepness}}{A length-one numeric vector}
+\item{\code{Steepness}}{A length-one numeric vector for steepness of SRR}
 
-\item{\code{Mpow}}{A length-one numeric vector}
+\item{\code{Mpow}}{A length-one numeric vector for M at length}
 
-\item{\code{R0}}{A length-one numeric vector}
+\item{\code{R0}}{A length-one numeric vector for initial number of recruits (1 for per-recruit)}
 
-\item{\code{SL50}}{A length-one numeric vector}
+\item{\code{SL50}}{A length-one numeric vector for length at 50\% selectivity}
 
-\item{\code{SL95}}{A length-one numeric vector}
+\item{\code{SL95}}{A length-one numeric vector for length at 95\% selectivity}
 
-\item{\code{FM}}{A length-one numeric vector}
+\item{\code{FM}}{A length-one numeric vector for F/M ratio (note this is apical F)}
 
-\item{\code{SPR}}{A length-one numeric vector}
+\item{\code{SPR}}{A length-one numeric vector for SPR}
 
-\item{\code{BinMin}}{A length-one numeric vector}
+\item{\code{BinMin}}{A length-one numeric vector for minimum length bin}
 
-\item{\code{BinMax}}{A length-one numeric vector}
+\item{\code{BinMax}}{A length-one numeric vector for maximum length bin}
 
-\item{\code{BinWidth}}{A length-one numeric vector}
+\item{\code{BinWidth}}{A length-one numeric vector for width of length bins}
 }}
 

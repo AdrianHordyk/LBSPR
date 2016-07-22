@@ -10,14 +10,14 @@ An S4 class containing length data
 \section{Slots}{
 
 \describe{
-\item{\code{LMids}}{Character vector of species name}
+\item{\code{LMids}}{A numeric vector containing the mid-points of the length bins}
 
-\item{\code{LData}}{A length-one numeric vector}
+\item{\code{LData}}{A numeric matrix containing length data}
 
-\item{\code{Years}}{Character vector of species name}
+\item{\code{Years}}{A numeric vector containing the year indices}
 
-\item{\code{NYears}}{A length-one numeric vector}
+\item{\code{NYears}}{A length-one numeric vector for number of years}
 
-\item{\code{Elog}}{A length-one numeric vector}
+\item{\code{Elog}}{A error log}
 }}
 

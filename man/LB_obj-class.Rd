@@ -10,20 +10,20 @@ An S4 class containing all parameters for the LBSPR model
 \section{Slots}{
 
 \describe{
-\item{\code{SPR}}{Character vector of species name}
+\item{\code{SPR}}{The Spawning Potential Ratio}
 
-\item{\code{Yield}}{A length-one numeric vector}
+\item{\code{Yield}}{Relative yield}
 
-\item{\code{LMids}}{Character vector of species name}
+\item{\code{LMids}}{A numeric vector containing the mid-points of the length bins}
 
-\item{\code{pLCatch}}{A length-one numeric vector}
+\item{\code{pLCatch}}{A numeric vector containg expected proportion for each length class in the catch}
 
-\item{\code{pLPop}}{A length-one numeric vector}
+\item{\code{pLPop}}{A numeric vector containg expected proportion for each length class in the population}
 
-\item{\code{Ests}}{A length-one numeric vector}
+\item{\code{Ests}}{A matrix of estimated values}
 
-\item{\code{NLL}}{A length-one numeric vector}
+\item{\code{NLL}}{A numeric NLL values}
 
-\item{\code{maxFM}}{A length-one numeric vector}
+\item{\code{maxFM}}{A numeric of maximum estimated F/M value (note this is apical F)}
 }}
 

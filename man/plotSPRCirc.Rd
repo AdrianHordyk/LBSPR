@@ -21,7 +21,7 @@ plotSPRCirc(LB_obj = NULL, SPRTarg = 0.4, SPRLim = 0.2,
 \item{Leg}{include the legend?}
 }
 \description{
-A function that creates a circle plot showing the estimated SPR relative to the 
+A function that creates a circle plot showing the estimated SPR relative to the
 target and limit reference points
 }
 \author{

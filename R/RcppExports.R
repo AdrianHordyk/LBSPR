@@ -3,20 +3,20 @@
 
 #' LBSPR Optimization function for GTG model
 #'
-#' Internal optimization function 
+#' Internal optimization function
 #'
-#' @param starts a
-#' @param LMids a 
-#' @param LBins a
-#' @param LDat a 
-#' @param gtgLinfs a
-#' @param MKMat a
-#' @param MK a
-#' @param Linf a
-#' @param ngtg a
-#' @param recP a
-#' @param usePen a
-#' @return negative log-likelihood value 
+#' @param starts a vector of starting parameters, relative SL50 (SL50/Linf), deltaSL (SL95-SL50)/Linf, and F/M (in log space)
+#' @param LMids a vector of the midpoints of the length classes
+#' @param LBins a vector of length classes
+#' @param LDat a vector of lenght frequencies. Must be same length as LMids
+#' @param gtgLinfs a vector of Linfs for the growth-type-groups
+#' @param MKMat a matrix of M/K for each GTG and length-class
+#' @param MK the M/K value
+#' @param Linf the Linf value for the population as a hole
+#' @param ngtg the number of growth-type-groups
+#' @param recP a vector of recruitment by GTG
+#' @param usePen logical to use penalty for extreme estimates of selectivity
+#' @return negative log-likelihood value
 #' @author A. Hordyk
 #' @export
 LBSPR_NLLgtg <- function(starts, LMids, LBins, LDat, gtgLinfs, MKMat, MK, Linf, ngtg, recP, usePen) {

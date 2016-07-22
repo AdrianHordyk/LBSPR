@@ -20,7 +20,15 @@ sum of squares value
 A internal function that optimizes for F/M when SPR is provided in the simulation parameters.
 }
 \details{
-add Control details here
+The Control options are:
+\describe{
+ \item{\code{modtype}}{Model Type: either Growth-Type-Group Model (default: "GTG") or Age-Structured ("absel")}
+ \item{\code{maxsd}}{Maximum number of standard deviations for length-at-age distribution (default is 2)}
+ \item{\code{ngtg}}{Number of groups for the GTG model. Default is 13}
+ \item{\code{P}}{Proportion of survival of initial cohort for maximum age for Age-Structured model. Default is 0.01}
+ \item{\code{Nage}}{Number of pseudo-age classes in the Age Structured model. Default is 101}
+ \item{\code{maxFM}}{Maximum value for F/M. Estimated values higher than this are trunctated to \code{maxFM}. Default is 4}
+}
 }
 \author{
 A. Hordyk

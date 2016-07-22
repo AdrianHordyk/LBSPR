@@ -8,27 +8,27 @@ LBSPR_NLLgtg(starts, LMids, LBins, LDat, gtgLinfs, MKMat, MK, Linf, ngtg, recP,
   usePen)
 }
 \arguments{
-\item{starts}{a}
+\item{starts}{a vector of starting parameters, relative SL50 (SL50/Linf), deltaSL (SL95-SL50)/Linf, and F/M (in log space)}
 
-\item{LMids}{a}
+\item{LMids}{a vector of the midpoints of the length classes}
 
-\item{LBins}{a}
+\item{LBins}{a vector of length classes}
 
-\item{LDat}{a}
+\item{LDat}{a vector of lenght frequencies. Must be same length as LMids}
 
-\item{gtgLinfs}{a}
+\item{gtgLinfs}{a vector of Linfs for the growth-type-groups}
 
-\item{MKMat}{a}
+\item{MKMat}{a matrix of M/K for each GTG and length-class}
 
-\item{MK}{a}
+\item{MK}{the M/K value}
 
-\item{Linf}{a}
+\item{Linf}{the Linf value for the population as a hole}
 
-\item{ngtg}{a}
+\item{ngtg}{the number of growth-type-groups}
 
-\item{recP}{a}
+\item{recP}{a vector of recruitment by GTG}
 
-\item{usePen}{a}
+\item{usePen}{logical to use penalty for extreme estimates of selectivity}
 }
 \value{
 negative log-likelihood value
