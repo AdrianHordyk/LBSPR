@@ -540,8 +540,10 @@ LBSPRfit_ <- function(yr=1, LB_pars=NULL, LB_lengths=NULL, Control=list(), pen=T
   con <- list(maxsd=2, modtype=c("GTG","absel"), ngtg=13, P=0.01, Nage=101, maxFM=4)
   nmsC <- names(con)
   con[(namc <- names(Control))] <- Control
-  if (length(noNms <- namc[!namc %in% nmsC]))
+  if (length(noNms <- namc[!namc %in% nmsC])) {
     warning("unknown names in Control: ", paste(noNms, collapse = ", "))
+	cat("Options are: ", paste(names(con), collapse = ", "), "\n")
+  }
   maxsd <- con$maxsd # maximum number of standard deviations from the mean for length-at-age distributions
   if (maxsd < 1) warning("maximum standard deviation is too small. See the help documentation")
   modType <- match.arg(arg=con$modtype, choices=c("GTG", "absel"))
@@ -576,8 +578,9 @@ LBSPRfit_ <- function(yr=1, LB_pars=NULL, LB_lengths=NULL, Control=list(), pen=T
 	  ngtg=ngtg, recP=recP,usePen=usePen)
 	NLL <- opt$value
   } else {
-    opt <- nlminb(Start, LBSPRopt, LB_pars=LB_pars, LB_lengths=SingYear, Control=Control,
-      pen=pen, control=list(iter.max=300, eval.max=400, abs.tol=1E-20))
+    opt <- nlminb(Start, LBSPRopt, LB_pars=LB_pars, LB_lengths=SingYear, 
+	Control=Control, pen=pen, control=list(iter.max=300, eval.max=400, 
+	abs.tol=1E-20))
 	NLL <- opt$objective
   }
   LB_pars@SL50 <- exp(opt$par)[1] * LB_pars@Linf
@@ -643,6 +646,7 @@ LBSPRopt <- function(trypars, yr=1, LB_pars=NULL, LB_lengths=NULL,  Control=list
   trySL50 <- exp(trypars[1])
   PenVal <- NLL
   Pen <- dbeta(trySL50, shape1=5, shape2=0.01) * PenVal
+  if(!is.finite(NLL)) return(1E9 + runif(1, 1E4, 1E5))
   if (Pen == 0) Pen <- PenVal * trySL50
   if (!pen) Pen <- 0
   NLL <- NLL+Pen
