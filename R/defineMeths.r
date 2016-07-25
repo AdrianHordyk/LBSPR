@@ -229,6 +229,7 @@ setMethod("initialize", "LB_lengths", function(.Object, file="none", LB_pars=NUL
 		  LB_pars@BinWidth <- 1/20 * LB_pars@BinMax
 	    }
 	    chk <- all(diff(dat[,1]) == median(diff( dat[,1]), na.rm=TRUE))
+		if (is.na(chk)) stop("There is a problem with the data file. Is there a header row?")
 	    if (chk) { # a length frequency file has been uploaded
 	      if (msg) warning("It looks like you may have uploaded a length frequency file? Perhaps use dataType='freq'?")
 	  	  .Object@Elog <- 2
