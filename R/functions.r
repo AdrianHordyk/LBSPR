@@ -99,8 +99,8 @@ LBSPRsim_ <- function(LB_pars=NULL, Control=list(), msg=TRUE, doCheck=TRUE) {
       if (msg) message("Steepness not set. Only used for yield analysis. Not sensitive if per-recruit. Using default of 1 (per-recruit model)")
 	LB_pars@Steepness <- Steepness <- 0.99
   }
+  if (Steepness <= 0.2 | Steepness >= 1) stop("Steepness must be greater than 0.2 and less than 1.0")
 
-  Steepness <- 0.7
   Mpow <- LB_pars@Mpow
   if (is.null(Mpow) | length(Mpow) < 1) Mpow <- 0
   R0 <- LB_pars@R0
@@ -231,7 +231,7 @@ LBSPRsim_ <- function(LB_pars=NULL, Control=list(), msg=TRUE, doCheck=TRUE) {
     reca <- recK/EPR0
     recb <- (reca * EPR0 - 1)/(R0*EPR0)
     RelRec <- max(0, (reca * EPRf-1)/(recb*EPRf))
-    if (!is.finite(RelRec)) RelRec <- 1
+    if (!is.finite(RelRec)) RelRec <- 0
     # RelRec/R0 - relative recruitment
     YPR <- sum(NatLC  * Weight * SelLen2) * FM
     Yield <- YPR * RelRec
@@ -268,10 +268,13 @@ LBSPRsim_ <- function(LB_pars=NULL, Control=list(), msg=TRUE, doCheck=TRUE) {
     # Truncate normal dist at MaxSD
     mat <- array(1, dim=dim(Prob))
     for (X in 1:Nage) {
-      ind <- which(abs((LMids - EL[X]) /SDL[X]) >= maxsd)
+	  ind <- NULL
+      if (EL[X] > (0.25 * Linf)) ind <- which(abs((LMids - EL[X]) /SDL[X]) >= maxsd)
       mat[X,ind] <- 0
     }
-    Prob <- Prob * mat
+
+	Prob <- Prob * mat
+	
     SL <- 1/(1+exp(-log(19)*(LMids-SL50)/(SL95-SL50))) # Selectivity at length
     Sx <- apply(t(Prob) * SL, 2, sum) # Selectivity at relative age
     MSX <- cumsum(Sx) / seq_along(Sx) # Mean cumulative selectivity for each age
@@ -292,6 +295,19 @@ LBSPRsim_ <- function(LB_pars=NULL, Control=list(), msg=TRUE, doCheck=TRUE) {
     VulnUF	<- apply(N0 * Cx, 2, sum) #
 	VulnUF <- VulnUF/sum(VulnUF)
     SPR <- sum(Ma * Ns * rLens^FecB)/sum(Ma * N0 * rLens^FecB)
+    
+	# Equilibrium Relative Recruitment
+	EPR0 <- sum(Ma * N0 * rLens^FecB)
+	EPRf <- sum(Ma * Ns * rLens^FecB)
+    recK <- (4*Steepness)/(1-Steepness) # Goodyear compensation ratio
+    reca <- recK/EPR0
+    recb <- (reca * EPR0 - 1)/(R0*EPR0)
+    RelRec <- max(0, (reca * EPRf-1)/(recb*EPRf))
+    if (!is.finite(RelRec)) RelRec <- 0
+	
+    # RelRec/R0 - relative recruitment
+    YPR <- sum(Nc  * LMids^FecB ) * FM
+    Yield <- YPR * RelRec
 
 	# Simulated length data
     LenOut <- cbind(mids=LMids, n=Nc)
@@ -304,15 +320,14 @@ LBSPRsim_ <- function(LB_pars=NULL, Control=list(), msg=TRUE, doCheck=TRUE) {
 	if (msg) message("setting F/M to maxFM (see Control in documentation)")
     FM <- maxFM
   }
-
   LBobj <- new("LB_obj")
   Slots <- slotNames(LB_pars)
   for (X in 1:length(Slots)) slot(LBobj, Slots[X]) <- slot(LB_pars, Slots[X])
-
   LBobj@SPR <- SPR
   LBobj@Yield <- Yield
   LBobj@LMids <- LenOut[,1]
   LBobj@pLCatch <- matrix(LenOut[,2])
+  LBobj@RelRec <- RelRec
   LBobj@pLPop <- round(array(c(LMids, PopUF, PopF, VulnUF, Nc),
     dim=c(length(PopUF), 5), dimnames=list(NULL, c("LMids", "PopUF", "PopF", "VulnUF", "VulnF")))
 	, 3)
@@ -659,6 +674,7 @@ LBSPRopt <- function(trypars, yr=1, LB_pars=NULL, LB_lengths=NULL,  Control=list
 #'
 #' @param LB_obj an object of class \code{'LB_obj'} that contains the life history and fishing information
 #' @param type a character value indicating if the Catch or Population should be plotted
+#' @param perRec a logical to indicate if plot should be per-recruit (ignore steepness) or not (zero recruitment if SPR below replacement level)
 #' @param Cols optional character vector of colours for the plot
 #' @param axTex size of the axis text
 #' @param axTitle size of axis title
@@ -666,15 +682,29 @@ LBSPRopt <- function(trypars, yr=1, LB_pars=NULL, LB_lengths=NULL,  Control=list
 #' @author A. Hordyk
 #' @importFrom ggplot2 ggplot aes geom_line geom_bar scale_color_manual guides guide_legend xlab ylab theme theme_bw element_text scale_fill_manual scale_fill_discrete ggtitle
 #' @export
-plotSim <- function(LB_obj=NULL, type=c("Catch", "Pop"), Cols=NULL, axTex=12, axTitle=14) {
+plotSim <- function(LB_obj=NULL, type=c("Catch", "Pop"), perRec=FALSE, Cols=NULL, axTex=12, axTitle=14) {
   if (class(LB_obj) != "LB_obj") stop("LB_obj must be of class 'LB_obj'. Use: LBSPRsim")
   type <- match.arg(type)
   LMids <- LB_obj@LMids
-  pLCatch <- LB_obj@pLCatch * LB_obj@SPR # predicted size comp of catch
+  
+  pLCatch <- LB_obj@pLCatch # predicted size comp of catch
   pLPop <- LB_obj@pLPop # predicted size comp of population
+  
+
   if (length(pLPop) < 1) stop("No simulated population data")
-  pLPop[,"PopF"] <- pLPop[,"PopF"] * LB_obj@SPR
+  PopF <- pLPop[,"PopF"] 
+  PopUF <- pLPop[,"PopUF"] 
   PopSizeDat <- data.frame(pLPop)
+  
+  if (!perRec) {
+    relativePop <- PopF / (PopF[1]/PopUF[1]) * (LB_obj@RelRec/LB_obj@R0)
+    PopSizeDat[,"PopF"] <- relativePop
+  
+    ind <- which(PopSizeDat[,"VulnUF"] > 0)[1]
+    relativeCatch <- pLCatch / (pLCatch[ind]/PopSizeDat[,"VulnUF"][ind]) * (LB_obj@RelRec/LB_obj@R0)
+    pLCatch <- relativeCatch
+  }
+
   if (type == "Catch") {
     ind <- match(LMids, PopSizeDat[,1])
     Dat <- data.frame(LMids=LMids, VulnUF=PopSizeDat[ind, "VulnUF"], pLCatch=pLCatch)

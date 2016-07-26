@@ -4,13 +4,15 @@
 \alias{plotSim}
 \title{Plot simulated size composition}
 \usage{
-plotSim(LB_obj = NULL, type = c("Catch", "Pop"), Cols = NULL,
-  axTex = 12, axTitle = 14)
+plotSim(LB_obj = NULL, type = c("Catch", "Pop"), perRec = FALSE,
+  Cols = NULL, axTex = 12, axTitle = 14)
 }
 \arguments{
 \item{LB_obj}{an object of class \code{'LB_obj'} that contains the life history and fishing information}
 
 \item{type}{a character value indicating if the Catch or Population should be plotted}
+
+\item{perRec}{a logical to indicate if plot should be per-recruit (ignore steepness) or not (zero recruitment if SPR below replacement level)}
 
 \item{Cols}{optional character vector of colours for the plot}
 

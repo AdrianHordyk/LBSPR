@@ -20,6 +20,8 @@ An S4 class containing all parameters for the LBSPR model
 
 \item{\code{pLPop}}{A numeric vector containg expected proportion for each length class in the population}
 
+\item{\code{RelRec}}{Relative recruitment}
+
 \item{\code{Ests}}{A matrix of estimated values}
 
 \item{\code{NLL}}{A numeric NLL values}

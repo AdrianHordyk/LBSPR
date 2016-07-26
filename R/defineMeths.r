@@ -339,6 +339,7 @@ setMethod("initialize", "LB_lengths", function(.Object, file="none", LB_pars=NUL
 #' @slot LMids A numeric vector containing the mid-points of the length bins
 #' @slot pLCatch A numeric vector containg expected proportion for each length class in the catch
 #' @slot pLPop A numeric vector containg expected proportion for each length class in the population
+#' @slot RelRec Relative recruitment
 #' @slot Ests A matrix of estimated values
 #' @slot NLL A numeric NLL values
 #' @slot maxFM A numeric of maximum estimated F/M value (note this is apical F)
@@ -349,6 +350,7 @@ setClass("LB_obj", representation(
   LMids = "vector",
   pLCatch = "matrix",
   pLPop = "array",
+  RelRec = "vector",
   Ests = "matrix",
   NLL = "vector",
   maxFM = "numeric"
