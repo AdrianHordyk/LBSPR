@@ -192,6 +192,18 @@ setMethod("initialize", "LB_lengths", function(.Object, file="none", LB_pars=NUL
       dat <- read.csv(file, header=header, stringsAsFactors=FALSE,check.names=FALSE)
 	  if (any(apply(dat, 1, class) == "character")) stop("Text in data file. Do you have header?")
 	  # dat <- as.data.frame(dat)
+	  # remove NAs 
+	  if (class(dat) == "data.frame" | class(dat) == "matrix") {
+	    if (ncol(dat) > 1) { 
+		  chkNAs <- apply(dat, 2, is.na) # check NAs
+		  dat <- dat[!apply(chkNAs, 1, prod),, drop=FALSE]
+		  dat <- dat[,!apply(chkNAs, 2, prod), drop=FALSE]
+		}
+	  }
+	  if (class(dat) == "numeric" | class(dat) == "integer") {
+  	    dat <- dat[!is.na(dat)]
+	  }
+
       dataType <- match.arg(dataType)
       if (dataType == "freq") {
         .Object@LMids <- LMids <- dat[,1]
