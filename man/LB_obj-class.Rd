@@ -24,8 +24,12 @@ An S4 class containing all parameters for the LBSPR model
 
 \item{\code{Ests}}{A matrix of estimated values}
 
+\item{\code{Vars}}{A vector of estimated variance for SL50, SL95, F/M and SPR}
+
 \item{\code{NLL}}{A numeric NLL values}
 
 \item{\code{maxFM}}{A numeric of maximum estimated F/M value (note this is apical F)}
+
+\item{\code{fitLog}}{A vector of error logs for each fit. 0 means everything is okay.}
 }}
 

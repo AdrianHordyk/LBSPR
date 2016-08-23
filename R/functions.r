@@ -541,7 +541,7 @@ FilterSmooth <- function(RawEsts, R=1, Q=0.1, Int=100) {
 #' @return a object of class \code{'LB_obj'}
 #' @author A. Hordyk
 #'
-#' @importFrom stats dbeta dnorm median nlminb optimise pnorm optim
+#' @importFrom stats dbeta dnorm median nlminb optimise pnorm optim runif
 #' @export
 LBSPRfit_ <- function(yr=1, LB_pars=NULL, LB_lengths=NULL, Control=list(), pen=TRUE, useCPP=TRUE) {
   message(yr)
@@ -924,7 +924,7 @@ plotMat <- function(LB_obj=NULL, axTex=12, axTitle=14, useSmooth=TRUE, Title=NUL
 #' @return a ggplot object
 #' @author A. Hordyk
 #'
-#' @importFrom ggplot2 facet_wrap
+#' @importFrom ggplot2 facet_wrap geom_text
 #' @export
 plotSize <- function(LB_obj=NULL, axTex=12, axTitle=14, Title=NULL) {
   if (class(LB_obj) != "LB_obj" & class(LB_obj) != "LB_lengths") stop("Require LB_lengths or LB_obj object")
@@ -952,6 +952,7 @@ plotSize <- function(LB_obj=NULL, axTex=12, axTitle=14, Title=NULL) {
   NCol <- ceiling(sqrt(NYrs))
   NRow <- ceiling(NYrs/NCol)
   LBSPR_len <- NULL # hack to get past CRAN check
+  lab <- NULL # hack to get past CRAN check
   bplot <- ggplot(longDat, aes(x=LMids, y=LBSPR_len)) +
    facet_wrap(~Year, ncol=NCol) +
    geom_bar(stat="identity") +
