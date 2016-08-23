@@ -354,6 +354,7 @@ setMethod("initialize", "LB_lengths", function(.Object, file="none", LB_pars=NUL
 #' @slot RelRec Relative recruitment
 #' @slot Ests A matrix of estimated values
 #' @slot Vars A vector of estimated variance for SL50, SL95, F/M and SPR
+#' @slot mles Maximum likelihood estimates of the objective function
 #' @slot NLL A numeric NLL values
 #' @slot maxFM A numeric of maximum estimated F/M value (note this is apical F)
 #' @slot fitLog A vector of error logs for each fit. 0 means everything is okay.
@@ -367,6 +368,7 @@ setClass("LB_obj", representation(
   RelRec = "vector",
   Ests = "matrix",
   Vars = "matrix",
+  mles = "matrix",
   NLL = "vector",
   maxFM = "numeric",
   fitLog = "vector"

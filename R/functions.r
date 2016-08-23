@@ -461,6 +461,7 @@ LBSPRfit <- function(LB_pars=NULL, LB_lengths=NULL, yrs=NA, Control=list(), pen=
   LBobj@Yield <- unlist(lapply(runMods, slot, "Yield"))
   LBobj@fitLog <- unlist(lapply(runMods, slot, "fitLog"))
   LBobj@Vars <-  matrix(unlist(lapply(runMods, slot, "Vars")), ncol=4, byrow=TRUE)
+  LBobj@mles <- matrix(unlist(lapply(runMods, slot, "mles")), ncol=3, byrow=TRUE)
   colnames(LBobj@Vars) <- c("SL50", "SL95", "FM", "SPR")
   LBobj@pLCatch <- do.call(cbind, lapply(runMods, slot, "pLCatch"))
   LBobj@maxFM <- unlist(lapply(runMods, slot, "maxFM"))[1]
@@ -644,6 +645,7 @@ LBSPRfit_ <- function(yr=1, LB_pars=NULL, LB_lengths=NULL, Control=list(), pen=T
   Slots <- slotNames(SingYear)
   for (X in 1:length(Slots)) slot(LBobj, Slots[X]) <- slot(SingYear, Slots[X])
   
+  LBobj@mles <- matrix(c(opt$par), ncol=3)
   LBobj@Vars <- matrix(c(vSL50, vSL95, vFM, vSPR), ncol=4)
   LBobj@pLCatch <- runMod@pLCatch
   LBobj@NLL <- NLL

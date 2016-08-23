@@ -26,6 +26,8 @@ An S4 class containing all parameters for the LBSPR model
 
 \item{\code{Vars}}{A vector of estimated variance for SL50, SL95, F/M and SPR}
 
+\item{\code{mles}}{Maximum likelihood estimates of the objective function}
+
 \item{\code{NLL}}{A numeric NLL values}
 
 \item{\code{maxFM}}{A numeric of maximum estimated F/M value (note this is apical F)}
