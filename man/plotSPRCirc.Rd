@@ -5,7 +5,9 @@
 \title{Circle of estimated SPR and target and limit points}
 \usage{
 plotSPRCirc(LB_obj = NULL, SPRTarg = 0.4, SPRLim = 0.2,
-  useSmooth = TRUE, Title = FALSE, Leg = TRUE)
+  useSmooth = TRUE, Title = FALSE, Leg = TRUE, limcol = "#ff1919",
+  targcol = "#ffb732", abtgcol = "#32ff36", labcol = NULL,
+  bgcol = "#FAFAFA", labcex = 2, texcex = 1.3)
 }
 \arguments{
 \item{LB_obj}{an object of class \code{'LB_obj'} that contains the life history and fishing information}
@@ -19,6 +21,20 @@ plotSPRCirc(LB_obj = NULL, SPRTarg = 0.4, SPRLim = 0.2,
 \item{Title}{include the title?}
 
 \item{Leg}{include the legend?}
+
+\item{limcol}{colour for SPR Limit (hex; default is red)}
+
+\item{targcol}{colour for SPR target (hex; default is orange)}
+
+\item{abtgcol}{colour for above SPR target (hex; default is green)}
+
+\item{labcol}{optional fixed colour for estimated SPR label}
+
+\item{bgcol}{colour for the background}
+
+\item{labcex}{size for the estimated SPR label}
+
+\item{texcex}{size for estimated other labels}
 }
 \description{
 A function that creates a circle plot showing the estimated SPR relative to the

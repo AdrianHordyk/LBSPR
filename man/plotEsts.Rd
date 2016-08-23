@@ -5,7 +5,8 @@
 \title{Plot LBSPR model estimates}
 \usage{
 plotEsts(LB_obj = NULL, pars = c("Sel", "FM", "SPR"), Lwd = 2.5,
-  axCex = 1.45, labCex = 1.55, doSmooth = TRUE)
+  ptCex = 1.25, axCex = 1.45, labCex = 1.55, doSmooth = TRUE,
+  incL50 = FALSE, CIcol = "darkgray", L50col = "gray")
 }
 \arguments{
 \item{LB_obj}{an object of class \code{'LB_obj'} that contains the life history and fishing information}
@@ -14,11 +15,19 @@ plotEsts(LB_obj = NULL, pars = c("Sel", "FM", "SPR"), Lwd = 2.5,
 
 \item{Lwd}{line width}
 
+\item{ptCex}{size of plotted points}
+
 \item{axCex}{size of the axis}
 
 \item{labCex}{size of axis label}
 
 \item{doSmooth}{apply the smoother?}
+
+\item{incL50}{include L50 line?}
+
+\item{CIcol}{colour of the confidence interval bars}
+
+\item{L50col}{colour of L50 line (if included)}
 }
 \description{
 A function that plots the estimates of the LBSPR with a smoother line

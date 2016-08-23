@@ -1001,14 +1001,23 @@ plotSize <- function(LB_obj=NULL, axTex=12, axTitle=14, Title=NULL) {
 #' @param useSmooth use the smoothed estimates? Usually would want to do this
 #' @param Title include the title?
 #' @param Leg include the legend?
+#' @param limcol colour for SPR Limit (hex; default is red)
+#' @param targcol colour for SPR target (hex; default is orange) 
+#' @param abtgcol colour for above SPR target (hex; default is green)
+#' @param labcol optional fixed colour for estimated SPR label
+#' @param bgcol colour for the background
+#' @param labcex size for the estimated SPR label
+#' @param texcex size for estimated other labels 
 
 #' @author A. Hordyk
 #' @importFrom plotrix draw.circle draw.ellipse draw.radial.line radialtext
 #' @export
-plotSPRCirc <- function(LB_obj=NULL, SPRTarg=0.4, SPRLim=0.2, useSmooth=TRUE, Title=FALSE, Leg=TRUE) {
+plotSPRCirc <- function(LB_obj=NULL, SPRTarg=0.4, SPRLim=0.2, useSmooth=TRUE, 
+  Title=FALSE, Leg=TRUE, limcol="#ff1919", targcol="#ffb732", abtgcol="#32ff36", 
+  labcol=NULL, bgcol="#FAFAFA", labcex=2, texcex=1.3) {
   if (class(LB_obj) != "LB_obj") stop("LB_obj must be of class 'LB_obj'. Use LBSPRfit")
 
-  par(mfrow=c(1,1), mar=c(1,2,3,2), oma=c(0,0,0,0))
+  par(mfrow=c(1,1), mar=c(1,2,3,2), oma=c(1,1,1,1))
   plot(1:10, asp = 1,main="", type="n", bty="n", axes=FALSE,
     xlim=c(0,10), ylim=c(0,10), xlab="", ylab="")
   a <- 4.5
@@ -1025,15 +1034,15 @@ plotSPRCirc <- function(LB_obj=NULL, SPRTarg=0.4, SPRLim=0.2, useSmooth=TRUE, Ti
   ang2 <- 90
   tg  <- 90 - (SPRTarg*360)
   lim <- 90 - (SPRLim*360)
-  limcol <- "#ff1919"
-  targcol <- "#ffb732"
-  abtgcol <- "#32ff36"
+  # limcol <- "#ff1919"
+  # targcol <- "#ffb732"
+  # abtgcol <- "#32ff36"
   nv <- 200
-  texcex <- 1.3 
-  texcex2 <- 2
+  # texcex <- 1.3 
+  # texcex2 <- 2
   # Circle
 	  
-  draw.circle(x=x, y=x, radius=a, border="#FAFAFA", col="#FAFAFA", nv=nv)
+  draw.circle(x=x, y=x, radius=a, border=bgcol, col=bgcol, nv=nv)
   # Limit Ellipse
   draw.ellipse(x=x, y=x, a=a, b=a, angle=0, segment=c(max(lim, ang), ang2),
       col=limcol, arc.only=FALSE, border=FALSE, nv=nv)
@@ -1060,9 +1069,10 @@ plotSPRCirc <- function(LB_obj=NULL, SPRTarg=0.4, SPRLim=0.2, useSmooth=TRUE, Ti
   if (rndspr <= SPRLim*100) textcol <- limcol
   if (rndspr <= SPRTarg*100 & rndspr > SPRLim*100) textcol <- targcol
   if (rndspr > SPRTarg*100)  textcol <- abtgcol
+  if (class(labcol) == "character") textcol <- labcol
   radialtext(paste0(round(spr,2)*100, "%"), 
-    center=c(x,x), start=x, middle=1, end=NA, deg=ang,  expand=0, stretch=1, 
-	nice=TRUE, cex=texcex2,xpd=NA, col=textcol)
+    center=c(x,x), start=x-0.2, middle=1, end=NA, deg=ang,  expand=0, stretch=1, 
+	nice=TRUE, cex=labcex, xpd=NA, col=textcol)
   
   if (Title) mtext(side=3, paste0("Estimated SPR = ", round(spr,2)),
     cex=1.25, line=-4 ,outer=TRUE)
@@ -1088,15 +1098,19 @@ plotSPRCirc <- function(LB_obj=NULL, SPRTarg=0.4, SPRLim=0.2, useSmooth=TRUE, Ti
 #' @param LB_obj an object of class \code{'LB_obj'} that contains the life history and fishing information
 #' @param pars a character vectors specifying which plots to create
 #' @param Lwd line width
+#' @param ptCex size of plotted points
 #' @param axCex size of the axis
 #' @param labCex size of axis label
 #' @param doSmooth apply the smoother?
-
+#' @param incL50 include L50 line?
+#' @param CIcol colour of the confidence interval bars
+#' @param L50col colour of L50 line (if included)
 #' @author A. Hordyk
 #' @importFrom graphics abline axis hist legend lines mtext par plot points text
 #' @importFrom plotrix plotCI
 #' @export
-plotEsts <- function(LB_obj=NULL, pars=c("Sel", "FM", "SPR"), Lwd=2.5,  axCex=1.45, labCex=1.55, doSmooth=TRUE) {
+plotEsts <- function(LB_obj=NULL, pars=c("Sel", "FM", "SPR"), Lwd=2.5, ptCex=1.25, 
+  axCex=1.45, labCex=1.55, doSmooth=TRUE, incL50=FALSE, CIcol="darkgray", L50col="gray") {
   if (class(LB_obj) != "LB_obj") stop("LB_obj must be of class 'LB_obj'. Use LBSPRfit")
   if (length(LB_obj@Ests) < 1) stop("No estimates found. Use LBSPRfit")
   pars <- match.arg(pars, several.ok=TRUE)
@@ -1127,7 +1141,7 @@ plotEsts <- function(LB_obj=NULL, pars=c("Sel", "FM", "SPR"), Lwd=2.5,  axCex=1.
   CIlower[!is.finite(CIlower)] <- NA
   CIupper[!is.finite(CIupper)] <- NA
 	
-  scol <- "darkgray"
+  scol <- CIcol 
   
   at <- seq(from=min(LB_obj@Years)-1, to=max(LB_obj@Years)+1, by=1)
   nplots <- 0
@@ -1144,33 +1158,46 @@ plotEsts <- function(LB_obj=NULL, pars=c("Sel", "FM", "SPR"), Lwd=2.5,  axCex=1.
     nplots <- nplots + 1
 	doSPR <- TRUE
   }
-  par(mfrow=c(1,nplots), bty="l", las=1, mar=c(2,3,2,2), oma=c(2,2,0,0))
+  par(mfrow=c(1,nplots), bty="l", las=1, mar=c(3,4,2,2), oma=c(2,2,0,0))
   # Selectivity
   if (doSel) {
     YLim <- c(max(CIlower[,1], na.rm=TRUE) * 0.95, max(CIupper[,2], na.rm=TRUE) * 1.05)
 	YLim <- range(pretty(YLim))
-    plot(rawEsts$Years,  rawEsts$SL50, ylim=YLim, pch=19, xlab="", ylab="", axes=FALSE, type="n")
+    plot(rawEsts$Years,  rawEsts$SL50, ylim=YLim, xlab="", ylab="", axes=FALSE, type="n")
 	myLeg <- legend("topright", bty="n", legend=c(expression(S[L50]), expression(S[L95]),
 	  expression(L[50])), lty=c(1,2,1), lwd=Lwd, col=c("black", "black", "gray"),
 	  cex=1.75, xpd=NA, plot=FALSE)
 
     YLim[2] <- 1.04*(YLim[2]+myLeg$rect$h)
-	par(mfrow=c(1,nplots), bty="l", las=1, mar=c(2,3,2,2), oma=c(2,2,0,0))
-	plot(rawEsts$Years,  rawEsts$SL50, ylim=YLim, pch=19, xlab="", ylab="", axes=FALSE)
-	plotrix::plotCI(x=rawEsts$Years, y=rawEsts$SL50, ui=CIupper[,1], li=CIlower[,1], add=TRUE, scol=scol)
+    par(mfrow=c(1,nplots), bty="l", las=1, mar=c(3,4,2,2), oma=c(2,2,0,0))
+	plot(rawEsts$Years,  rawEsts$SL50, ylim=YLim, xlab="", ylab="", axes=FALSE, type="n")
+	plotrix::plotCI(x=rawEsts$Years, y=rawEsts$SL50, ui=CIupper[,1], li=CIlower[,1], add=TRUE, scol=scol,
+	   pch=19, cex=ptCex)
 	
 	axis(side=1, at=at, cex.axis=axCex)
 	axis(side=2, at=pretty(YLim), cex.axis=axCex)
     if(doSmooth) lines(smoothEsts$Years,  smoothEsts$SL50, lwd=Lwd)
    
     # points(rawEsts$Years,  rawEsts$SL95, pch=17)
-	plotrix::plotCI(x=rawEsts$Years, y=rawEsts$SL95, ui=CIupper[,2], li=CIlower[,2], add=TRUE, pch=17, scol=scol)
+	plotrix::plotCI(x=rawEsts$Years, y=rawEsts$SL95, ui=CIupper[,2], li=CIlower[,2], add=TRUE, pch=17, scol=scol,
+	  cex=ptCex)
     if(doSmooth) lines(smoothEsts$Years,  smoothEsts$SL95, lwd=Lwd, lty=2)
-    abline(h=LB_obj@L50, col="gray", lwd=0.5)
-	mtext(side=2, line=3, "Selectivity", cex=labCex, las=3)
-	legend("topright", bty="n", legend=c(expression(S[L50]), expression(S[L95]),
+    if (incL50) abline(h=LB_obj@L50, col=L50col, lwd=0.5)
+	mtext(side=2, line=4, "Selectivity", cex=labCex, las=3)
+	if (incL50 & doSmooth) 
+	  legend("topright", bty="n", legend=c(expression(S[L50]), expression(S[L95]),
 	  expression(L[50])), lty=c(1,2,1), lwd=Lwd, col=c("black", "black", "gray"),
 	  cex=1.75, xpd=NA)
+	if (!incL50 & doSmooth) 
+	  legend("topright", bty="n", legend=c(expression(S[L50]), expression(S[L95])), 
+	  lty=c(1,2), lwd=Lwd, col=c("black"),  cex=1.75, xpd=NA)	
+	if (incL50 & !doSmooth)
+	  legend("topright", bty="n", legend=c(expression(S[L50]), expression(S[L95]),
+	  expression(L[50])), pch=c(17, 19, 15), col=c("black", "black", L50col),
+	  cex=ptCex, xpd=NA)
+	if (!incL50 & !doSmooth)
+	  legend("topright", bty="n", legend=c(expression(S[L50]), expression(S[L95])),
+	  pch=c(19, 17), col=c("black"), cex=ptCex, xpd=NA)	
   }
   # Relative Fishing Mortality
   if (doFM) {
@@ -1178,21 +1205,23 @@ plotEsts <- function(LB_obj=NULL, pars=c("Sel", "FM", "SPR"), Lwd=2.5,  axCex=1.
     YMin <- min(CIlower[,3], na.rm=TRUE) * 0.95
 	YLim <- round(c(YMin, YMax),2)
 	YLim <- range(pretty(YLim))
-    plot(rawEsts$Years,  rawEsts$FM, ylim=YLim,pch=19, xlab="", ylab="", cex.axis=axCex, axes=FALSE)
-	plotrix::plotCI(x=rawEsts$Years, y=rawEsts$FM, ui=CIupper[,3], li=CIlower[,3], add=TRUE, scol=scol)
+    plot(rawEsts$Years,  rawEsts$FM, ylim=YLim, type="n", xlab="", ylab="", cex.axis=axCex, axes=FALSE)
+	plotrix::plotCI(x=rawEsts$Years, y=rawEsts$FM, ui=CIupper[,3], li=CIlower[,3], add=TRUE, scol=scol,
+	  cex=ptCex, pch=19)
     axis(side=1, at=at, cex.axis=axCex)
 	axis(side=2, at=pretty(YLim), cex.axis=axCex)
     if(doSmooth) lines(smoothEsts$Years,  smoothEsts$FM, lwd=Lwd)
-	mtext(side=2, line=3, "F/M", cex=labCex, las=3)
+	mtext(side=2, line=4, "F/M", cex=labCex, las=3)
   }
   # SPR
   if (doSPR) {
-    plot(rawEsts$Years,  rawEsts$SPR, ylim=c(0,1), pch=19, xlab="", ylab="", cex.axis=axCex, axes=FALSE)
-	plotrix::plotCI(x=rawEsts$Years, y=rawEsts$SPR, ui=CIupper[,4], li=CIlower[,4], add=TRUE, scol=scol)
+    plot(rawEsts$Years,  rawEsts$SPR, ylim=c(0,1), type="n", xlab="", ylab="", cex.axis=axCex, axes=FALSE)
+	plotrix::plotCI(x=rawEsts$Years, y=rawEsts$SPR, ui=CIupper[,4], li=CIlower[,4], add=TRUE, scol=scol,
+	 cex=ptCex, pch=19)
 	axis(side=1, at=at, cex.axis=axCex)
 	axis(side=2, at=pretty(c(0,1)), cex.axis=axCex)
     if(doSmooth) lines(smoothEsts$Years,  smoothEsts$SPR, lwd=Lwd)
-	mtext(side=2, line=3, "SPR", cex=labCex, las=3)
+	mtext(side=2, line=4, "SPR", cex=labCex, las=3)
   }
   mtext(outer=TRUE, side=1, line=1, "Years", cex=labCex)
 }
