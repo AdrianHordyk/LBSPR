@@ -127,11 +127,11 @@ setMethod("initialize", "LB_pars", function(.Object, file="none", defaults=TRUE,
    # Add code for file input here
    return(.Object)
  }
- if (file == "none")  message("A blank LB_pars object created")
- if (file != "none" & !(file.exists(file)))  message("Couldn't file specified CSV file: ", file, ".  A blank LB_pars object created")
+ if (file == "none" & msg)  message("A blank LB_pars object created")
+ if (file != "none" & !(file.exists(file)) & msg)  message("Couldn't file specified CSV file: ", file, ".  A blank LB_pars object created")
  if (!defaults)  return(.Object)
  if (defaults) {
-   message("Default values have been set for some parameters")
+   if (msg) message("Default values have been set for some parameters")
    .Object@CVLinf <- 0.1
    .Object@Walpha <- 0.001
    .Object@Wbeta <- 3
@@ -348,6 +348,7 @@ setMethod("initialize", "LB_lengths", function(.Object, file="none", LB_pars=NUL
 #' An S4 class containing all parameters for the LBSPR model
 #' @slot SPR The Spawning Potential Ratio
 #' @slot Yield Relative yield
+#' @slot YPR Yield-per-recruit
 #' @slot LMids A numeric vector containing the mid-points of the length bins
 #' @slot pLCatch A numeric vector containg expected proportion for each length class in the catch
 #' @slot pLPop A numeric vector containg expected proportion for each length class in the population
@@ -358,10 +359,12 @@ setMethod("initialize", "LB_lengths", function(.Object, file="none", LB_pars=NUL
 #' @slot NLL A numeric NLL values
 #' @slot maxFM A numeric of maximum estimated F/M value (note this is apical F)
 #' @slot fitLog A vector of error logs for each fit. 0 means everything is okay.
+#' @slot SPRatsize A vector of SPR at size
 #' @export
 setClass("LB_obj", representation(
   SPR = "vector",
   Yield = "vector",
+  YPR = "vector",
   LMids = "vector",
   pLCatch = "matrix",
   pLPop = "array",
@@ -371,7 +374,8 @@ setClass("LB_obj", representation(
   mles = "matrix",
   NLL = "vector",
   maxFM = "numeric",
-  fitLog = "vector"
+  fitLog = "vector",
+  SPRatsize = "vector"
   ), contains=c("LB_pars", "LB_lengths"))
 
 #' Create a new LB_obj object

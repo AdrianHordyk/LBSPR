@@ -259,6 +259,7 @@ LBSPRsim_ <- function(LB_pars=NULL, Control=list(), msg=TRUE, doCheck=TRUE) {
     LenOut[,2] <- LenOut[,2]/sum(LenOut[,2])
   }
   if (modType == "absel") {
+    SPRatsize <- NA
     # LBSPR model with pseudo-age classes
     x <- seq(from=0, to=1, length.out=Nage) # relative age vector
     EL <- (1-P^(x/MK)) * Linf # length at relative age
@@ -333,6 +334,7 @@ LBSPRsim_ <- function(LB_pars=NULL, Control=list(), msg=TRUE, doCheck=TRUE) {
   for (X in 1:length(Slots)) slot(LBobj, Slots[X]) <- slot(LB_pars, Slots[X])
   LBobj@SPR <- SPR
   LBobj@Yield <- Yield
+  LBobj@YPR <- YPR
   LBobj@LMids <- LenOut[,1]
   LBobj@pLCatch <- matrix(LenOut[,2])
   LBobj@RelRec <- RelRec
@@ -340,6 +342,7 @@ LBSPRsim_ <- function(LB_pars=NULL, Control=list(), msg=TRUE, doCheck=TRUE) {
     dim=c(length(PopUF), 5), dimnames=list(NULL, c("LMids", "PopUF", "PopF", "VulnUF", "VulnF")))
 	, 6)
   LBobj@maxFM <- maxFM
+  LBobj@SPRatsize <- SPRatsize
   LBobj
 }
 
@@ -794,8 +797,8 @@ plotSim <- function(LB_obj=NULL, type=c("Catch", "Pop"), perRec=FALSE, Cols=NULL
   }
 
   if (type == "Catch") {
-    ind <- match(LMids, PopSizeDat[,1])
-    Dat <- data.frame(LMids=LMids, VulnUF=PopSizeDat[ind, "VulnUF"], pLCatch=pLCatch)
+    # ind <- match(LMids, PopSizeDat[,1])
+    Dat <- data.frame(LMids=LMids, VulnUF=PopSizeDat[, "VulnUF"], pLCatch=pLCatch)
 	longDat <- gather(Dat, "PopType", "PLength", 2:ncol(Dat))
 	Title <- "Catch"
 	Leg <- c("Fished", "Unfished")
@@ -1163,7 +1166,7 @@ plotEsts <- function(LB_obj=NULL, pars=c("Sel", "FM", "SPR"), Lwd=2.5, ptCex=1.2
   par(mfrow=c(1,nplots), bty="l", las=1, mar=c(3,4,2,2), oma=c(2,2,0,0))
   # Selectivity
   if (doSel) {
-    YLim <- c(max(CIlower[,1], na.rm=TRUE) * 0.95, max(CIupper[,2], na.rm=TRUE) * 1.05)
+    YLim <- c(min(CIlower[,1], na.rm=TRUE) * 0.95, max(CIupper[,2], na.rm=TRUE) * 1.05)
 	YLim <- range(pretty(YLim))
     plot(rawEsts$Years,  rawEsts$SL50, ylim=YLim, xlab="", ylab="", axes=FALSE, type="n")
 	myLeg <- legend("topright", bty="n", legend=c(expression(S[L50]), expression(S[L95]),
@@ -1184,7 +1187,7 @@ plotEsts <- function(LB_obj=NULL, pars=c("Sel", "FM", "SPR"), Lwd=2.5, ptCex=1.2
 	plotrix::plotCI(x=rawEsts$Years, y=rawEsts$SL95, ui=CIupper[,2], li=CIlower[,2], add=TRUE, pch=17, scol=scol,
 	  cex=ptCex)
     if(doSmooth) lines(smoothEsts$Years,  smoothEsts$SL95, lwd=Lwd, lty=2)
-    if (incL50) abline(h=LB_obj@L50, col=L50col, lwd=0.5)
+    if (incL50) abline(h=LB_obj@L50, col=L50col, lwd=1)
 	mtext(side=2, line=4, "Selectivity", cex=labCex, las=3)
 	if (incL50 & doSmooth) 
 	  legend("topright", bty="n", legend=c(expression(S[L50]), expression(S[L95]),
