@@ -14,6 +14,8 @@ An S4 class containing all parameters for the LBSPR model
 
 \item{\code{Yield}}{Relative yield}
 
+\item{\code{YPR}}{Yield-per-recruit}
+
 \item{\code{LMids}}{A numeric vector containing the mid-points of the length bins}
 
 \item{\code{pLCatch}}{A numeric vector containg expected proportion for each length class in the catch}
@@ -33,5 +35,7 @@ An S4 class containing all parameters for the LBSPR model
 \item{\code{maxFM}}{A numeric of maximum estimated F/M value (note this is apical F)}
 
 \item{\code{fitLog}}{A vector of error logs for each fit. 0 means everything is okay.}
+
+\item{\code{SPRatsize}}{A vector of SPR at size}
 }}
 
