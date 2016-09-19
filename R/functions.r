@@ -1,4 +1,3 @@
-
 #' LBSPR Simulation Model
 #'
 #' Function that generates the expected equilbrium size composition given biological parameters, and fishing mortality and selectivity pattern.
@@ -887,7 +886,7 @@ plotMat <- function(LB_obj=NULL, axTex=12, axTitle=14, useSmooth=TRUE, Title=NUL
       longSel <- data.frame(Lens=Lens, Selectivity=LenSel, Maturity=LenMat)
 	  longSel <- gather(longSel, "Line", "Proportion", 2:3)
 	  mplot <- ggplot(longSel, aes(x=Lens, y=Proportion)) +
-        geom_line(aes(color=Line), size=1.5) +
+        geom_line(aes(linetype=Line), size=1.5) +
 	    xlab("Length") +
         ylab("Proportion") +
 	    guides(color=guide_legend(title="")) +
@@ -1082,8 +1081,9 @@ plotSPRCirc <- function(LB_obj=NULL, SPRTarg=0.4, SPRLim=0.2, useSmooth=TRUE,
   if (Title) mtext(side=3, paste0("Estimated SPR = ", round(spr,2)),
     cex=1.25, line=-4 ,outer=TRUE)
   if (Leg) legend("topleft", legend=c(as.expression(bquote(Below ~ Limit ~ .(SPRLim*100) * "%")),
-    as.expression(bquote(Below ~ Target ~ .(SPRTarg*100) * "%")), "Above Target"), bty="n", pch=15, pt.cex=2,
-	col=c(limcol, targcol, abtgcol),
+    as.expression(bquote(Above ~ Limit)), 
+	as.expression(bquote(Above ~ Target ~ .(SPRTarg*100) * "%"))), 
+	bty="n", pch=15, pt.cex=2,col=c(limcol, targcol, abtgcol),
 	bg=c(limcol, targcol, abtgcol), title=expression(bold("SPR")), cex=texcex)
   # if (Leg) legend("topright", bty="n",
     # legend=as.expression(bquote(Estimate ~ .(round(spr,2)*100) * "%")),
