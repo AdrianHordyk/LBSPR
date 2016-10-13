@@ -224,6 +224,28 @@ LBSPRsim_ <- function(LB_pars=NULL, Control=list(), msg=TRUE, doCheck=TRUE) {
     NatLC <- NatLF * SelLen2 # Catch Vul Pop
 
     # Aggregate across GTGs
+    Nc <- apply(NatLC, 1, sum)
+    VulnUF <- apply(NatLV, 1, sum)
+    PopUF <- apply(NatLUF, 1, sum)
+    PopF <- apply(NatLF, 1, sum)
+
+	# Need to calculate catch using a version of the Baranov 
+	FK <- FKL[1:(length(FKL)-1)]
+	C <- (FK/(MK+FK) * abs(diff(c(PopF,0))))
+	
+	calculate number that died, then proportion that died from F
+	
+	# Calculate Fs 
+	Fpop <- -log(1-(sum(C*Weight)/sum(PopF*Weight*(MK/2))))
+	print(Fpop)
+	# plot(Nc)
+	# lines(PopF)
+	# sum(Nc)
+	# sum(PopF)
+	#Fvul
+	#Fspawn 	
+	
+    # Aggregate across GTGs
     Nc <- apply(NatLC, 1, sum)/sum(apply(NatLC, 1, sum))
     VulnUF <- apply(NatLV, 1, sum)/sum(apply(NatLV, 1, sum))
     PopUF <- apply(NatLUF, 1, sum)/sum(apply(NatLUF, 1, sum))
@@ -233,6 +255,8 @@ LBSPRsim_ <- function(LB_pars=NULL, Control=list(), msg=TRUE, doCheck=TRUE) {
     EPR0 <- sum(NatLUF * FecLengtg) # Eggs-per-recruit Unfished
     EPRf <- sum(NatLF * FecLengtg) # Eggs-per-recruit Fished
     SPR <- EPRf/EPR0
+	
+
 
     # Equilibrium Relative Recruitment
     recK <- (4*Steepness)/(1-Steepness) # Goodyear compensation ratio
