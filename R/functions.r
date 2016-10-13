@@ -234,7 +234,8 @@ LBSPRsim_ <- function(LB_pars=NULL, Control=list(), msg=TRUE, doCheck=TRUE) {
 	C <- (FK/(MK+FK) * abs(diff(c(PopF,0))))
 	
 	calculate number that died, then proportion that died from F
-	
+	http://www.fao.org/docrep/003/T0535E/T0535E04.htm
+	eq 4.3
 	# Calculate Fs 
 	Fpop <- -log(1-(sum(C*Weight)/sum(PopF*Weight*(MK/2))))
 	print(Fpop)
