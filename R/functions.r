@@ -1,3 +1,4 @@
+
 #' LBSPR Simulation Model
 #'
 #' Function that generates the expected equilbrium size composition given biological parameters, and fishing mortality and selectivity pattern.
@@ -138,7 +139,7 @@ LBSPRsim_ <- function(LB_pars=NULL, Control=list(), msg=TRUE, doCheck=TRUE) {
   }
   if (MaxL < Linf) stop(paste0("Maximum length bin (", MaxL, ") can't be smaller than asymptotic size (", Linf ,"). Increase size of maximum length class ['maxL']"))
   # Control Parameters
-  con <- list(maxsd=2, modtype=c("GTG","absel"), ngtg=13, P=0.01, Nage=101, 
+  con <- list(maxsd=2, modtype=c("GTG","absel"), ngtg=13, P=0.01, Nage=101,
     maxFM=4, method="BFGS")
   nmsC <- names(con)
   con[(namc <- names(Control))] <- Control
@@ -156,18 +157,18 @@ LBSPRsim_ <- function(LB_pars=NULL, Control=list(), msg=TRUE, doCheck=TRUE) {
   maxFM <- con$maxFM
   ngtg <- con$ngtg
   Yield <- vector()
-  
+
   newngtg <- max(ngtg, ceiling((2*maxsd*SDLinf + 1)/BinWidth))
   if (newngtg != ngtg) {
     if(msg) message("ngtg increased to ", newngtg, " because of small bin size")
-	ngtg <- newngtg  
+	ngtg <- newngtg
   }
-  
+
   if (modType == "GTG") {
     # Linfs of the GTGs
     gtgLinfs <- seq(from=Linf-maxsd*SDLinf, to=Linf+maxsd*SDLinf, length=ngtg)
     dLinf <- gtgLinfs[2] - gtgLinfs[1]
-    
+
     # Distribute Recruits across GTGS
     recP <- dnorm(gtgLinfs, Linf, sd=SDLinf) / sum(dnorm(gtgLinfs, Linf, sd=SDLinf))
 
@@ -282,7 +283,7 @@ LBSPRsim_ <- function(LB_pars=NULL, Control=list(), msg=TRUE, doCheck=TRUE) {
     }
 
 	Prob <- Prob * mat
-	
+
     SL <- 1/(1+exp(-log(19)*(LMids-SL50)/(SL95-SL50))) # Selectivity at length
     Sx <- apply(t(Prob) * SL, 2, sum) # Selectivity at relative age
     MSX <- cumsum(Sx) / seq_along(Sx) # Mean cumulative selectivity for each age
@@ -303,7 +304,7 @@ LBSPRsim_ <- function(LB_pars=NULL, Control=list(), msg=TRUE, doCheck=TRUE) {
     VulnUF	<- apply(N0 * Cx, 2, sum) #
 	VulnUF <- VulnUF/sum(VulnUF)
     SPR <- sum(Ma * Ns * rLens^FecB)/sum(Ma * N0 * rLens^FecB)
-    
+
 	# Equilibrium Relative Recruitment
 	EPR0 <- sum(Ma * N0 * rLens^FecB)
 	EPRf <- sum(Ma * Ns * rLens^FecB)
@@ -312,7 +313,7 @@ LBSPRsim_ <- function(LB_pars=NULL, Control=list(), msg=TRUE, doCheck=TRUE) {
     recb <- (reca * EPR0 - 1)/(R0*EPR0)
     RelRec <- max(0, (reca * EPRf-1)/(recb*EPRf))
     if (!is.finite(RelRec)) RelRec <- 0
-	
+
     # RelRec/R0 - relative recruitment
     YPR <- sum(Nc  * LMids^FecB ) * FM
     Yield <- YPR * RelRec
@@ -467,7 +468,7 @@ LBSPRfit <- function(LB_pars=NULL, LB_lengths=NULL, yrs=NA, Control=list(), pen=
   colnames(LBobj@Vars) <- c("SL50", "SL95", "FM", "SPR")
   LBobj@pLCatch <- do.call(cbind, lapply(runMods, slot, "pLCatch"))
   LBobj@maxFM <- unlist(lapply(runMods, slot, "maxFM"))[1]
- 
+
   DF <- data.frame(SL50=LBobj@SL50, SL95=LBobj@SL95, FM=LBobj@FM, SPR=LBobj@SPR)
   if (nrow(DF) == 1) LBobj@Ests <- as.matrix(DF)
   if (nrow(DF) > 1) LBobj@Ests <- apply(DF, 2, FilterSmooth, ...)
@@ -566,7 +567,7 @@ LBSPRfit_ <- function(yr=1, LB_pars=NULL, LB_lengths=NULL, Control=list(), pen=T
   LB_pars@BinMax <- LMids[length(LMids)] + 0.5 * LB_pars@BinWidth
 
   # Control Parameters
-  con <- list(maxsd=2, modtype=c("GTG","absel"), ngtg=13, P=0.01, Nage=101, 
+  con <- list(maxsd=2, modtype=c("GTG","absel"), ngtg=13, P=0.01, Nage=101,
     maxFM=4, method="BFGS")
   nmsC <- names(con)
   con[(namc <- names(Control))] <- Control
@@ -610,11 +611,11 @@ LBSPRfit_ <- function(yr=1, LB_pars=NULL, LB_lengths=NULL, Control=list(), pen=T
 
 	NLL <- opt$value
   } else {
-    # opt <- nlminb(Start, LBSPRopt, LB_pars=LB_pars, LB_lengths=SingYear, 
-	# Control=Control, pen=pen, control=list(iter.max=300, eval.max=400, 
+    # opt <- nlminb(Start, LBSPRopt, LB_pars=LB_pars, LB_lengths=SingYear,
+	# Control=Control, pen=pen, control=list(iter.max=300, eval.max=400,
 	# abs.tol=1E-20))
 	# NLL <- opt$objective
-	opt <- optim(Start, LBSPRopt, LB_pars=LB_pars, LB_lengths=SingYear, 
+	opt <- optim(Start, LBSPRopt, LB_pars=LB_pars, LB_lengths=SingYear,
 	Control=Control, pen=pen, hessian=TRUE, method=Control$method)
 	varcov <- solve(opt$hessian)
 	NLL <- opt$value
@@ -623,12 +624,12 @@ LBSPRfit_ <- function(yr=1, LB_pars=NULL, LB_lengths=NULL, Control=list(), pen=T
   LB_pars@SL95 <- LB_pars@SL50 + (exp(opt$par)[2] * LB_pars@Linf)
   LB_pars@FM <- exp(opt$par)[3]
 
-  # Estimate variance of derived parameters using delta method 
-  MLEs <- opt$par 
+  # Estimate variance of derived parameters using delta method
+  MLEs <- opt$par
   vSL50 <- (exp(opt$par[1]) * LB_pars@Linf)^2 * varcov[1,1]
-  vSL95 <- (LB_pars@Linf * exp(MLEs[2]))^2 * varcov[2,2] + 
+  vSL95 <- (LB_pars@Linf * exp(MLEs[2]))^2 * varcov[2,2] +
              (LB_pars@Linf * exp(MLEs[1]))^2 * varcov[1,1] +
-              LB_pars@Linf * exp(MLEs[2]) * LB_pars@Linf * exp(MLEs[1]) * 
+              LB_pars@Linf * exp(MLEs[2]) * LB_pars@Linf * exp(MLEs[1]) *
 			  varcov[1,2]
   vFM <- exp(opt$par[3])^2 * varcov[3,3]
   vSPR <- varSPR(opt$par, varcov, LB_pars)
@@ -636,9 +637,9 @@ LBSPRfit_ <- function(yr=1, LB_pars=NULL, LB_lengths=NULL, Control=list(), pen=T
   if (any(diag(varcov) < 0)) {
     warning("The final Hessian is not positive definite. Estimates may be unreliable")
 	flush.console()
-	elog <- 1 # 
+	elog <- 1 #
   }
-  
+
   runMod <- LBSPRsim_(LB_pars, Control=Control, msg=FALSE, doCheck=FALSE)
 
   LBobj <- new("LB_obj")
@@ -646,7 +647,7 @@ LBSPRfit_ <- function(yr=1, LB_pars=NULL, LB_lengths=NULL, Control=list(), pen=T
   for (X in 1:length(Slots)) slot(LBobj, Slots[X]) <- slot(LB_pars, Slots[X])
   Slots <- slotNames(SingYear)
   for (X in 1:length(Slots)) slot(LBobj, Slots[X]) <- slot(SingYear, Slots[X])
-  
+
   LBobj@mles <- matrix(c(opt$par), ncol=3)
   LBobj@Vars <- matrix(c(vSL50, vSL95, vFM, vSPR), ncol=4)
   LBobj@pLCatch <- runMod@pLCatch
@@ -663,24 +664,24 @@ varSPR <- function(MLEs, varcov, LB_pars) {
   var <- diag(varcov)
   vars <- c("lSL50", "ldL", "lFM")
   p1 <- 0
-  for (i in seq_along(MLEs)) p1 <- p1 + derivative(dSPR, x=MLEs[i], var=vars[i], 
+  for (i in seq_along(MLEs)) p1 <- p1 + derivative(dSPR, x=MLEs[i], var=vars[i],
     LB_pars=LB_pars)^2 * var[i]
 
-  p2 <- derivative(dSPR, x=MLEs[1], var=vars[1],  LB_pars=LB_pars) * 
+  p2 <- derivative(dSPR, x=MLEs[1], var=vars[1],  LB_pars=LB_pars) *
     derivative(dSPR, x=MLEs[2], var=vars[2],  LB_pars=LB_pars) * varcov[1,2]
-  
-  p3 <- derivative(dSPR, x=MLEs[1], var=vars[1],  LB_pars=LB_pars) * 
+
+  p3 <- derivative(dSPR, x=MLEs[1], var=vars[1],  LB_pars=LB_pars) *
     derivative(dSPR, x=MLEs[3], var=vars[3],  LB_pars=LB_pars) * varcov[1,3]
-  
-  p4 <- derivative(dSPR, x=MLEs[3], var=vars[3],  LB_pars=LB_pars) * 
+
+  p4 <- derivative(dSPR, x=MLEs[3], var=vars[3],  LB_pars=LB_pars) *
     derivative(dSPR, x=MLEs[2], var=vars[2],  LB_pars=LB_pars) * varcov[3,2]
-  p1 + p2 + p3 + p4   
+  p1 + p2 + p3 + p4
 }
 
 dSPR <- function(x, LB_pars, var=c("lSL50", "ldL", "lFM"),Control=NULL) {
   lvar <- match.arg(var)
   ex <- exp(x)
-  if (lvar == "lFM") myslot <- "FM" 
+  if (lvar == "lFM") myslot <- "FM"
   if (lvar == "lSL50") {
     myslot <- "SL50"
 	ex <- ex * LB_pars@Linf
@@ -689,7 +690,7 @@ dSPR <- function(x, LB_pars, var=c("lSL50", "ldL", "lFM"),Control=NULL) {
     myslot <- "SL95"
 	ex <-  ex * LB_pars@Linf + LB_pars@L50
   }
-  slot(LB_pars, myslot) <- ex 
+  slot(LB_pars, myslot) <- ex
   temp <- LBSPRsim_(LB_pars, Control=Control, msg=FALSE, doCheck=FALSE)
   temp@SPR
 }
@@ -776,20 +777,20 @@ plotSim <- function(LB_obj=NULL, type=c("Catch", "Pop"), perRec=FALSE, Cols=NULL
   if (class(LB_obj) != "LB_obj") stop("LB_obj must be of class 'LB_obj'. Use: LBSPRsim")
   type <- match.arg(type)
   LMids <- LB_obj@LMids
-  
+
   pLCatch <- LB_obj@pLCatch # predicted size comp of catch
   pLPop <- LB_obj@pLPop # predicted size comp of population
-  
+
 
   if (length(pLPop) < 1) stop("No simulated population data")
-  PopF <- pLPop[,"PopF"] 
-  PopUF <- pLPop[,"PopUF"] 
+  PopF <- pLPop[,"PopF"]
+  PopUF <- pLPop[,"PopUF"]
   PopSizeDat <- data.frame(pLPop)
-  
+
   if (!perRec) {
     relativePop <- PopF / (PopF[1]/PopUF[1]) * (LB_obj@RelRec/LB_obj@R0)
     PopSizeDat[,"PopF"] <- relativePop
-  
+
     ind <- which(PopSizeDat[,"VulnUF"] > 0)[1]
     relativeCatch <- pLCatch / (pLCatch[ind]/PopSizeDat[,"VulnUF"][ind]) * (LB_obj@RelRec/LB_obj@R0)
     pLCatch <- relativeCatch
@@ -987,7 +988,7 @@ plotSize <- function(LB_obj=NULL, axTex=12, axTitle=14, Title=NULL) {
 	    LMids=longDat$LMids[0.1*length(longDat$LMids)],
 		LBSPR_len=0.15 * max(longDat$LBSPR_len), lab="Model didn't converge")
       bplot <- bplot + geom_text(data=text_dat, aes(label=lab), size=6)
-	
+
 	}
   }
 
@@ -1006,18 +1007,18 @@ plotSize <- function(LB_obj=NULL, axTex=12, axTitle=14, Title=NULL) {
 #' @param Title include the title?
 #' @param Leg include the legend?
 #' @param limcol colour for SPR Limit (hex; default is red)
-#' @param targcol colour for SPR target (hex; default is orange) 
+#' @param targcol colour for SPR target (hex; default is orange)
 #' @param abtgcol colour for above SPR target (hex; default is green)
 #' @param labcol optional fixed colour for estimated SPR label
 #' @param bgcol colour for the background
 #' @param labcex size for the estimated SPR label
-#' @param texcex size for estimated other labels 
+#' @param texcex size for estimated other labels
 
 #' @author A. Hordyk
 #' @importFrom plotrix draw.circle draw.ellipse draw.radial.line radialtext
 #' @export
-plotSPRCirc <- function(LB_obj=NULL, SPRTarg=0.4, SPRLim=0.2, useSmooth=TRUE, 
-  Title=FALSE, Leg=TRUE, limcol="#ff1919", targcol="#ffb732", abtgcol="#32ff36", 
+plotSPRCirc <- function(LB_obj=NULL, SPRTarg=0.4, SPRLim=0.2, useSmooth=TRUE,
+  Title=FALSE, Leg=TRUE, limcol="#ff1919", targcol="#ffb732", abtgcol="#32ff36",
   labcol=NULL, bgcol="#FAFAFA", labcex=2, texcex=1.3) {
   if (class(LB_obj) != "LB_obj") stop("LB_obj must be of class 'LB_obj'. Use LBSPRfit")
 
@@ -1042,10 +1043,10 @@ plotSPRCirc <- function(LB_obj=NULL, SPRTarg=0.4, SPRLim=0.2, useSmooth=TRUE,
   # targcol <- "#ffb732"
   # abtgcol <- "#32ff36"
   nv <- 200
-  # texcex <- 1.3 
+  # texcex <- 1.3
   # texcex2 <- 2
   # Circle
-	  
+
   draw.circle(x=x, y=x, radius=a, border=bgcol, col=bgcol, nv=nv)
   # Limit Ellipse
   draw.ellipse(x=x, y=x, a=a, b=a, angle=0, segment=c(max(lim, ang), ang2),
@@ -1067,28 +1068,28 @@ plotSPRCirc <- function(LB_obj=NULL, SPRTarg=0.4, SPRLim=0.2, useSmooth=TRUE,
        expand=FALSE, col=targcol, lwd=1, lty=1)
   draw.radial.line(0, x-0.5, center=c(x, x), deg=ang,
        expand=FALSE, col="black", lwd=3, lty=2)
-	   
+
   rndspr <- round(spr,2)*100
- 
+
   if (rndspr <= SPRLim*100) textcol <- limcol
   if (rndspr <= SPRTarg*100 & rndspr > SPRLim*100) textcol <- targcol
   if (rndspr > SPRTarg*100)  textcol <- abtgcol
   if (class(labcol) == "character") textcol <- labcol
-  radialtext(paste0(round(spr,2)*100, "%"), 
-    center=c(x,x), start=x-0.2, middle=1, end=NA, deg=ang,  expand=0, stretch=1, 
+  radialtext(paste0(round(spr,2)*100, "%"),
+    center=c(x,x), start=x-0.2, middle=1, end=NA, deg=ang,  expand=0, stretch=1,
 	nice=TRUE, cex=labcex, xpd=NA, col=textcol)
-  
+
   if (Title) mtext(side=3, paste0("Estimated SPR = ", round(spr,2)),
     cex=1.25, line=-4 ,outer=TRUE)
   if (Leg) legend("topleft", legend=c(as.expression(bquote(Below ~ Limit ~ .(SPRLim*100) * "%")),
-    as.expression(bquote(Above ~ Limit)), 
-	as.expression(bquote(Above ~ Target ~ .(SPRTarg*100) * "%"))), 
+    as.expression(bquote(Above ~ Limit)),
+	as.expression(bquote(Above ~ Target ~ .(SPRTarg*100) * "%"))),
 	bty="n", pch=15, pt.cex=2,col=c(limcol, targcol, abtgcol),
 	bg=c(limcol, targcol, abtgcol), title=expression(bold("SPR")), cex=texcex)
   # if (Leg) legend("topright", bty="n",
     # legend=as.expression(bquote(Estimate ~ .(round(spr,2)*100) * "%")),
 	# lty=2,lwd=3, cex=texcex)
-    
+
   text(x, x+a, "0%", pos=3, xpd=NA, cex=texcex)
   text(x+a, x, "25%", pos=4, xpd=NA, cex=texcex)
   text(x, x-a, "50%", pos=1, xpd=NA, cex=texcex)
@@ -1114,7 +1115,7 @@ plotSPRCirc <- function(LB_obj=NULL, SPRTarg=0.4, SPRLim=0.2, useSmooth=TRUE,
 #' @importFrom graphics abline axis hist legend lines mtext par plot points text
 #' @importFrom plotrix plotCI
 #' @export
-plotEsts <- function(LB_obj=NULL, pars=c("Sel", "FM", "SPR"), Lwd=2.5, ptCex=1.25, 
+plotEsts <- function(LB_obj=NULL, pars=c("Sel", "FM", "SPR"), Lwd=2.5, ptCex=1.25,
   axCex=1.45, labCex=1.55, doSmooth=TRUE, incL50=FALSE, CIcol="darkgray", L50col="gray") {
   if (class(LB_obj) != "LB_obj") stop("LB_obj must be of class 'LB_obj'. Use LBSPRfit")
   if (length(LB_obj@Ests) < 1) stop("No estimates found. Use LBSPRfit")
@@ -1134,20 +1135,20 @@ plotEsts <- function(LB_obj=NULL, pars=c("Sel", "FM", "SPR"), Lwd=2.5, ptCex=1.2
   if (length(LB_obj@Years) < 2) message("This plot doesn't make much sense with only 1 year. But here it is anyway")
   smoothEsts <- data.frame(LB_obj@Ests)
   smoothEsts$Years <- LB_obj@Years
-  
+
   ## 95% CIs ##
   CIlower <- as.matrix(rawEsts[,1:4] - 1.96 * sqrt(LB_obj@Vars))
   CIupper <- as.matrix(rawEsts[,1:4] + 1.96 * sqrt(LB_obj@Vars))
-  
+
   # correct bounded parameters - dodgy I know!
   CIlower[CIlower[,3]<0,3] <- 0
   CIlower[CIlower[,4]<0,4] <- 0
-  CIupper[CIupper[,4]>1,4] <- 1 
+  CIupper[CIupper[,4]>1,4] <- 1
   CIlower[!is.finite(CIlower)] <- NA
   CIupper[!is.finite(CIupper)] <- NA
-	
-  scol <- CIcol 
-  
+
+  scol <- CIcol
+
   at <- seq(from=min(LB_obj@Years)-1, to=max(LB_obj@Years)+1, by=1)
   nplots <- 0
   doSel <- doFM <- doSPR <- FALSE
@@ -1178,31 +1179,31 @@ plotEsts <- function(LB_obj=NULL, pars=c("Sel", "FM", "SPR"), Lwd=2.5, ptCex=1.2
 	plot(rawEsts$Years,  rawEsts$SL50, ylim=YLim, xlab="", ylab="", axes=FALSE, type="n")
 	plotrix::plotCI(x=rawEsts$Years, y=rawEsts$SL50, ui=CIupper[,1], li=CIlower[,1], add=TRUE, scol=scol,
 	   pch=19, cex=ptCex)
-	
+
 	axis(side=1, at=at, cex.axis=axCex)
 	axis(side=2, at=pretty(YLim), cex.axis=axCex)
     if(doSmooth) lines(smoothEsts$Years,  smoothEsts$SL50, lwd=Lwd)
-   
+
     # points(rawEsts$Years,  rawEsts$SL95, pch=17)
 	plotrix::plotCI(x=rawEsts$Years, y=rawEsts$SL95, ui=CIupper[,2], li=CIlower[,2], add=TRUE, pch=17, scol=scol,
 	  cex=ptCex)
     if(doSmooth) lines(smoothEsts$Years,  smoothEsts$SL95, lwd=Lwd, lty=2)
     if (incL50) abline(h=LB_obj@L50, col=L50col, lwd=1)
 	mtext(side=2, line=4, "Selectivity", cex=labCex, las=3)
-	if (incL50 & doSmooth) 
+	if (incL50 & doSmooth)
 	  legend("topright", bty="n", legend=c(expression(S[L50]), expression(S[L95]),
 	  expression(L[50])), lty=c(1,2,1), lwd=Lwd, col=c("black", "black", "gray"),
 	  cex=1.75, xpd=NA)
-	if (!incL50 & doSmooth) 
-	  legend("topright", bty="n", legend=c(expression(S[L50]), expression(S[L95])), 
-	  lty=c(1,2), lwd=Lwd, col=c("black"),  cex=1.75, xpd=NA)	
+	if (!incL50 & doSmooth)
+	  legend("topright", bty="n", legend=c(expression(S[L50]), expression(S[L95])),
+	  lty=c(1,2), lwd=Lwd, col=c("black"),  cex=1.75, xpd=NA)
 	if (incL50 & !doSmooth)
 	  legend("topright", bty="n", legend=c(expression(S[L50]), expression(S[L95]),
 	  expression(L[50])), pch=c(17, 19, 15), col=c("black", "black", L50col),
 	  cex=ptCex, xpd=NA)
 	if (!incL50 & !doSmooth)
 	  legend("topright", bty="n", legend=c(expression(S[L50]), expression(S[L95])),
-	  pch=c(19, 17), col=c("black"), cex=ptCex, xpd=NA)	
+	  pch=c(19, 17), col=c("black"), cex=ptCex, xpd=NA)
   }
   # Relative Fishing Mortality
   if (doFM) {
