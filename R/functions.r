@@ -282,12 +282,13 @@ LBSPRsim_ <- function(LB_pars=NULL, Control=list(), msg=TRUE, doCheck=TRUE) {
     }
 
 	Prob <- Prob * mat
+	Prob <- Prob/apply(Prob, 1, sum) # re-standardize
 	
     SL <- 1/(1+exp(-log(19)*(LMids-SL50)/(SL95-SL50))) # Selectivity at length
     Sx <- apply(t(Prob) * SL, 2, sum) # Selectivity at relative age
     MSX <- cumsum(Sx) / seq_along(Sx) # Mean cumulative selectivity for each age
     Ns <- (1-rLens)^(MK+(MK*FM)*MSX) # number at relative age in population
-
+  print(Ns)
     Cx <- t(t(Prob) * SL) # Conditional catch length-at-age probablilities
     Nc <- apply(Ns * Cx, 2, sum) #
 
