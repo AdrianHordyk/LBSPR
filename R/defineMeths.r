@@ -169,6 +169,7 @@ setClass("LB_lengths", representation(
 #' @param dataType is the length data individual measurements (raw) or a length frequency (freq)?
 #' @param header is there a header?
 #' @param msg display a message?
+#' @param ... optional additional arguments passed to read.csv
 #' @return a object of class \code{'LB_lengths'}
 #' @author A. Hordyk
 #' @importFrom utils read.csv
