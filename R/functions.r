@@ -439,11 +439,12 @@ LBSPRfit <- function(LB_pars=NULL, LB_lengths=NULL, yrs=NA, Control=list(), pen=
     if (is.null(yearNames)) yearNames <- yrs
 	cols <- yrs
   }
-  message("Fitting model")
-  message("Year:")
+  if (msg) message("Fitting model")
+  if (msg) message("Year:")
   flush.console()
   runMods <- sapply(cols, function (X)
-	LBSPRfit_(yr=X, LB_pars=LB_pars, LB_lengths=LB_lengths, Control=Control,  pen=pen, useCPP=useCPP))
+	LBSPRfit_(yr=X, LB_pars=LB_pars, LB_lengths=LB_lengths, Control=Control,  
+	  pen=pen, useCPP=useCPP, msg=msg))
 
   LBobj <- new("LB_obj")
   Slots <- slotNames(LB_pars)
@@ -530,6 +531,7 @@ FilterSmooth <- function(RawEsts, R=1, Q=0.1, Int=100) {
 #' @param Control a list of control options for the LBSPR model.
 #' @param pen apply a penalty if estimate of selectivity is very high?
 #' @param useCPP use cpp optimization code?
+#' @param msg display messages?
 #' @details The Control options are:
 #' \describe{
 #'  \item{\code{modtype}}{Model Type: either Growth-Type-Group Model (default: "GTG") or Age-Structured ("absel")}
@@ -544,8 +546,8 @@ FilterSmooth <- function(RawEsts, R=1, Q=0.1, Int=100) {
 #'
 #' @importFrom stats dbeta dnorm median nlminb optimise pnorm optim runif
 #' @export
-LBSPRfit_ <- function(yr=1, LB_pars=NULL, LB_lengths=NULL, Control=list(), pen=TRUE, useCPP=TRUE) {
-  message(yr)
+LBSPRfit_ <- function(yr=1, LB_pars=NULL, LB_lengths=NULL, Control=list(), pen=TRUE, useCPP=TRUE, msg=TRUE) {
+  if (msg) message(yr)
   flush.console()
 
   if (class(LB_pars) != "LB_pars") stop("LB_pars must be of class 'LB_pars'. Use: new('LB_pars')")
@@ -601,11 +603,19 @@ LBSPRfit_ <- function(yr=1, LB_pars=NULL, LB_lengths=NULL, Control=list(), pen=T
 	recP <- dnorm(gtgLinfs, LB_pars@Linf, sd=SDLinf) / sum(dnorm(gtgLinfs, LB_pars@Linf, sd=SDLinf))
     usePen <- 1
 	if (!pen) usePen <- 0
-	opt <- optim(Start, LBSPR_NLLgtg, LMids=LMids, LBins=LBins, LDat=LDat,
+	opt <- try(optim(Start, LBSPR_NLLgtg, LMids=LMids, LBins=LBins, LDat=LDat,
 	  gtgLinfs=gtgLinfs, MKMat=MKMat,  MK=LB_pars@MK, Linf=LB_pars@Linf,
-	  ngtg=ngtg, recP=recP,usePen=usePen, hessian=TRUE, method=Control$method)
-	varcov <- solve(opt$hessian)
-
+	  ngtg=ngtg, recP=recP,usePen=usePen, hessian=TRUE, method=Control$method), 
+	  silent=TRUE)
+	varcov <- try(solve(opt$hessian), silent=TRUE)
+	if (class(varcov) == "try-error") class(opt) <- "try-error"
+	
+	if (class(opt) == "try-error") { # optim crashed - try a different approach 
+      opt <- try(optim(Start, LBSPR_NLLgtg, LMids=LMids, LBins=LBins, LDat=LDat,
+	    gtgLinfs=gtgLinfs, MKMat=MKMat,  MK=LB_pars@MK, Linf=LB_pars@Linf,
+	    ngtg=ngtg, recP=recP,usePen=usePen, hessian=FALSE, method=Control$method))	
+	  varcov <- matrix(NA, 3,3) 
+	}  
 	NLL <- opt$value
   } else {
     # opt <- nlminb(Start, LBSPRopt, LB_pars=LB_pars, LB_lengths=SingYear, 
@@ -631,7 +641,7 @@ LBSPRfit_ <- function(yr=1, LB_pars=NULL, LB_lengths=NULL, Control=list(), pen=T
   vFM <- exp(opt$par[3])^2 * varcov[3,3]
   vSPR <- varSPR(opt$par, varcov, LB_pars)
   elog <- 0
-  if (any(diag(varcov) < 0)) {
+  if (all(is.na(varcov)) | any(diag(varcov) < 0)) {
     warning("The final Hessian is not positive definite. Estimates may be unreliable")
 	flush.console()
 	elog <- 1 # 

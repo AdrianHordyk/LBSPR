@@ -127,11 +127,11 @@ setMethod("initialize", "LB_pars", function(.Object, file="none", defaults=TRUE,
    # Add code for file input here
    return(.Object)
  }
- if (file == "none")  message("A blank LB_pars object created")
- if (file != "none" & !(file.exists(file)))  message("Couldn't file specified CSV file: ", file, ".  A blank LB_pars object created")
+ if (file == "none" & msg)  message("A blank LB_pars object created")
+ if (file != "none" & !(file.exists(file)) & msg)  message("Couldn't file specified CSV file: ", file, ".  A blank LB_pars object created")
  if (!defaults)  return(.Object)
  if (defaults) {
-   message("Default values have been set for some parameters")
+   if (msg) message("Default values have been set for some parameters")
    .Object@CVLinf <- 0.1
    .Object@Walpha <- 0.001
    .Object@Wbeta <- 3
