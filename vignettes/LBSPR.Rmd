@@ -440,7 +440,7 @@ Here we have set the target SPR at 75%.
 
 Then import your length data:
 ```{r}
-LenDat <- new("LB_lengths", LB_pars=MyPars, file=paste0(datadir, "/LRaw_MultiYr.csv"), dataType="raw", msg=FALSE)
+LenDat <- new("LB_lengths", LB_pars=MyPars, file=paste0(datdir, "/LRaw_MultiYr.csv"), dataType="raw", msg=FALSE)
 ```
 
 Finally, you must set the selectivity parameters for the simulated size data. You may be able to estimate these from the data:

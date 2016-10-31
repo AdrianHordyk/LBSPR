@@ -390,7 +390,7 @@ MyPars@SPR &lt;-<span class="st"> </span><span class="fl">0.75</span> <span clas
 MyPars@BinWidth &lt;-<span class="st"> </span><span class="dv">5</span></code></pre></div>
 <p>Here we have set the target SPR at 75%.</p>
 <p>Then import your length data:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">LenDat &lt;-<span class="st"> </span><span class="kw">new</span>(<span class="st">"LB_lengths"</span>, <span class="dt">LB_pars=</span>MyPars, <span class="dt">file=</span><span class="kw">paste0</span>(datadir, <span class="st">"/LRaw_MultiYr.csv"</span>), <span class="dt">dataType=</span><span class="st">"raw"</span>, <span class="dt">msg=</span><span class="ot">FALSE</span>)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">LenDat &lt;-<span class="st"> </span><span class="kw">new</span>(<span class="st">"LB_lengths"</span>, <span class="dt">LB_pars=</span>MyPars, <span class="dt">file=</span><span class="kw">paste0</span>(datdir, <span class="st">"/LRaw_MultiYr.csv"</span>), <span class="dt">dataType=</span><span class="st">"raw"</span>, <span class="dt">msg=</span><span class="ot">FALSE</span>)</code></pre></div>
 <p>Finally, you must set the selectivity parameters for the simulated size data. You may be able to estimate these from the data:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">Mod &lt;-<span class="st"> </span><span class="kw"><a href="../reference/LBSPRfit.html">LBSPRfit</a></span>(MyPars, LenDat, <span class="dt">msg=</span><span class="ot">FALSE</span>)
 
