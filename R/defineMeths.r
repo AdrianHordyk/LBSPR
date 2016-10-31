@@ -215,6 +215,7 @@ setMethod("initialize", "LB_lengths", function(.Object, file="none", LB_pars=NUL
         .Object@Years <-  gsub("X", "", .Object@Years)
 		.Object@Years <-  gsub("V", "", .Object@Years)
 	    .Object@Years <- as.numeric(.Object@Years)
+		if (any(is.na(.Object@Years))) .Object@Years <- 1:length(.Object@Years)
 		if (.Object@Years[1] == 2) .Object@Years <- 1:length(.Object@Years)
 	    options(warn=1)
         .Object@NYears <- ncol(dat) - 1
