@@ -7,3 +7,4 @@ README.MD
 ## Ignore travis config file
 ^\.travis\.yml$
 ^appveyor\.yml$
+docs
