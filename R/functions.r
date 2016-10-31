@@ -29,8 +29,8 @@ LBSPRsim <- function(LB_pars=NULL, Control=list(), msg=TRUE) {
 	opt <- optimise(getFMfun, interval=c(0.001, 20), LB_pars, Control=Control)
 	LB_pars@FM <- opt$minimum
 	temp <- LBSPRsim_(LB_pars, Control=Control, msg=msg)
-	temp@SPR <- round(temp@SPR,1)
-	if (temp@SPR != round(LB_pars@SPR,1)) {
+	temp@SPR <- round(temp@SPR,2)
+	if (temp@SPR != round(LB_pars@SPR,2)) {
 	  warning("Not possible to reach specified SPR. SPR may be too low for current selectivity pattern")
 	  message("SPR is ", temp@SPR, " instead of ", LB_pars@SPR)
 	}
