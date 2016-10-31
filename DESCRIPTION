@@ -17,7 +17,8 @@ Imports:
   dplyr,
   graphics,
   methods,
-  Rcpp
+  Rcpp,
+  testthat
 RoxygenNote: 5.0.1
 LinkingTo: Rcpp
 Suggests: knitr,
