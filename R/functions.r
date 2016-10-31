@@ -29,7 +29,8 @@ LBSPRsim <- function(LB_pars=NULL, Control=list(), msg=TRUE) {
 	opt <- optimise(getFMfun, interval=c(0.001, 20), LB_pars, Control=Control)
 	LB_pars@FM <- opt$minimum
 	temp <- LBSPRsim_(LB_pars, Control=Control, msg=msg)
-	if (round(temp@SPR,1) != round(LB_pars@SPR,1)) {
+	temp@SPR <- round(temp@SPR,1)
+	if (temp@SPR != round(LB_pars@SPR,1)) {
 	  warning("Not possible to reach specified SPR. SPR may be too low for current selectivity pattern")
 	  message("SPR is ", temp@SPR, " instead of ", LB_pars@SPR)
 	}
@@ -325,11 +326,11 @@ LBSPRsim_ <- function(LB_pars=NULL, Control=list(), msg=TRUE, doCheck=TRUE) {
     LenOut[,2] <- LenOut[,2]/sum(LenOut[,2])
   }
 
-  if (FM > maxFM) {
-    if (msg) message("F/M (", round(FM,2), ") greater than max F/M parameter (", maxFM, ")")
-	if (msg) message("setting F/M to maxFM (see Control in documentation)")
-    FM <- maxFM
-  }
+  # if (FM > maxFM) {
+    # if (msg) message("F/M (", round(FM,2), ") greater than max F/M parameter (", maxFM, ")")
+	# if (msg) message("setting F/M to maxFM (see Control in documentation)")
+    # FM <- maxFM
+  # }
   LBobj <- new("LB_obj")
   Slots <- slotNames(LB_pars)
   for (X in 1:length(Slots)) slot(LBobj, Slots[X]) <- slot(LB_pars, Slots[X])
