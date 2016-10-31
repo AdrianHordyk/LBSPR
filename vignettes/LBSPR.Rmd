@@ -33,9 +33,9 @@ Hordyk et al. (2016) describe a length-structured version of the LBSPR model tha
 The default setting for the LBSPR package is to use the GTG-LBSPR model for all simulation and estimation.  Control options in the simulation and estimation functions can be used to switch to the age-structured LBSPR model. 
 
 ## Bug Reports
-The LBSPR package is still in development. It is possible, even highly likely, that there are bugs and issues with some of the functions. Please alert me to any bugs or issues that you come across (either email or GitHub).
+The LBSPR package is still in development. It is possible, even highly likely, that there are bugs and issues with some of the functions. Please alert me to any bugs or issues by using (GitHub)[https://github.com/AdrianHordyk/LBSPR/issues].
 
-Comments and suggestions for additional features are welcome. GitHub pull requests with modifications or extensions are even more welcome!
+Comments and suggestions for additional features are welcome. (GitHub pull requests)[https://github.com/AdrianHordyk/LBSPR/pulls] with modifications or extensions are even more welcome!
 
 Finally, please make sure you understand the data and the biological parameters (and how the model treats these) and critically evaluate any output of the LBSPR model. As they say: 
 
@@ -307,10 +307,15 @@ slotNames(MyLengths)
 However, it is probably easier to create the `LB_lengths` object by directly reading in a CSV file.
 
 A number of CSV files containing example data have been included in the LBSPR package.  To find the location of the data files on your machine, use the `DataDir` function:
-```{r}
+```{r, eval=FALSE}
 datdir <- DataDir()
 ```
 
+```{r, include=FALSE}
+datdir <- DataDir()
+if (datdir == "E:\\GitRepos\\LBSPR/") # during build
+  datdir <- "E:/GitRepos/LBSPR/inst"
+```
 The available example files can be printed out using `list.files`:
 ```{r}
 list.files(datdir, pattern=".csv")
@@ -416,6 +421,37 @@ Finally, the `plotEsts` function can be used to visually display the estimated p
 ```{r, fig.width=7, fig.height=5}
 plotEsts(myFit1)
 plotEsts(myFit2)
+```
+
+# Comparing Observed Length Data to Target Size Structure
+You can compare the observed size data against an expected size composition at a target SPR using the `plotTarg` function.  To do this, you need a `LB_pars` object with the life history parameters and the target SPR:
+
+```{r}
+MyPars <- new("LB_pars", msg=FALSE)
+MyPars@Linf <- 100 
+MyPars@L50 <- 66 
+MyPars@L95 <- 70
+MyPars@MK <- 1.5 
+MyPars@SPR <- 0.75 # Target SPR 
+MyPars@BinWidth <- 5
+```
+
+Here we have set the target SPR at 75%. 
+
+Then import your length data:
+```{r}
+LenDat <- new("LB_lengths", LB_pars=MyPars, file=paste0(datadir, "/LRaw_MultiYr.csv"), dataType="raw", msg=FALSE)
+```
+
+Finally, you must set the selectivity parameters for the simulated size data. You may be able to estimate these from the data:
+```{r, fig.width=5, fig.height=5}
+Mod <- LBSPRfit(MyPars, LenDat, msg=FALSE)
+
+yr <- 1 # first year of data
+MyPars@SL50 <- Mod@SL50[yr]
+MyPars@SL95 <- Mod@SL95[yr] 
+
+plotTarg(MyPars, LenDat, yr=yr)
 ```
 
 
