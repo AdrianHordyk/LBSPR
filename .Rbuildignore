@@ -6,3 +6,4 @@ README.MD
 ^.*\.git
 ## Ignore travis config file
 ^\.travis\.yml$
+^appveyor\.yml$
