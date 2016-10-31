@@ -1,7 +1,7 @@
 Package: LBSPR
 Title: Length-Based Spawning Potential Ratio
 Version: 0.1
-Authors@R: person("Adrian", "Hordyk", email = "a.hordyk@murdoch.edu.au", role = c("aut", "cre"))
+Authors@R: person("Adrian", "Hordyk", email = "ar.hordyk@gmail.com", role = c("aut", "cre"))
 Description: Simulate expected equilibrium length composition, YPR, and
     SPR using the LBSPR model. Fit the LBSPR model to length data to estimate
     selectivity, relative fishing mortality, and spawning potential ratio.

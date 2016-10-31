@@ -1,6 +1,6 @@
 ---
 title: "Length-Based Spawning Potential Ratio"
-author: "Adrian Hordyk (a.hordyk@murdoch.edu.au)"
+author: "Adrian Hordyk"
 date: "`r Sys.Date()`"
 output: 
   html_document:
@@ -33,13 +33,11 @@ Hordyk et al. (2016) describe a length-structured version of the LBSPR model tha
 The default setting for the LBSPR package is to use the GTG-LBSPR model for all simulation and estimation.  Control options in the simulation and estimation functions can be used to switch to the age-structured LBSPR model. 
 
 ## Bug Reports
-The LBSPR package is still in development. It is possible, even highly likely, that there are bugs and issues with some of the functions. Please alert me to any bugs or issues by using (GitHub)[https://github.com/AdrianHordyk/LBSPR/issues].
+Please alert me to any bugs or issues by using [GitHub](https://github.com/AdrianHordyk/LBSPR/issues).
 
-Comments and suggestions for additional features are welcome. (GitHub pull requests)[https://github.com/AdrianHordyk/LBSPR/pulls] with modifications or extensions are even more welcome!
+Comments and suggestions for additional features are welcome. [GitHub pull requests](https://github.com/AdrianHordyk/LBSPR/pulls) with modifications or extensions are even more welcome!
 
-Finally, please make sure you understand the data and the biological parameters (and how the model treats these) and critically evaluate any output of the LBSPR model. As they say: 
-
-> All Care Taken But We Accept No Responsibility 
+Finally, please make sure you understand the data and the biological parameters (and how the model treats these) and critically evaluate any output of the LBSPR model. 
 
 # First Steps
 
