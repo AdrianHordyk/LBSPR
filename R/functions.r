@@ -5,6 +5,7 @@
 #'
 #' @param LB_pars an object of class \code{'LB_pars'} that contains the life history information
 #' @param Control a list of control options for the LBSPR model.
+#' @param msg display messages?
 #' @details The Control options are:
 #' \describe{
 #'  \item{\code{modtype}}{Model Type: either Growth-Type-Group Model (default: "GTG") or Age-Structured ("absel")}
@@ -20,21 +21,21 @@
 #' @importFrom Rcpp evalCpp sourceCpp
 #'
 #' @export
-LBSPRsim <- function(LB_pars=NULL, Control=list()) {
+LBSPRsim <- function(LB_pars=NULL, Control=list(), msg=TRUE) {
   # if (class(LB_pars) != "LB_pars") stop("LB_pars must be of class 'LB_pars'. Use: new('LB_pars')")
   if (length(LB_pars@SPR)>0) {
     if (LB_pars@SPR > 1 | LB_pars@SPR < 0) stop("SPR must be between 0 and 1")
     if (length(LB_pars@FM) >0) message("Both SPR and F/M have been specified. Using SPR and ignoring F/M")
 	opt <- optimise(getFMfun, interval=c(0.001, 20), LB_pars, Control=Control)
 	LB_pars@FM <- opt$minimum
-	temp <- LBSPRsim_(LB_pars, Control=Control)
+	temp <- LBSPRsim_(LB_pars, Control=Control, msg=msg)
 	if (round(temp@SPR,1) != round(LB_pars@SPR,1)) {
 	  warning("Not possible to reach specified SPR. SPR may be too low for current selectivity pattern")
 	  message("SPR is ", temp@SPR, " instead of ", LB_pars@SPR)
 	}
 	return(temp)
   } else {
-    return(LBSPRsim_(LB_pars, Control=Control))
+    return(LBSPRsim_(LB_pars, Control=Control, msg=msg))
   }
 }
 
@@ -609,8 +610,28 @@ LBSPRfit_ <- function(yr=1, LB_pars=NULL, LB_lengths=NULL, Control=list(), pen=T
 	  silent=TRUE)
 	varcov <- try(solve(opt$hessian), silent=TRUE)
 	if (class(varcov) == "try-error") class(opt) <- "try-error"
-	
-	if (class(opt) == "try-error") { # optim crashed - try a different approach 
+	if (class(varcov) != "try-error" && any(diag(varcov) < 0)) 
+	  class(opt) <- "try-error"
+	count <- 0 
+	countmax <- 10
+	quants <- seq(from=0, to=0.95, length.out=countmax)
+	while (class(opt) == "try-error" & count < countmax) { # optim crashed - try different starts 
+      count <- count + 1 
+	  sSL50 <- quantile(c(LMids[min(which(ldat>0))]/LB_pars@Linf, 
+	    LMids[which.max(ldat)]/LB_pars@Linf), probs=quants)[count]
+	  sSL50 <- as.numeric(sSL50)
+	  Start <- log(c(sSL50, sDel, sFM))	
+      opt <- try(optim(Start, LBSPR_NLLgtg, LMids=LMids, LBins=LBins, LDat=LDat,
+	    gtgLinfs=gtgLinfs, MKMat=MKMat,  MK=LB_pars@MK, Linf=LB_pars@Linf,
+	    ngtg=ngtg, recP=recP,usePen=usePen, hessian=TRUE, method=Control$method),
+		silent=TRUE)	
+	  varcov <- try(solve(opt$hessian), silent=TRUE) 
+	  if (class(varcov) == "try-error") class(opt) <- "try-error"
+	  if (class(varcov) != "try-error" && any(diag(varcov) < 0)) 
+	    class(opt) <- "try-error"
+	}	
+
+	if (class(opt) == "try-error") { # optim crashed - try without hessian  
       opt <- try(optim(Start, LBSPR_NLLgtg, LMids=LMids, LBins=LBins, LDat=LDat,
 	    gtgLinfs=gtgLinfs, MKMat=MKMat,  MK=LB_pars@MK, Linf=LB_pars@Linf,
 	    ngtg=ngtg, recP=recP,usePen=usePen, hessian=FALSE, method=Control$method))	
@@ -641,11 +662,15 @@ LBSPRfit_ <- function(yr=1, LB_pars=NULL, LB_lengths=NULL, Control=list(), pen=T
   vFM <- exp(opt$par[3])^2 * varcov[3,3]
   vSPR <- varSPR(opt$par, varcov, LB_pars)
   elog <- 0
+  # Error Logs 
   if (all(is.na(varcov)) | any(diag(varcov) < 0)) {
     warning("The final Hessian is not positive definite. Estimates may be unreliable")
 	flush.console()
 	elog <- 1 # 
   }
+  if (LB_pars@SL50/LB_pars@Linf > 0.85) elog <- 2
+  if (LB_pars@FM > 5) elog <- 3
+  if (LB_pars@SL50/LB_pars@Linf > 0.85 & LB_pars@FM > 5) elog <- 4
   
   runMod <- LBSPRsim_(LB_pars, Control=Control, msg=FALSE, doCheck=FALSE)
 
@@ -655,6 +680,7 @@ LBSPRfit_ <- function(yr=1, LB_pars=NULL, LB_lengths=NULL, Control=list(), pen=T
   Slots <- slotNames(SingYear)
   for (X in 1:length(Slots)) slot(LBobj, Slots[X]) <- slot(SingYear, Slots[X])
   
+
   LBobj@Vars <- matrix(c(vSL50, vSL95, vFM, vSPR), ncol=4)
   LBobj@pLCatch <- runMod@pLCatch
   LBobj@NLL <- NLL
@@ -830,6 +856,9 @@ plotSim <- function(LB_obj=NULL, type=c("Catch", "Pop"), perRec=FALSE, Cols=NULL
  Plot
 }
 
+
+
+
 #' Plot the maturity-at-length and selectivity-at-length curves
 #'
 #' A function that plots the maturity-at-length and selectivity-at-length curves
@@ -989,12 +1018,41 @@ plotSize <- function(LB_obj=NULL, axTex=12, axTitle=14, Title=NULL) {
 	fitLog <- LB_obj@fitLog
 	ind <- which(fitLog > 0)
 	if (length(ind) > 0) {
-	  yrs <- unique(longDat$Year)[which(fitLog > 0)]
-	  text_dat <- data.frame(Year=factor(yrs), levels=levels(longDat$Year),
-	    LMids=longDat$LMids[0.1*length(longDat$LMids)],
-		LBSPR_len=0.15 * max(longDat$LBSPR_len), lab="Model didn't converge")
-      bplot <- bplot + geom_text(data=text_dat, aes(label=lab), size=6)
-	
+	  # Didn't converge
+	  yrs <- unique(longDat$Year)[which(fitLog == 1)]
+	  if (length(yrs) > 0) {
+	    text_dat <- data.frame(Year=factor(yrs), levels=levels(longDat$Year),
+	      LMids=longDat$LMids[0.5*length(longDat$LMids)],
+		  LBSPR_len=0.99 * max(longDat$LBSPR_len), lab="Model didn't converge")
+        bplot <- bplot + geom_text(data=text_dat, aes(label=lab), size=6)
+	  }
+	  # High Selectivity 
+	  yrs <- unique(longDat$Year)[which(fitLog == 2)]
+	  if (length(yrs) > 0) {
+	    text_dat <- data.frame(Year=factor(yrs), levels=levels(longDat$Year),
+	      LMids=longDat$LMids[0.5*length(longDat$LMids)],
+		  LBSPR_len=0.99 * max(longDat$LBSPR_len), 
+		  lab="Estimated selectivity\n may be realistically high")
+        bplot <- bplot + geom_text(data=text_dat, aes(label=lab), size=6)	
+	  }
+	  # High F/M
+	  yrs <- unique(longDat$Year)[which(fitLog == 3)]
+	  if (length(yrs) > 0) {
+	    text_dat <- data.frame(Year=factor(yrs), levels=levels(longDat$Year),
+	      LMids=longDat$LMids[0.5*length(longDat$LMids)],
+		  LBSPR_len=0.99 * max(longDat$LBSPR_len), 
+		  lab="Estimated F/M appears\n be realistically high")
+        bplot <- bplot + geom_text(data=text_dat, aes(label=lab), size=6)	
+	  }
+	  # High F/M & Selectivity
+	  yrs <- unique(longDat$Year)[which(fitLog == 4)]
+	  if (length(yrs) > 0) {	  
+	    text_dat <- data.frame(Year=factor(yrs), levels=levels(longDat$Year),
+	      LMids=longDat$LMids[0.5*length(longDat$LMids)],
+		  LBSPR_len=0.99 * max(longDat$LBSPR_len), 
+		  lab="Estimated selectivity\n and F/M may be realistically high")
+        bplot <- bplot + geom_text(data=text_dat, aes(label=lab), size=6)		  
+	  }
 	}
   }
 
@@ -1248,4 +1306,80 @@ plotEsts <- function(LB_obj=NULL, pars=c("Sel", "FM", "SPR"), Lwd=2.5, ptCex=1.2
 #' @export
 DataDir<-function(){
     return(paste(searchpaths()[match("package:LBSPR",search())],"/",sep=""))
+}
+
+
+#' Plot sampled length structure against target simulated size composition
+#'
+#' A function that plots the observed size structure against the expected size composition at the target SPR
+#'
+#' @param LB_pars an object of class \code{'LB_pars'} that contains the life history and fishing information
+#' @param LB_lengths an object of class \code{'LB_lengths'} that contains the observed size data 
+#' @param yr index for sampled length data (defaults to 1)
+#' @param Cols optional character vector of colours for the plot
+#' @param axTex size of the axis text
+#' @param axTitle size of axis title
+#' @return a ggplot object
+#' @author A. Hordyk
+#' @importFrom ggplot2 ggplot aes geom_line geom_bar scale_color_manual guides guide_legend xlab ylab theme theme_bw element_text scale_fill_manual scale_fill_discrete ggtitle scale_alpha_manual annotate
+#' @importFrom stats optimize quantile
+#' @export
+plotTarg <- function(LB_pars=NULL, LB_lengths=NULL, yr=1, Cols=NULL, axTex=12, axTitle=14) {
+  if (class(LB_pars) != "LB_pars") stop("LB_pars must be of class 'LB_pars' Use: new('LB_lengths')")
+  if (class(LB_lengths) != "LB_lengths") stop("LB_lengths must be of class 'LB_lengths'. Use: new('LB_lengths')")
+  
+  if (length(LB_pars@SPR) < 1) stop("Must supply SPR target (LB_pars@SPR)")
+  if (length(LB_pars@SL50) < 1) stop("Must supply SL50 (LB_pars@SL50)")
+  if (length(LB_pars@SL95) < 1) stop("Must supply SL95 (LB_pars@SL95)")
+
+  LMids <- LB_lengths@LMids 
+  LB_pars@BinWidth <- LMids[2] - LMids[1]
+  LB_pars@BinMin <- min(LMids) - 0.5 * LB_pars@BinWidth
+  LB_pars@BinMax <- max(LMids) + 0.5 * LB_pars@BinWidth
+
+  LB_obj <- LBSPRsim(LB_pars, msg=FALSE)
+  pLCatch <- LB_obj@pLCatch # predicted size comp of catch - target
+  pLSample <- as.matrix(LB_lengths@LData[,yr]) # predicted size comp of population
+  
+  # scale predicted to sample
+  ScaleCatch <- function(Scale, Sample, PredCatch) {
+    ind <- which.max(Sample) 
+	if (ind < 1) ind <- 1 
+	wght <- Sample[1:ind]
+	sum((((PredCatch[1:ind] * Scale) -  Sample[1:ind]) * wght)^2)
+  }
+  
+  Scale <- optimize(ScaleCatch, interval=c(1, 5000), Sample=pLSample, PredCatch=pLCatch)$minimum
+ 
+  pLCatch <- pLCatch * Scale
+  
+  Dat <- data.frame(LMids=LMids, pLCatch=pLCatch, Sample=pLSample)
+  longDat <- gather(Dat, "PopType", "PLength", 2:ncol(Dat))
+  Title <- "Size Structure"
+  Leg <- c("Target", "Sample")
+  longDat$alphayr <- c(rep(1, length(pLCatch)), rep(0.6, length(pLCatch)))
+  
+  SPRtarg <- LB_pars@SPR 
+  if (SPRtarg < 1) SPRtarg <- SPRtarg * 100 
+  
+  targ <- paste0("SPR Target: ", SPRtarg, "%")
+  x <- quantile(LMids, 0.8)
+  y <- max(longDat$PLength) *0.8
+  
+  
+  PopType <- PLength <- alphayr <- NULL # hack to get past CRAN
+  Plot <- ggplot(longDat, aes(x=LMids, y=PLength, fill=PopType, alpha=factor(alphayr))) +
+	geom_bar(stat="identity", position = "identity") +
+	xlab("Length") +
+    ylab("Relative Number") +
+	scale_alpha_manual(values = c("0.6"=0.6, "1"=1), guide='none') + 
+	theme_bw() +
+	theme(axis.text=element_text(size=axTex),
+        axis.title=element_text(size=axTitle,face="bold"))
+  if (all(is.null(Cols))) Plot <- Plot + scale_fill_discrete(Title, labels = Leg)
+  if (!all(is.null(Cols))) Plot <- Plot + scale_fill_manual(Title, labels = Leg, 
+    values=Cols)
+  Plot <- Plot + annotate("text", x=x, y=y, label=targ)
+  
+  Plot
 }
