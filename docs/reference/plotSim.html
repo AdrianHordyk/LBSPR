@@ -76,23 +76,33 @@
     <p>A function that plots the expected size composition in the fished and unfished state</p>
     
 
-    <pre><span class='fu'>plotSim</span>(<span class='kw'>LB_obj</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>type</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"Catch"</span>, <span class='st'>"Pop"</span>), <span class='kw'>perRec</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>Cols</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>axTex</span> <span class='kw'>=</span> <span class='fl'>12</span>, <span class='kw'>axTitle</span> <span class='kw'>=</span> <span class='fl'>14</span>)</pre>
+    <pre><span class='fu'>plotSim</span>(<span class='kw'>LB_obj</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>type</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"all"</span>, <span class='st'>"len.freq"</span>, <span class='st'>"growth"</span>,
+  <span class='st'>"maturity.select"</span>, <span class='st'>"yield.curve"</span>), <span class='kw'>lf.type</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"catch"</span>, <span class='st'>"pop"</span>),
+  <span class='kw'>growth.type</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"LAA"</span>, <span class='st'>"WAA"</span>), <span class='kw'>perRec</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>incSPR</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
+  <span class='kw'>Cols</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>size.axtex</span> <span class='kw'>=</span> <span class='fl'>12</span>, <span class='kw'>size.title</span> <span class='kw'>=</span> <span class='fl'>14</span>, <span class='kw'>size.SPR</span> <span class='kw'>=</span> <span class='fl'>4</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <dl class="dl-horizontal">
       <dt>LB_obj</dt>
       <dd>an object of class <code>&#39;LB_obj&#39;</code> that contains the life history and fishing information</dd>
       <dt>type</dt>
-      <dd>a character value indicating if the Catch or Population should be plotted</dd>
+      <dd>a character value indicating which plots to include: &quot;all&quot;, &quot;len.freq&quot;, &quot;growth&quot;, &quot;maturity.select&quot;, &quot;yield.curve&quot;</dd>
+      <dt>lf.type</dt>
+      <dd>a character value indicating if the <code>catch</code> or <code>pop</code> (population) should be plotted for the length frequency</dd>
+      <dt>growth.type</dt>
+      <dd>should growth be plotted as length-at-age (<code>&quot;LAA&quot;</code>) or weight-at-age (<code>&quot;WAA&quot;</code>)</dd>
       <dt>perRec</dt>
       <dd>a logical to indicate if plot should be per-recruit (ignore steepness) or not (zero recruitment if SPR below replacement level)</dd>
+      <dt>incSPR</dt>
+      <dd>a logical to indicate if SPR value should be printed in top right corner of plot</dd>
       <dt>Cols</dt>
       <dd>optional character vector of colours for the plot</dd>
-      <dt>axTex</dt>
+      <dt>size.axtex</dt>
       <dd>size of the axis text</dd>
-      <dt>axTitle</dt>
+      <dt>size.title</dt>
       <dd>size of axis title</dd>
+      <dt>size.SPR</dt>
+      <dd>size of SPR text</dd>
     </dl>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>

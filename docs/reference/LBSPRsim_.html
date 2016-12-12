@@ -76,7 +76,8 @@
     <p>A internal function that generates the expected equilbrium size composition given biological parameters, and fishing mortality and selectivity pattern.  Typically only used by other functions in the package.</p>
     
 
-    <pre><span class='fu'>LBSPRsim_</span>(<span class='kw'>LB_pars</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>Control</span> <span class='kw'>=</span> <span class='fu'>list</span>(), <span class='kw'>msg</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>doCheck</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
+    <pre><span class='fu'>LBSPRsim_</span>(<span class='kw'>LB_pars</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>Control</span> <span class='kw'>=</span> <span class='fu'>list</span>(), <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
+  <span class='kw'>doCheck</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <dl class="dl-horizontal">
@@ -84,7 +85,7 @@
       <dd>an object of class <code>&#39;LB_pars&#39;</code> that contains the life history information</dd>
       <dt>Control</dt>
       <dd>a list of control options for the LBSPR model.</dd>
-      <dt>msg</dt>
+      <dt>verbose</dt>
       <dd>display messages?</dd>
       <dt>doCheck</dt>
       <dd>check if the LB_pars object is valid? Switch off when calling function from a optimization routine.</dd>

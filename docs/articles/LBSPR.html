@@ -32,7 +32,7 @@
       <h1>Length-Based Spawning Potential Ratio</h1>
                         <h4 class="author">Adrian Hordyk</h4>
             
-            <h4 class="date">2016-10-31</h4>
+            <h4 class="date">2016-12-12</h4>
           </div>
 
     
@@ -40,10 +40,9 @@
 <div class="contents">
 <div id="introduction" class="section level1">
 <h1 class="hasAnchor"><html><body><a href="#introduction" class="anchor"> </a></body></html>Introduction</h1>
-<p>This package contains functions to run the Length-Based Spawning Potential Ratio (LBSPR) method. The LBSPR package can be used in two ways: 1) simulation using the LBSPR model and 2) fitting to empirical length data to provide an estimate of the spawning potential ratio (SPR).</p>
+<p>This package contains functions to run the Length-Based Spawning Potential Ratio (LBSPR) method. The LBSPR package can be used in two ways: 1) simulating the expected length composition, growth curve, and SPR and yield curves using the LBSPR model and 2) fitting to empirical length data to provide an estimate of the spawning potential ratio (SPR).</p>
 <p>The LBSPR method has been developed for data-limited fisheries, where few data are available other than a representative sample of the size structure of the vulnerable portion of the population (i.e., the catch) and an understanding of the life history of the species. The LBSPR method does not require knowledge of the natural mortality rate (<em>M</em>), but instead uses the ratio of natural mortality and the von Bertalanffy growth coefficient (<em>K</em>) (<em>M</em>/<em>K</em>), which is believed to vary less across stocks and species than <em>M</em> (Prince et al. 2015).</p>
 <p>Like any assessment method, the LBSPR model relies on a number of simplifying assumptions. In particular, the LBSPR models are equilibrium based, and assume that the length composition data is representative of the exploited population at steady state. See the publicaitons listed in the reference list for full details of the assumptions of the model, including simulation testing to evauate the effect of violations of these assumptions.</p>
-<p><strong>Please make sure that you understand the assumptions of the model before using the LBSPR package on your data.</strong></p>
 <p>There are two versions of the LBSPR model included in this package.</p>
 <div id="age-structured-length-based-model" class="section level2">
 <h2 class="hasAnchor"><html><body><a href="#age-structured-length-based-model" class="anchor"> </a></body></html>Age-Structured Length-Based Model</h2>
@@ -84,7 +83,6 @@
 <p>The first thing to do is to create a <code>LB_pars</code> object that contains all of the required parameters for the simulation model. <code>LB_pars</code> is an S4 class object.</p>
 <p>The S4 system is different to the S3 system that is commonly used in R, and that R users are familiar with. Don&rsquo;t worry if you&rsquo;ve never used S4 objects before. The main thing to know is that elements in a S4 object are called <strong>slots</strong> and you access them using the <code>@</code> symbol (rather than the <code>$</code> symbol that is used with data.frames).</p>
 <p>You can read more about S4 objects <a href="http://adv-r.had.co.nz/S4.html">here</a>.</p>
-<!-- You can create an `LB_pars` object in two ways: 1) create an empty object in R and populate it manually, or read in a CSV containing the parameter values. -->
 <div id="create-a-new-lb_pars-object" class="section level3">
 <h3 class="hasAnchor"><html><body><a href="#create-a-new-lb_pars-object" class="anchor"> </a></body></html>Create a new <code>LB_pars</code> Object</h3>
 <p>To create a new <code>LB_pars</code> object you use the <code>new</code> function:</p>
@@ -93,10 +91,12 @@
 <pre><code>## Default values have been set for some parameters</code></pre>
 <p>You can see the elements or <strong>slots</strong> of the <code>LB_pars</code> object using the <code>slotNames</code> function:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">slotNames</span>(MyPars)</code></pre></div>
-<pre><code>##  [1] "Species"   "MK"        "Linf"      "CVLinf"    "L50"      
-##  [6] "L95"       "Walpha"    "Wbeta"     "FecB"      "Steepness"
-## [11] "Mpow"      "R0"        "SL50"      "SL95"      "FM"       
-## [16] "SPR"       "BinMin"    "BinMax"    "BinWidth"</code></pre>
+<pre><code>##  [1] "Species"      "MK"           "M"            "Linf"        
+##  [5] "Linf_units"   "CVLinf"       "L50"          "L95"         
+##  [9] "Walpha"       "Walpha_units" "Wbeta"        "FecB"        
+## [13] "Steepness"    "Mpow"         "R0"           "SL50"        
+## [17] "SL95"         "FM"           "SPR"          "BinMin"      
+## [21] "BinMax"       "BinWidth"</code></pre>
 <p><code>MyPars</code> is an object of class <code>LB_pars</code>. You can access the help file for classes by using the <code>?</code> symbol (similar to how you find the help file for functions):</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">class?CLASSNAME
 
@@ -104,10 +104,10 @@ class?LB_pars</code></pre></div>
 </div>
 <div id="populate-the-lb_pars-object" class="section level3">
 <h3 class="hasAnchor"><html><body><a href="#populate-the-lb_pars-object" class="anchor"> </a></body></html>Populate the <code>LB_pars</code> Object</h3>
-<p>The <code>LB_pars</code> object has 19 slots. However, not all parameters need to be specified for the simulation model.</p>
-<p>Some parameters are essential, and a warning message <strong>should</strong> appear if you attempt to progress without values (please let me know if there are issues).</p>
+<p>The <code>LB_pars</code> object has 22 slots. However, not all parameters need to be specified for the simulation model.</p>
+<p>Some parameters are essential, and a warning message should appear if you attempt to progress without values (please let me know if there are issues).</p>
 <p>Default values will be used for some of the other parameters if no value is specified. For example, the first slot (Species) is a character object that can be used for the species name. If this slot is left empty, the simulation model will populate it with a default value.</p>
-<p>A message <strong>should</strong> alert you any time a default value is being used. Again, please let me know if you find something strange going on.</p>
+<p>A message should alert you any time a default value is being used. Again, please let me know if you find something strange going on.</p>
 <p>The minimum parameters that are needed for the simulation model are:</p>
 <p><strong>Biology</strong></p>
 <ul><li>von Bertalanffy asymptotic length (<code>Linf</code>)</li>
@@ -128,23 +128,19 @@ MyPars@SL95 &lt;-<span class="st"> </span><span class="dv">65</span>
 MyPars@SPR &lt;-<span class="st"> </span><span class="fl">0.4</span>
 MyPars@BinWidth &lt;-<span class="st"> </span><span class="dv">5</span></code></pre></div>
 </div>
-<div id="load-a-lb_pars-object-from-csv" class="section level3">
-<h3 class="hasAnchor"><html><body><a href="#load-a-lb_pars-object-from-csv" class="anchor"> </a></body></html>Load a <code>LB_pars</code> Object from CSV</h3>
-<p>Still to come: read in parameter values for the <code>LB_pars</code> object directly from a CSV file.</p>
-</div>
 </div>
 <div id="running-the-simulation-model" class="section level2">
 <h2 class="hasAnchor"><html><body><a href="#running-the-simulation-model" class="anchor"> </a></body></html>Running the Simulation Model</h2>
 <p>Now we are ready to run the LBSPR simulation model. To do this we use the <code>LBSPRsim</code> function:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">MySim &lt;-<span class="st"> </span><span class="kw"><a href="../reference/LBSPRsim.html">LBSPRsim</a></span>(MyPars)</code></pre></div>
-<pre><code>## No species name provided - using a default</code></pre>
 <pre><code>## BinMax not set. Using default of 1.3 Linf</code></pre>
 <pre><code>## BinMin not set. Using default value of 0</code></pre>
 <p>You will notice some messages in the console alerting you that default values have been used. You can change these by specifying values in <code>MyPars</code> and re-running the <code>LBSPRsim</code> function.</p>
 <p>We&rsquo;ll manually set those values here so we don&rsquo;t keep seeing the messages throughout the vignette.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">MyPars@Species &lt;-<span class="st"> "MySpecies"</span>
-MyPars@BinMax &lt;-<span class="st"> </span><span class="dv">150</span>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">MyPars@BinMax &lt;-<span class="st"> </span><span class="dv">150</span>
 MyPars@BinMin &lt;-<span class="st"> </span><span class="dv">0</span></code></pre></div>
+<p>We can also choose to set the units for the length parameters:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">MyPars@Linf_units &lt;-<span class="st"> "mm"</span></code></pre></div>
 <div id="the-lb_obj-object" class="section level3">
 <h3 class="hasAnchor"><html><body><a href="#the-lb_obj-object" class="anchor"> </a></body></html>The <code>LB_obj</code> Object</h3>
 <p>The output of the <code>LBSPRsim</code> function is an object of class <code>LB_obj</code>. This is another S4 object, and contains all of the information from the <code>LB_pars</code> object and the output of the <code>LBSPRsim</code> function.</p>
@@ -155,10 +151,10 @@ MyPars@BinMin &lt;-<span class="st"> </span><span class="dv">0</span></code></pr
 <p>Let&rsquo;s take a look at some of the simulated output.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">MySim@SPR </code></pre></div>
 <pre><code>## [1] 0.4</code></pre>
-<p>Ignoring a small amount of rounding error, the simulated SPR is the same as our input value (<code>MyPars@SPR</code>).</p>
+<p>The simulated SPR is the same as our input value (<code>MyPars@SPR</code>).</p>
 <p>What is the ratio of fishing mortality to natural mortality in this scenario?</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">MySim@FM </code></pre></div>
-<pre><code>## [1] 0.6473832</code></pre>
+<pre><code>## [1] 0.651</code></pre>
 <p>It is important to note that the F/M ratio reported in the LBSPR model refers to the <em>apical F</em> over the adult natural mortality rate. That is, the value for fishing mortality refers to the highest level of <em>F</em> experienced by any single size class.</p>
 <p>If the selectivity pattern excludes all but the largest individuals from being exploited, it is possible to have a <strong>very</strong> high F/M ratio in a sustainable fishery (high SPR).</p>
 <p>A couple of more simulations with alternative values:</p>
@@ -167,20 +163,20 @@ MyPars@BinMin &lt;-<span class="st"> </span><span class="dv">0</span></code></pr
 MyPars@FM &lt;-<span class="st"> </span><span class="dv">1</span> <span class="co"># set value for FM</span>
 MySim &lt;-<span class="st"> </span><span class="kw"><a href="../reference/LBSPRsim.html">LBSPRsim</a></span>(MyPars)
 MySim@SPR <span class="co"># SPR at F/M = 1 </span></code></pre></div>
-<pre><code>## [1] 0.2714598</code></pre>
+<pre><code>## [1] 0.27</code></pre>
 <p>Change the life history parameters:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">MyPars@MK &lt;-<span class="st"> </span><span class="fl">2.0</span> 
 MySim &lt;-<span class="st"> </span><span class="kw"><a href="../reference/LBSPRsim.html">LBSPRsim</a></span>(MyPars)
 MySim@SPR <span class="co"># SPR </span></code></pre></div>
-<pre><code>## [1] 0.2435621</code></pre>
+<pre><code>## [1] 0.24</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">MyPars@MK &lt;-<span class="st"> </span><span class="fl">0.5</span>
 MySim &lt;-<span class="st"> </span><span class="kw"><a href="../reference/LBSPRsim.html">LBSPRsim</a></span>(MyPars)
 MySim@SPR <span class="co"># SPR </span></code></pre></div>
-<pre><code>## [1] 0.3605154</code></pre>
+<pre><code>## [1] 0.36</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">MyPars@Linf &lt;-<span class="st"> </span><span class="dv">120</span>
 MySim &lt;-<span class="st"> </span><span class="kw"><a href="../reference/LBSPRsim.html">LBSPRsim</a></span>(MyPars)
 MySim@SPR <span class="co"># SPR </span></code></pre></div>
-<pre><code>## [1] 0.3497405</code></pre>
+<pre><code>## [1] 0.35</code></pre>
 <p>Change selectivity parameters:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">MyPars@MK &lt;-<span class="st"> </span><span class="fl">1.5</span> 
 MyPars@SL50 &lt;-<span class="st"> </span><span class="dv">10</span>
@@ -188,12 +184,12 @@ MyPars@SL95 &lt;-<span class="st"> </span><span class="dv">15</span>
 MyPars@FM &lt;-<span class="st"> </span><span class="dv">1</span> 
 MySim &lt;-<span class="st"> </span><span class="kw"><a href="../reference/LBSPRsim.html">LBSPRsim</a></span>(MyPars)
 MySim@SPR <span class="co"># SPR </span></code></pre></div>
-<pre><code>## [1] 0.1345684</code></pre>
+<pre><code>## [1] 0.13</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">MyPars@SL50 &lt;-<span class="st"> </span><span class="dv">80</span>
 MyPars@SL95 &lt;-<span class="st"> </span><span class="dv">85</span> 
 MySim &lt;-<span class="st"> </span><span class="kw"><a href="../reference/LBSPRsim.html">LBSPRsim</a></span>(MyPars)
 MySim@SPR <span class="co"># SPR </span></code></pre></div>
-<pre><code>## [1] 0.5678794</code></pre>
+<pre><code>## [1] 0.57</code></pre>
 </div>
 <div id="control-options" class="section level3">
 <h3 class="hasAnchor"><html><body><a href="#control-options" class="anchor"> </a></body></html>Control Options</h3>
@@ -206,61 +202,25 @@ MyPars@FM &lt;-<span class="st"> </span><span class="kw">numeric</span>()
 MyPars@SPR &lt;-<span class="st"> </span><span class="fl">0.4</span>
 MySim &lt;-<span class="st"> </span><span class="kw"><a href="../reference/LBSPRsim.html">LBSPRsim</a></span>(MyPars, <span class="dt">Control=</span><span class="kw">list</span>(<span class="dt">modtype=</span><span class="st">"absel"</span>))
 MySim@FM </code></pre></div>
-<pre><code>## [1] 0.6683713</code></pre>
+<pre><code>## [1] 0.659</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">MySim &lt;-<span class="st"> </span><span class="kw"><a href="../reference/LBSPRsim.html">LBSPRsim</a></span>(MyPars, <span class="dt">Control=</span><span class="kw">list</span>(<span class="dt">modtype=</span><span class="st">"GTG"</span>))
 MySim@FM  <span class="co"># lower F/M for the GTG model</span></code></pre></div>
-<pre><code>## [1] 0.6376642</code></pre>
+<pre><code>## [1] 0.632</code></pre>
 <p>See the help file for the <code>LBSPRsim</code> function for additional parameters for the <code>Control</code> argument.</p>
 </div>
 <div id="plotting-the-simulation" class="section level3">
 <h3 class="hasAnchor"><html><body><a href="#plotting-the-simulation" class="anchor"> </a></body></html>Plotting the Simulation</h3>
-<p>The <code>plotSim</code> function can be used to plot the expected equilibrium size composition generated by the LBSPR model.</p>
-<p>Expected Unfished and Fished size structure of the catch:</p>
+<p>The <code>plotSim</code> function can be used to plot <code>MySim</code>:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/plotSim.html">plotSim</a></span>(MySim) </code></pre></div>
-<p><img src="LBSPR_files/figure-html/unnamed-chunk-15-1.png" width="576"></p>
-<p>Expected Unfished and Fished size structure of the population:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/plotSim.html">plotSim</a></span>(MySim, <span class="dt">type=</span><span class="st">"Pop"</span>)</code></pre></div>
 <p><img src="LBSPR_files/figure-html/unnamed-chunk-16-1.png" width="576"></p>
-<p>The maturity- and selectivity-at-length curves can also be plotted:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/plotMat.html">plotMat</a></span>(MySim)</code></pre></div>
-<p><img src="LBSPR_files/figure-html/unnamed-chunk-17-1.png" width="384"></p>
-</div>
-<div id="still-to-come" class="section level3">
-<h3 class="hasAnchor"><html><body><a href="#still-to-come" class="anchor"> </a></body></html>Still to Come</h3>
-<ul><li>Plots of yield per recruit and relative yield (if <em>steepness</em> of stock-recruitment relationship is known)</li>
-<li>Plots of von Bertlanffy growth curve, length-weight, etc</li>
-<li>Functions to calculate SPR and Yield at F</li>
-</ul><p>You can use a simple loop to produce a plot of SPR at different levels of <em>F/M</em> (or <em>F</em> if <em>M</em> is known). Below is an example for two different selectivity patterns:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">FMVec &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="dt">from=</span><span class="dv">0</span>, <span class="dt">to=</span><span class="dv">3</span>, <span class="dt">by=</span><span class="fl">0.05</span>)
-SPROut &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="ot">NA</span>, <span class="dt">nrow=</span><span class="kw">length</span>(FMVec), <span class="dt">ncol=</span><span class="dv">2</span>)
-
-MyPars@Linf &lt;-<span class="st"> </span><span class="dv">100</span> 
-MyPars@MK &lt;-<span class="st"> </span><span class="fl">1.5</span> 
-MyPars@L50 &lt;-<span class="st"> </span><span class="dv">50</span> 
-MyPars@L95 &lt;-<span class="st"> </span><span class="dv">55</span>
-MyPars@SPR &lt;-<span class="st"> </span><span class="kw">numeric</span>() <span class="co"># make sure SPR slot is empty</span>
-
-MyPars@BinMin &lt;-<span class="st"> </span><span class="dv">0</span> 
-MyPars@BinMax &lt;-<span class="st"> </span><span class="dv">130</span> 
-MyPars@BinWidth &lt;-<span class="st"> </span><span class="dv">5</span>
-
-for (ind in <span class="kw">seq_along</span>(FMVec)) {
-  MyPars@SL50 &lt;-<span class="st"> </span><span class="dv">50</span>
-  MyPars@SL95 &lt;-<span class="st"> </span><span class="dv">55</span>
-  MyPars@FM &lt;-<span class="st"> </span>FMVec[ind]
-  SPROut[ind, <span class="dv">1</span>] &lt;-<span class="st"> </span><span class="kw"><a href="../reference/LBSPRsim.html">LBSPRsim</a></span>(MyPars)@SPR
-  
-  MyPars@SL50 &lt;-<span class="st"> </span><span class="dv">75</span>
-  MyPars@SL95 &lt;-<span class="st"> </span><span class="dv">80</span>
-  MyPars@FM &lt;-<span class="st"> </span>FMVec[ind]
-  SPROut[ind, <span class="dv">2</span>] &lt;-<span class="st"> </span><span class="kw"><a href="../reference/LBSPRsim.html">LBSPRsim</a></span>(MyPars)@SPR
-}
-
-<span class="kw">plot</span>(<span class="kw">range</span>(FMVec), <span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">1</span>), <span class="dt">xlab=</span><span class="st">"F/M"</span>, <span class="dt">ylab=</span><span class="st">"SPR"</span>, <span class="dt">bty=</span><span class="st">"n"</span>, <span class="dt">type=</span><span class="st">"n"</span>)
-<span class="kw">lines</span>(FMVec, SPROut[,<span class="dv">1</span>], <span class="dt">lwd=</span><span class="dv">2</span>)
-<span class="kw">lines</span>(FMVec, SPROut[,<span class="dv">2</span>], <span class="dt">lwd=</span><span class="dv">2</span>, <span class="dt">lty=</span><span class="dv">2</span>)
-<span class="kw">legend</span>(<span class="st">"topright"</span>, <span class="dt">lty=</span><span class="dv">1</span>:<span class="dv">2</span>, <span class="dt">lwd=</span><span class="dv">2</span>, <span class="dt">title=</span><span class="st">"Selectivity"</span>, <span class="dt">legend=</span><span class="kw">c</span>(<span class="st">"@Maturity"</span>, <span class="st">"Higher"</span>), <span class="dt">bty=</span><span class="st">"n"</span>)</code></pre></div>
-<p><img src="LBSPR_files/figure-html/unnamed-chunk-18-1.png" width="672"></p>
+<p>By default the function plots: a) the expected size structure of the catch and the expected unfished size structure of the vulnerable population, b) the maturity and selectivity-at-length curves, c) the growth curve, and d) the SPR and relative yield curves as a function of relative fishing mortality.</p>
+<p>The <code>plotSim</code> function can be controlled in a number of ways. For example, you can plot the expected unfished and fished size structure of the population by changing the <code>lf.type</code> argument:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/plotSim.html">plotSim</a></span>(MySim, <span class="dt">lf.type=</span><span class="st">"pop"</span>)</code></pre></div>
+<p><img src="LBSPR_files/figure-html/unnamed-chunk-17-1.png" width="576"></p>
+<p>Individual plots can be created using the <code>type</code> argument:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/plotSim.html">plotSim</a></span>(MySim, <span class="dt">type=</span><span class="st">"len.freq"</span>)</code></pre></div>
+<p><img src="LBSPR_files/figure-html/unnamed-chunk-18-1.png" width="384"></p>
+<p>See <code><a href="../reference/plotSim.html">?plotSim</a></code> for more options for plotting the output of the LBSPR simulation model.</p>
 </div>
 </div>
 </div>
@@ -298,14 +258,18 @@ for (ind in <span class="kw">seq_along</span>(FMVec)) {
 MyPars@Linf &lt;-<span class="st"> </span><span class="dv">100</span> 
 MyPars@L50 &lt;-<span class="st"> </span><span class="dv">66</span> 
 MyPars@L95 &lt;-<span class="st"> </span><span class="dv">70</span>
-MyPars@MK &lt;-<span class="st"> </span><span class="fl">1.5</span> </code></pre></div>
+MyPars@MK &lt;-<span class="st"> </span><span class="fl">1.5</span> 
+MyPars@Linf_units &lt;-<span class="st"> "mm"</span></code></pre></div>
 <p>Note that only the life history parameters need to be specified for the estimation model. The exploitation parameters will be estimated.</p>
 <p>A length frequency data set with multiple years:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">Len1 &lt;-<span class="st"> </span><span class="kw">new</span>(<span class="st">"LB_lengths"</span>, <span class="dt">LB_pars=</span>MyPars, <span class="dt">file=</span><span class="kw">paste0</span>(datdir, <span class="st">"/LFreq_MultiYr.csv"</span>), <span class="dt">dataType=</span><span class="st">"freq"</span>)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">Len1 &lt;-<span class="st"> </span><span class="kw">new</span>(<span class="st">"LB_lengths"</span>, <span class="dt">LB_pars=</span>MyPars, <span class="dt">file=</span><span class="kw">paste0</span>(datdir, <span class="st">"/LFreq_MultiYr.csv"</span>), 
+            <span class="dt">dataType=</span><span class="st">"freq"</span>)</code></pre></div>
 <p>A length frequency data set with multiple years and a header row (identical to Len1 data, but with a header row):</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">Len2 &lt;-<span class="st"> </span><span class="kw">new</span>(<span class="st">"LB_lengths"</span>, <span class="dt">LB_pars=</span>MyPars, <span class="dt">file=</span><span class="kw">paste0</span>(datdir, <span class="st">"/LFreq_MultiYrHead.csv"</span>), <span class="dt">dataType=</span><span class="st">"freq"</span>, <span class="dt">header=</span><span class="ot">TRUE</span>)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">Len2 &lt;-<span class="st"> </span><span class="kw">new</span>(<span class="st">"LB_lengths"</span>, <span class="dt">LB_pars=</span>MyPars, <span class="dt">file=</span><span class="kw">paste0</span>(datdir, <span class="st">"/LFreq_MultiYrHead.csv"</span>), 
+            <span class="dt">dataType=</span><span class="st">"freq"</span>, <span class="dt">header=</span><span class="ot">TRUE</span>)</code></pre></div>
 <p>A raw length data set with multiple years:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">Len3 &lt;-<span class="st"> </span><span class="kw">new</span>(<span class="st">"LB_lengths"</span>, <span class="dt">LB_pars=</span>MyPars, <span class="dt">file=</span><span class="kw">paste0</span>(datdir, <span class="st">"/LRaw_MultiYr.csv"</span>), <span class="dt">dataType=</span><span class="st">"raw"</span>)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">Len3 &lt;-<span class="st"> </span><span class="kw">new</span>(<span class="st">"LB_lengths"</span>, <span class="dt">LB_pars=</span>MyPars, <span class="dt">file=</span><span class="kw">paste0</span>(datdir, <span class="st">"/LRaw_MultiYr.csv"</span>), 
+            <span class="dt">dataType=</span><span class="st">"raw"</span>)</code></pre></div>
 <pre><code>## Length bin parameters (BinMax) must be set for raw data. Using defaults</code></pre>
 <pre><code>## Length bin parameters (BinMin) must be set for raw data. Using defaults</code></pre>
 <pre><code>## Length bin parameters (BinWidth) must be set for raw data. Using defaults</code></pre>
@@ -325,7 +289,7 @@ MyPars@MK &lt;-<span class="st"> </span><span class="fl">1.5</span> </code></pre
 <h2 class="hasAnchor"><html><body><a href="#fit-the-model" class="anchor"> </a></body></html>Fit the Model</h2>
 <p>The LBSPR model is fitted using the <code>LBSPRfit</code> function:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">myFit1 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/LBSPRfit.html">LBSPRfit</a></span>(MyPars, Len1)
-myFit2 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/LBSPRfit.html">LBSPRfit</a></span>(MyPars, Len3)</code></pre></div>
+myFit2 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/LBSPRfit.html">LBSPRfit</a></span>(MyPars, Len2)</code></pre></div>
 <p>Note that the <code>Control</code> argument can be used to modify the additional parameters or LBSPR model type (see description in earlier section).</p>
 </div>
 <div id="examine-and-plot-results" class="section level2">
@@ -333,52 +297,46 @@ myFit2 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/LBSP
 <p>The LBSPR package uses a Kalman filter and the Rauch-Tung-Striebel smoother function (see <code>FilterSmooth</code>) to smooth out the multi-year estimates of SPR, F/M, and selectivity parameters.</p>
 <p>The smoother parameter estimates can be accessed from the <code>myFit</code> object (which is an object of class <code>LB_obj</code> [see earlier section for details]):</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">myFit1@Ests</code></pre></div>
-<pre><code>##          SL50     SL95        FM       SPR
-## [1,] 48.48227 62.45054 0.5391273 0.4471170
-## [2,] 48.49150 62.50824 0.5389455 0.4480386
-## [3,] 48.48337 62.40175 0.5384740 0.4493289
-## [4,] 48.49369 62.42311 0.5369927 0.4519306
-## [5,] 48.43434 62.25561 0.5417449 0.4508460
-## [6,] 48.22890 62.00275 0.5257542 0.4594711</code></pre>
+<pre><code>##       SL50  SL95   FM  SPR
+## [1,] 48.48 62.45 0.54 0.45
+## [2,] 48.49 62.51 0.54 0.45
+## [3,] 48.48 62.40 0.54 0.45
+## [4,] 48.49 62.42 0.54 0.45
+## [5,] 48.43 62.25 0.54 0.45
+## [6,] 48.23 62.00 0.53 0.46</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">myFit2@Ests</code></pre></div>
-<pre><code>##          SL50     SL95        FM       SPR
-## [1,] 50.73096 66.64051 0.7032696 0.3977334
-## [2,] 50.59793 66.39950 0.6970513 0.3993612
-## [3,] 50.39604 66.21379 0.6843253 0.4033221
-## [4,] 50.40019 66.51309 0.6844358 0.4031591
-## [5,] 50.39663 66.58710 0.6799632 0.4050490
-## [6,] 50.38433 66.38578 0.6709568 0.4089476</code></pre>
+<pre><code>##       SL50  SL95   FM  SPR
+## [1,] 48.48 62.45 0.54 0.45
+## [2,] 48.49 62.51 0.54 0.45
+## [3,] 48.48 62.40 0.54 0.45
+## [4,] 48.49 62.42 0.54 0.45
+## [5,] 48.43 62.25 0.54 0.45
+## [6,] 48.23 62.00 0.53 0.46</code></pre>
 <p>Note that by default the smoothed estimates are used in the plotting routines.</p>
 <p>The individual point estimates for each year can be accessed from the <code>LB_obj</code> object:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">data.frame</span>(<span class="dt">rawSL50=</span>myFit1@SL50, <span class="dt">rawSL95=</span>myFit1@SL95, <span class="dt">rawFM=</span>myFit1@FM, <span class="dt">rawSPR=</span>myFit1@SPR)</code></pre></div>
-<pre><code>##    rawSL50  rawSL95     rawFM    rawSPR
-## 1 48.87476 62.49813 0.5463361 0.4423721
-## 2 48.66520 64.15004 0.5418438 0.4443514
-## 3 48.29876 61.12324 0.5485707 0.4362159
-## 4 49.19038 64.31178 0.4746581 0.4887930
-## 5 49.89528 63.10918 0.7491747 0.3537482
-## 6 46.17451 59.47412 0.3658466 0.5457228</code></pre>
+<pre><code>##   rawSL50 rawSL95 rawFM rawSPR
+## 1   48.87   62.50  0.55   0.44
+## 2   48.67   64.15  0.54   0.44
+## 3   48.30   61.12  0.55   0.44
+## 4   49.19   64.31  0.47   0.49
+## 5   49.90   63.11  0.75   0.35
+## 6   46.17   59.47  0.37   0.55</code></pre>
 <p>The <code>plotSize</code> function can also be used to show the model fit to the data:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/plotSize.html">plotSize</a></span>(myFit1)</code></pre></div>
 <p><img src="LBSPR_files/figure-html/unnamed-chunk-32-1.png" width="672"></p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/plotSize.html">plotSize</a></span>(myFit2)</code></pre></div>
-<p><img src="LBSPR_files/figure-html/unnamed-chunk-32-2.png" width="672"></p>
 <p>Similarly, the <code>plotMat</code> function can be used to show the specified maturity-at-length curve, and the estimated selectivity-at-length curve:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/plotMat.html">plotMat</a></span>(myFit1)</code></pre></div>
 <p><img src="LBSPR_files/figure-html/unnamed-chunk-33-1.png" width="480"></p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/plotMat.html">plotMat</a></span>(myFit2)</code></pre></div>
-<p><img src="LBSPR_files/figure-html/unnamed-chunk-33-2.png" width="480"></p>
 <p>Finally, the <code>plotEsts</code> function can be used to visually display the estimated parameters. Note that this works for all data sets, but only makes sense when there are several years of data:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/plotEsts.html">plotEsts</a></span>(myFit1)</code></pre></div>
-<p><img src="LBSPR_files/figure-html/unnamed-chunk-34-1.png" width="672"><img src="LBSPR_files/figure-html/unnamed-chunk-34-2.png" width="672"></p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/plotEsts.html">plotEsts</a></span>(myFit2)</code></pre></div>
-<p><img src="LBSPR_files/figure-html/unnamed-chunk-34-3.png" width="672"><img src="LBSPR_files/figure-html/unnamed-chunk-34-4.png" width="672"></p>
+<p><img src="LBSPR_files/figure-html/unnamed-chunk-34-1.png" width="768"></p>
 </div>
 </div>
 <div id="comparing-observed-length-data-to-target-size-structure" class="section level1">
 <h1 class="hasAnchor"><html><body><a href="#comparing-observed-length-data-to-target-size-structure" class="anchor"> </a></body></html>Comparing Observed Length Data to Target Size Structure</h1>
 <p>You can compare the observed size data against an expected size composition at a target SPR using the <code>plotTarg</code> function. To do this, you need a <code>LB_pars</code> object with the life history parameters and the target SPR:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">MyPars &lt;-<span class="st"> </span><span class="kw">new</span>(<span class="st">"LB_pars"</span>, <span class="dt">msg=</span><span class="ot">FALSE</span>)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">MyPars &lt;-<span class="st"> </span><span class="kw">new</span>(<span class="st">"LB_pars"</span>, <span class="dt">verbose=</span><span class="ot">FALSE</span>)
 MyPars@Linf &lt;-<span class="st"> </span><span class="dv">100</span> 
 MyPars@L50 &lt;-<span class="st"> </span><span class="dv">66</span> 
 MyPars@L95 &lt;-<span class="st"> </span><span class="dv">70</span>
@@ -387,9 +345,10 @@ MyPars@SPR &lt;-<span class="st"> </span><span class="fl">0.75</span> <span clas
 MyPars@BinWidth &lt;-<span class="st"> </span><span class="dv">5</span></code></pre></div>
 <p>Here we have set the target SPR at 75%.</p>
 <p>Then import your length data:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">LenDat &lt;-<span class="st"> </span><span class="kw">new</span>(<span class="st">"LB_lengths"</span>, <span class="dt">LB_pars=</span>MyPars, <span class="dt">file=</span><span class="kw">paste0</span>(datdir, <span class="st">"/LRaw_MultiYr.csv"</span>), <span class="dt">dataType=</span><span class="st">"raw"</span>, <span class="dt">msg=</span><span class="ot">FALSE</span>)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">LenDat &lt;-<span class="st"> </span><span class="kw">new</span>(<span class="st">"LB_lengths"</span>, <span class="dt">LB_pars=</span>MyPars, <span class="dt">file=</span><span class="kw">paste0</span>(datdir, <span class="st">"/LRaw_MultiYr.csv"</span>), 
+              <span class="dt">dataType=</span><span class="st">"raw"</span>, <span class="dt">verbose=</span><span class="ot">FALSE</span>)</code></pre></div>
 <p>Finally, you must set the selectivity parameters for the simulated size data. You may be able to estimate these from the data:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">Mod &lt;-<span class="st"> </span><span class="kw"><a href="../reference/LBSPRfit.html">LBSPRfit</a></span>(MyPars, LenDat, <span class="dt">msg=</span><span class="ot">FALSE</span>)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">Mod &lt;-<span class="st"> </span><span class="kw"><a href="../reference/LBSPRfit.html">LBSPRfit</a></span>(MyPars, LenDat, <span class="dt">verbose=</span><span class="ot">FALSE</span>)
 
 yr &lt;-<span class="st"> </span><span class="dv">1</span> <span class="co"># first year of data</span>
 MyPars@SL50 &lt;-<span class="st"> </span>Mod@SL50[yr]
