@@ -69,11 +69,14 @@ check_LB_pars <- function(object) {
 #'
 #' @slot Species Character vector of species name
 #' @slot MK A length-one numeric vector for M/K ratio
+#' @slot M An optional value for natural mortality (M)
 #' @slot Linf A length-one numeric vector for Linf
+#' @slot Linf_units Character describing units of length parameters
 #' @slot CVLinf A length-one numeric vector for CV of length-at-age
 #' @slot L50 A length-one numeric vector for length at 50\% maturity
 #' @slot L95 A length-one numeric vector for length at 95\% maturity
 #' @slot Walpha A length-one numeric vector for alpha parameter of length-weight relationship
+#' @slot Walpha_units Character describing units for weight scaling parameter
 #' @slot Wbeta A length-one numeric vector for beta parameter of length-weight relationship
 #' @slot FecB A length-one numeric vector for beta parameter of length-fecundity relationship
 #' @slot Steepness A length-one numeric vector for steepness of SRR
@@ -90,11 +93,14 @@ check_LB_pars <- function(object) {
 setClass("LB_pars", representation(
   Species = "character",
   MK = "numeric",
+  M = "numeric",
   Linf = "numeric",
+  Linf_units = "character",
   CVLinf = "numeric",
   L50 = "numeric",
   L95 = "numeric",
   Walpha = "numeric",
+  Walpha_units = "character",
   Wbeta = "numeric",
   FecB = "numeric",
   Steepness = "numeric",
@@ -116,27 +122,27 @@ setClass("LB_pars", representation(
 #' @param .Object class of object to be created
 #' @param file file path and name to CSV containing parameters
 #' @param defaults use defaults for some parameters?
-#' @param msg display a message?
+#' @param verbose display a message?
 #' @return a object of class \code{'LB_pars'}
 #' @author A. Hordyk
 #' @importFrom utils read.csv
-setMethod("initialize", "LB_pars", function(.Object, file="none", defaults=TRUE, msg=TRUE){
+setMethod("initialize", "LB_pars", function(.Object, file="none", defaults=TRUE, verbose=TRUE){
 
  if (file != "none" & file.exists(file)) {
    # check that it is CSV
    # Add code for file input here
    return(.Object)
  }
- if (file == "none" & msg)  message("A blank LB_pars object created")
- if (file != "none" & !(file.exists(file)) & msg)  message("Couldn't file specified CSV file: ", file, ".  A blank LB_pars object created")
+ if (file == "none" & verbose)  message("A blank LB_pars object created")
+ if (file != "none" & !(file.exists(file)) & verbose)  message("Couldn't file specified CSV file: ", file, ".  A blank LB_pars object created")
  if (!defaults)  return(.Object)
  if (defaults) {
-   if (msg) message("Default values have been set for some parameters")
+   if (verbose) message("Default values have been set for some parameters")
    .Object@CVLinf <- 0.1
-   .Object@Walpha <- 0.001
+   .Object@Walpha <- 0.0001
    .Object@Wbeta <- 3
    .Object@FecB <- 3
-   .Object@Steepness <- 0.99
+   .Object@Steepness <- 0.7
    .Object@Mpow <- 0
    .Object@R0 <- 10000
     }
@@ -168,17 +174,17 @@ setClass("LB_lengths", representation(
 #' @param LB_pars a object of class LB_pars
 #' @param dataType is the length data individual measurements (raw) or a length frequency (freq)?
 #' @param header is there a header?
-#' @param msg display a message?
+#' @param verbose display a message?
 #' @param ... optional additional arguments passed to read.csv
 #' @return a object of class \code{'LB_lengths'}
 #' @author A. Hordyk
 #' @importFrom utils read.csv
 setMethod("initialize", "LB_lengths", function(.Object, file="none", LB_pars=NULL,
-  dataType=c("raw", "freq"), header=FALSE, msg=TRUE, ...) {
+  dataType=c("raw", "freq"), header=FALSE, verbose=TRUE, ...) {
 
   if (class(file)== "character") {
     if(!file.exists(file)) {
-      if (msg) message("File not found. A blank LB_lengths object created")
+      if (verbose) message("File not found. A blank LB_lengths object created")
 	  .Object@Elog <- 0
       return(.Object)
     }
@@ -231,21 +237,21 @@ setMethod("initialize", "LB_lengths", function(.Object, file="none", LB_pars=NUL
 	    options(warn=1)		
         .Object@NYears <- ncol(dat)
     	if (length(LB_pars@BinMax) < 1) {
-          if (msg) message("Length bin parameters (BinMax) must be set for raw data. Using defaults")
+          if (verbose) message("Length bin parameters (BinMax) must be set for raw data. Using defaults")
           LB_pars@BinMax <- max(LB_pars@Linf * 1.1, 1.1 * max(dat, na.rm=TRUE))
 	    }
 	    if (length(LB_pars@BinMin) < 1) {
-	      if (msg) message("Length bin parameters (BinMin) must be set for raw data. Using defaults")
+	      if (verbose) message("Length bin parameters (BinMin) must be set for raw data. Using defaults")
 		  LB_pars@BinMin <- min(dat, na.rm=TRUE) * 0.9
 	    }
 	    if (length(LB_pars@BinWidth) < 1) {
-	      if (msg) message("Length bin parameters (BinWidth) must be set for raw data. Using defaults")
+	      if (verbose) message("Length bin parameters (BinWidth) must be set for raw data. Using defaults")
 		  LB_pars@BinWidth <- 1/20 * LB_pars@BinMax
 	    }
 	    chk <- all(diff(dat[,1]) == median(diff( dat[,1]), na.rm=TRUE))
 		if (is.na(chk)) stop("There is a problem with the data file. Is there a header row?")
 	    if (chk) { # a length frequency file has been uploaded
-	      if (msg) warning("It looks like you may have uploaded a length frequency file? Perhaps use dataType='freq'?")
+	      if (verbose) warning("It looks like you may have uploaded a length frequency file? Perhaps use dataType='freq'?")
 	  	  .Object@Elog <- 2
 	  	  return(.Object)
 	    }
@@ -259,17 +265,17 @@ setMethod("initialize", "LB_lengths", function(.Object, file="none", LB_pars=NUL
 	    maxDat <- max(dat, na.rm=TRUE)
 	    minDat <- min(dat, na.rm=TRUE)
 	    if (maxL < maxDat) {
-	      if (msg) warning("BinMax must equal or larger than largest observation (", maxDat, ")")
+	      if (verbose) warning("BinMax must equal or larger than largest observation (", maxDat, ")")
 	  	.Object@Elog <- 3
 	  	return(.Object)
 	    }
 	     if (minL > minDat) {
-	      if (msg) warning("BinMin must equal or less than smallest observation (", minDat, ")")
+	      if (verbose) warning("BinMin must equal or less than smallest observation (", minDat, ")")
 	  	.Object@Elog <- 4
 	  	return(.Object)
 	    }
 	    if (maxL < LB_pars@Linf) {
-	      if (msg) warning("BinMax must equal or larger than Linf")
+	      if (verbose) warning("BinMax must equal or larger than Linf")
 	  	.Object@Elog <- 5
 	  	return(.Object)
 	    }
@@ -297,20 +303,20 @@ setMethod("initialize", "LB_lengths", function(.Object, file="none", LB_pars=NUL
       .Object@Years <- names(dat[1:ncol(dat)])
       .Object@NYears <- ncol(dat)
 	  if (length(LB_pars@BinMax) < 1) {
-        if (msg) message("Length bin parameters (BinMax) must be set for raw data. Using defaults")
+        if (verbose) message("Length bin parameters (BinMax) must be set for raw data. Using defaults")
         LB_pars@BinMax <- ceiling((max(LB_pars@Linf * 1.1, 1.1 * max(dat, na.rm=TRUE)))/0.5)*0.5
 	  }
 	  if (length(LB_pars@BinMin) < 1) {
-	    if (msg) message("Length bin parameters (BinMin) must be set for raw data. Using defaults")
+	    if (verbose) message("Length bin parameters (BinMin) must be set for raw data. Using defaults")
 		LB_pars@BinMin <- floor((min(dat, na.rm=TRUE) * 0.9)/0.5)*0.5
 	  }
 	  if (length(LB_pars@BinWidth) < 1) {
-	    if (msg) message("Length bin parameters (BinWidth) must be set for raw data. Using defaults")
+	    if (verbose) message("Length bin parameters (BinWidth) must be set for raw data. Using defaults")
 		LB_pars@BinWidth <- floor((1/20 * LB_pars@BinMax)/5)*5
 	  }
 	  chk <- all(diff(dat[,1]) == median(diff( dat[,1]), na.rm=TRUE))
 	  if (chk) { # a length frequency file has been uploaded
-	    if (msg) warning("It looks like you may have uploaded a length frequency file? Perhaps use dataType='freq'?")
+	    if (verbose) warning("It looks like you may have uploaded a length frequency file? Perhaps use dataType='freq'?")
 		.Object@Elog <- 2
 		return(.Object)
 	  }
@@ -320,17 +326,17 @@ setMethod("initialize", "LB_lengths", function(.Object, file="none", LB_pars=NUL
 	  maxDat <- max(dat, na.rm=TRUE)
 	  minDat <- min(dat, na.rm=TRUE)
 	  if (maxL < maxDat) {
-	    if (msg) warning("BinMax must equal or larger than largest observation (", maxDat, ")")
+	    if (verbose) warning("BinMax must equal or larger than largest observation (", maxDat, ")")
 		.Object@Elog <- 3
 		return(.Object)
 	  }
 	   if (minL > minDat) {
-	    if (msg) warning("BinMin must equal or less than smallest observation (", minDat, ")")
+	    if (verbose) warning("BinMin must equal or less than smallest observation (", minDat, ")")
 		.Object@Elog <- 4
 		return(.Object)
 	  }
 	  if (maxL < LB_pars@Linf) {
-	    if (msg) warning("BinMax must equal or larger than Linf")
+	    if (verbose) warning("BinMax must equal or larger than Linf")
 		.Object@Elog <- 5
 		return(.Object)
 	  }
@@ -350,6 +356,7 @@ setMethod("initialize", "LB_lengths", function(.Object, file="none", LB_pars=NUL
 #' An S4 class containing all parameters for the LBSPR model
 #' @slot SPR The Spawning Potential Ratio
 #' @slot Yield Relative yield
+#' @slot YPR Yield per recruit
 #' @slot LMids A numeric vector containing the mid-points of the length bins
 #' @slot pLCatch A numeric vector containg expected proportion for each length class in the catch
 #' @slot pLPop A numeric vector containg expected proportion for each length class in the population
@@ -363,6 +370,7 @@ setMethod("initialize", "LB_lengths", function(.Object, file="none", LB_pars=NUL
 setClass("LB_obj", representation(
   SPR = "vector",
   Yield = "vector",
+  YPR = "vector",
   LMids = "vector",
   pLCatch = "matrix",
   pLPop = "array",
@@ -380,10 +388,10 @@ setClass("LB_obj", representation(
 #'
 #' @param .Object class of object to be created
 #' @param defaults use defaults?
-#' @param msg display a message?
+#' @param verbose display a message?
 #' @return a object of class \code{'LB_obj'}
 #' @author A. Hordyk
-setMethod("initialize", "LB_obj", function(.Object, defaults=FALSE, msg=FALSE){
+setMethod("initialize", "LB_obj", function(.Object, defaults=FALSE, verbose=FALSE){
   .Object
 })
 
