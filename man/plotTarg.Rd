@@ -5,7 +5,7 @@
 \title{Plot sampled length structure against target simulated size composition}
 \usage{
 plotTarg(LB_pars = NULL, LB_lengths = NULL, yr = 1, Cols = NULL,
-  axTex = 12, axTitle = 14)
+  size.axtex = 12, size.title = 14)
 }
 \arguments{
 \item{LB_pars}{an object of class \code{'LB_pars'} that contains the life history and fishing information}
@@ -16,9 +16,9 @@ plotTarg(LB_pars = NULL, LB_lengths = NULL, yr = 1, Cols = NULL,
 
 \item{Cols}{optional character vector of colours for the plot}
 
-\item{axTex}{size of the axis text}
+\item{size.axtex}{size of the axis text}
 
-\item{axTitle}{size of axis title}
+\item{size.title}{size of axis title}
 }
 \value{
 a ggplot object

@@ -14,7 +14,11 @@ An S4 class containing life history and other parameters
 
 \item{\code{MK}}{A length-one numeric vector for M/K ratio}
 
+\item{\code{M}}{An optional value for natural mortality (M)}
+
 \item{\code{Linf}}{A length-one numeric vector for Linf}
+
+\item{\code{Linf_units}}{Character describing units of length parameters}
 
 \item{\code{CVLinf}}{A length-one numeric vector for CV of length-at-age}
 
@@ -23,6 +27,8 @@ An S4 class containing life history and other parameters
 \item{\code{L95}}{A length-one numeric vector for length at 95\% maturity}
 
 \item{\code{Walpha}}{A length-one numeric vector for alpha parameter of length-weight relationship}
+
+\item{\code{Walpha_units}}{Character describing units for weight scaling parameter}
 
 \item{\code{Wbeta}}{A length-one numeric vector for beta parameter of length-weight relationship}
 

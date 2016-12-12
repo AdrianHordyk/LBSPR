@@ -5,7 +5,7 @@
 \title{Interal function to fit LBSPR model to length data}
 \usage{
 LBSPRfit_(yr = 1, LB_pars = NULL, LB_lengths = NULL, Control = list(),
-  pen = TRUE, useCPP = TRUE, msg = TRUE)
+  pen = TRUE, useCPP = TRUE, verbose = TRUE)
 }
 \arguments{
 \item{yr}{index of the year column to fit model to}
@@ -20,7 +20,7 @@ LBSPRfit_(yr = 1, LB_pars = NULL, LB_lengths = NULL, Control = list(),
 
 \item{useCPP}{use cpp optimization code?}
 
-\item{msg}{display messages?}
+\item{verbose}{display messages?}
 }
 \value{
 a object of class \code{'LB_obj'}

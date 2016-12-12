@@ -6,7 +6,7 @@
 \title{Create a new LB_pars object}
 \usage{
 \S4method{initialize}{LB_pars}(.Object, file = "none", defaults = TRUE,
-  msg = TRUE)
+  verbose = TRUE)
 }
 \arguments{
 \item{.Object}{class of object to be created}
@@ -15,7 +15,7 @@
 
 \item{defaults}{use defaults for some parameters?}
 
-\item{msg}{display a message?}
+\item{verbose}{display a message?}
 }
 \value{
 a object of class \code{'LB_pars'}

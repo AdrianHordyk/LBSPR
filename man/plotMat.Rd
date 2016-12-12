@@ -4,15 +4,15 @@
 \alias{plotMat}
 \title{Plot the maturity-at-length and selectivity-at-length curves}
 \usage{
-plotMat(LB_obj = NULL, axTex = 12, axTitle = 14, useSmooth = TRUE,
-  Title = NULL)
+plotMat(LB_obj = NULL, size.axtex = 12, size.title = 14,
+  useSmooth = TRUE, Title = NULL)
 }
 \arguments{
 \item{LB_obj}{an object of class \code{'LB_obj'} that contains the life history and fishing information}
 
-\item{axTex}{size of the axis text}
+\item{size.axtex}{size of the axis text}
 
-\item{axTitle}{size of axis title}
+\item{size.title}{size of axis title}
 
 \item{useSmooth}{use the smoothed estimates?}
 

@@ -4,21 +4,31 @@
 \alias{plotSim}
 \title{Plot simulated size composition}
 \usage{
-plotSim(LB_obj = NULL, type = c("Catch", "Pop"), perRec = FALSE,
-  Cols = NULL, axTex = 12, axTitle = 14)
+plotSim(LB_obj = NULL, type = c("all", "len.freq", "growth",
+  "maturity.select", "yield.curve"), lf.type = c("catch", "pop"),
+  growth.type = c("LAA", "WAA"), perRec = FALSE, incSPR = TRUE,
+  Cols = NULL, size.axtex = 12, size.title = 14, size.SPR = 4)
 }
 \arguments{
 \item{LB_obj}{an object of class \code{'LB_obj'} that contains the life history and fishing information}
 
-\item{type}{a character value indicating if the Catch or Population should be plotted}
+\item{type}{a character value indicating which plots to include: "all", "len.freq", "growth", "maturity.select", "yield.curve"}
+
+\item{lf.type}{a character value indicating if the \code{catch} or \code{pop} (population) should be plotted for the length frequency}
+
+\item{growth.type}{should growth be plotted as length-at-age (\code{"LAA"}) or weight-at-age (\code{"WAA"})}
 
 \item{perRec}{a logical to indicate if plot should be per-recruit (ignore steepness) or not (zero recruitment if SPR below replacement level)}
 
+\item{incSPR}{a logical to indicate if SPR value should be printed in top right corner of plot}
+
 \item{Cols}{optional character vector of colours for the plot}
 
-\item{axTex}{size of the axis text}
+\item{size.axtex}{size of the axis text}
 
-\item{axTitle}{size of axis title}
+\item{size.title}{size of axis title}
+
+\item{size.SPR}{size of SPR text}
 }
 \value{
 a ggplot object

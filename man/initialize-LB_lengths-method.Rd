@@ -6,7 +6,7 @@
 \title{Create a new LB_lengths object}
 \usage{
 \S4method{initialize}{LB_lengths}(.Object, file = "none", LB_pars = NULL,
-  dataType = c("raw", "freq"), header = FALSE, msg = TRUE, ...)
+  dataType = c("raw", "freq"), header = FALSE, verbose = TRUE, ...)
 }
 \arguments{
 \item{.Object}{class of object to be created}
@@ -19,7 +19,7 @@
 
 \item{header}{is there a header?}
 
-\item{msg}{display a message?}
+\item{verbose}{display a message?}
 
 \item{...}{optional additional arguments passed to read.csv}
 }
