@@ -9,3 +9,4 @@ README.MD
 ^appveyor\.yml$
 docs
 cran-comments.md
+NEWS.md
