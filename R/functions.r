@@ -27,20 +27,23 @@ LBSPRsim <- function(LB_pars=NULL, Control=list(), verbose=TRUE) {
     if (LB_pars@SPR > 1 | LB_pars@SPR < 0) stop("SPR must be between 0 and 1")
     if (length(LB_pars@FM) >0) message("Both SPR and F/M have been specified. Using SPR and ignoring F/M")
 	opt <- optimise(getFMfun, interval=c(0.001, 7), LB_pars, Control=Control)
-	LB_pars@FM <- round(opt$minimum,3)
+	LB_pars@FM <- opt$minimum
 	temp <- LBSPRsim_(LB_pars, Control=Control, verbose=verbose)
 	temp@SPR <- round(temp@SPR,2)
+	temp@FM <- round(temp@FM, 2)
 	if (temp@SPR != round(LB_pars@SPR,2)) {
 	  warning("Not possible to reach specified SPR. SPR may be too low for current selectivity pattern")
 	  message("SPR is ", temp@SPR, " instead of ", LB_pars@SPR)
 	}
 	return(temp)
   } else {
-    return(LBSPRsim_(LB_pars, Control=Control, verbose=verbose))
+    out <- LBSPRsim_(LB_pars, Control=Control, verbose=verbose)
+	out@SPR <- round(out@SPR, 2)
+    return(out)
   }
 }
 
-#' Interal LBSPR Simulation Model
+#' Internal LBSPR Simulation Model
 #'
 #' A internal function that generates the expected equilbrium size composition given biological parameters, and fishing mortality and selectivity pattern.  Typically only used by other functions in the package.
 #'
@@ -334,7 +337,7 @@ LBSPRsim_ <- function(LB_pars=NULL, Control=list(), verbose=TRUE, doCheck=TRUE) 
   LBobj <- new("LB_obj", verbose=verbose)
   Slots <- slotNames(LB_pars)
   for (X in 1:length(Slots)) slot(LBobj, Slots[X]) <- slot(LB_pars, Slots[X])
-  LBobj@SPR <- round(SPR,2)
+  LBobj@SPR <- SPR
   LBobj@Yield <- Yield
   LBobj@YPR <- YPR
   LBobj@LMids <- LenOut[,1]
@@ -527,7 +530,7 @@ FilterSmooth <- function(RawEsts, R=1, Q=0.1, Int=100) {
 
 }
 
-#' Interal function to fit LBSPR model to length data
+#' Internal function to fit LBSPR model to length data
 #'
 #' An internal function that fits the LBSPR model to a single year of length data
 #'
@@ -552,7 +555,8 @@ FilterSmooth <- function(RawEsts, R=1, Q=0.1, Int=100) {
 #'
 #' @importFrom stats dbeta dnorm median nlminb optimise pnorm optim runif
 #' @export
-LBSPRfit_ <- function(yr=1, LB_pars=NULL, LB_lengths=NULL, Control=list(), pen=TRUE, useCPP=TRUE, verbose=TRUE) {
+LBSPRfit_ <- function(yr=1, LB_pars=NULL, LB_lengths=NULL, Control=list(), 
+  pen=TRUE, useCPP=TRUE, verbose=TRUE) {
   if (verbose) message(yr)
   flush.console()
 
@@ -697,6 +701,7 @@ LBSPRfit_ <- function(yr=1, LB_pars=NULL, LB_lengths=NULL, Control=list(), pen=T
   LBobj
 
 }
+
 
 varSPR <- function(MLEs, varcov, LB_pars) {
   var <- diag(varcov)
@@ -857,8 +862,8 @@ plotSim <- function(LB_obj=NULL, type=c("all", "len.freq", "growth", "maturity.s
 	Title <- "Population"
 	Leg <- c("Fished", "Unfished")
   }
-  if (length(LB_obj@Linf_units) > 0) {
-    XLab <- paste0("Length (", LB_obj@Linf_units, ")")
+  if (length(LB_obj@L_units) > 0) {
+    XLab <- paste0("Length (", LB_obj@L_units, ")")
   } else XLab <- "Length"
   
   PopType <- PLength <- NULL # hack to get past CRAN
@@ -904,8 +909,8 @@ plotSim <- function(LB_obj=NULL, type=c("all", "len.freq", "growth", "maturity.s
  if (MaxAge == 1) XLab <- "Relative Age\n"
  if (MaxAge != 1) XLab <- "Age"
  if (growth.type=="LAA") {
-   if (length(LB_obj@Linf_units) > 0) {
-     YLab <- paste0("Length (", LB_obj@Linf_units, ")")
+   if (length(LB_obj@L_units) > 0) {
+     YLab <- paste0("Length (", LB_obj@L_units, ")")
     } else YLab <- "Length"
  } 
  if (growth.type=="WAA") {
@@ -1005,9 +1010,6 @@ plotSim <- function(LB_obj=NULL, type=c("all", "len.freq", "growth", "maturity.s
  
 }
 
-
-
-
 #' Plot the maturity-at-length and selectivity-at-length curves
 #'
 #' A function that plots the maturity-at-length and selectivity-at-length curves
@@ -1030,8 +1032,8 @@ plotMat <- function(LB_obj=NULL, size.axtex=12, size.title=14, useSmooth=TRUE, T
   if ("LMids" %in% slotNames(LB_obj)) Lens <- seq(from=LB_obj@LMids[1], to=LB_obj@LMids[length(LB_obj@LMids)], by=1)
   if (!("LMids" %in% slotNames(LB_obj))) Lens <- seq(from=0, to=LB_obj@Linf, by=1)
   # Length at Maturity
-  if (length(LB_obj@Linf_units) > 0) {
-    XLab <- paste0("Length (", LB_obj@Linf_units, ")")
+  if (length(LB_obj@L_units) > 0) {
+    XLab <- paste0("Length (", LB_obj@L_units, ")")
   } else XLab <- "Length"
   LenMat <- 1.0/(1+exp(-log(19)*(Lens-LB_obj@L50)/(LB_obj@L95-LB_obj@L50)))
   DF <- data.frame(Lens=Lens, Dat=LenMat, Line="Maturity")
@@ -1143,10 +1145,9 @@ plotSize <- function(LB_obj=NULL, size.axtex=12, size.title=14, Title=NULL) {
   longDat$Year <- factor(longDat$Year, levels=colnames(Ldat))
   NCol <- ceiling(sqrt(NYrs))
   NRow <- ceiling(NYrs/NCol)
-  LBSPR_len <- NULL # hack to get past CRAN check
-  lab <- NULL # hack to get past CRAN check
-  if (class(LB_obj) != "LB_lengths" && length(LB_obj@Linf_units) > 0) {
-    XLab <- paste0("Length (", LB_obj@Linf_units, ")")
+  LBSPR_len <- lab <- NULL # hack to get past CRAN check
+  if (length(LB_obj@L_units) > 0) {
+    XLab <- paste0("Length (", LB_obj@L_units, ")")
   } else XLab <- "Length"
   bplot <- ggplot(longDat, aes(x=LMids, y=LBSPR_len)) +
    facet_wrap(~Year, ncol=NCol) +
@@ -1521,8 +1522,8 @@ plotTarg <- function(LB_pars=NULL, LB_lengths=NULL, yr=1, Cols=NULL, size.axtex=
   x <- quantile(LMids, 0.8)
   y <- max(longDat$PLength) *0.8
   
-  if (length(LB_obj@Linf_units) > 0) {
-    XLab <- paste0("Length (", LB_obj@Linf_units, ")")
+  if (length(LB_obj@L_units) > 0) {
+    XLab <- paste0("Length (", LB_obj@L_units, ")")
   } else XLab <- "Length"
   PopType <- PLength <- alphayr <- NULL # hack to get past CRAN
   Plot <- ggplot(longDat, aes(x=LMids, y=PLength, fill=PopType, alpha=factor(alphayr))) +

@@ -71,7 +71,7 @@ check_LB_pars <- function(object) {
 #' @slot MK A length-one numeric vector for M/K ratio
 #' @slot M An optional value for natural mortality (M)
 #' @slot Linf A length-one numeric vector for Linf
-#' @slot Linf_units Character describing units of length parameters
+#' @slot L_units Character describing units of length parameters
 #' @slot CVLinf A length-one numeric vector for CV of length-at-age
 #' @slot L50 A length-one numeric vector for length at 50\% maturity
 #' @slot L95 A length-one numeric vector for length at 95\% maturity
@@ -95,7 +95,7 @@ setClass("LB_pars", representation(
   MK = "numeric",
   M = "numeric",
   Linf = "numeric",
-  Linf_units = "character",
+  L_units = "character",
   CVLinf = "numeric",
   L50 = "numeric",
   L95 = "numeric",
@@ -153,6 +153,7 @@ setMethod("initialize", "LB_pars", function(.Object, file="none", defaults=TRUE,
 #'
 #' @slot LMids A numeric vector containing the mid-points of the length bins
 #' @slot LData A numeric matrix containing length data
+#' @slot L_units Character descrbing units of the length measurements
 #' @slot Years A numeric vector containing the year indices
 #' @slot NYears A length-one numeric vector for number of years
 #' @slot Elog A error log
@@ -160,6 +161,7 @@ setMethod("initialize", "LB_pars", function(.Object, file="none", defaults=TRUE,
 setClass("LB_lengths", representation(
   LMids = "vector",
   LData = "matrix",
+  L_units = "character",
   Years = "vector",
   NYears = "numeric",
   Elog = "numeric"
@@ -344,6 +346,7 @@ setMethod("initialize", "LB_lengths", function(.Object, file="none", LB_pars=NUL
 	  .Object@LMids <- hist(dat[,1], breaks=LBins, plot=FALSE)$mids
     }
     .Object@Elog <- 0
+	if (length(LB_pars@L_units) > 0) .Object@L_units <- LB_pars@L_units
 	return(.Object)
   }
 
