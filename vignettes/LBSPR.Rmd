@@ -40,13 +40,14 @@ Finally, please make sure you understand the data and the biological parameters 
 # First Steps
 
 ## Installing the Package
-The LBSPR package is not available on CRAN.
-
-You can install the latest version of the package directly from GitHub using the `devtools` package:
+The LBSPR package is now available on CRAN:
+```{r, eval=FALSE}
+install.packages("LBSPR")
+```
+You can install the latest development version of the package from GitHub using the `devtools` package:
 ```{r, eval=FALSE}
 # installed.packages("devtools")
-library(devtools)
-install_github("AdrianHordyk/LBSPR")
+devtools::install_github("AdrianHordyk/LBSPR")
 ```
 
 ## Load the Package
