@@ -8,7 +8,7 @@ output:
     toc: yes
     toc_float: true
 vignette: >
-  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteIndexEntry{LBSPR: An R package for simulation and estimation using life-history ratios and length composition data}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
