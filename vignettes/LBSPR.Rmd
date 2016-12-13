@@ -1,5 +1,5 @@
 ---
-title: "Length-Based Spawning Potential Ratio"
+title: "LBSPR: An R package for simulation and estimation using life-history ratios and length composition data"
 author: "Adrian Hordyk"
 date: "`r Sys.Date()`"
 output: 
@@ -23,7 +23,7 @@ Like any assessment method, the LBSPR model relies on a number of simplifying as
 There are two versions of the LBSPR model included in this package. 
 
 ## Age-Structured Length-Based Model
-The LBSPR model described by Hordyk et al. (2015a, b), and tested in a MSE framework (Hordyk et al. 2015c), use a conventional age-structured equilibrium population model.  An inherent assumption of this model structure is that selectivity is age-based not length-based.
+The LBSPR model described by Hordyk et al. (2015a, b), and tested in a MSE framework (Hordyk et al. 2015c), use a conventional age-structured equilibrium population model.  An important assumption of this model structure is that selectivity is age-based not length-based.
 
 ## Length-Structured Growth-Type-Group Model
 Hordyk et al. (2016) describe a length-structured version of the LBSPR model that uses growth-type-groups (GTG) to account for size-based selectivity.  The GTG-LBSPR model also has the ability to include variable *M* at size (by default *M* is assumed to be constant).  The GTG-LBSPR model typically estimates a lower fishing mortality rate for a given size structure compared to the earlier age-structured model.  This is because the age-structured model has a 'regeneration assumption', where, because of the age-based selectivity assumption, large individuals are expected even at high fishing mortality (large, young fish).
@@ -57,7 +57,7 @@ library(LBSPR)
 # Simulation
 The LBSPR package can be used to generate the expected size composition, the SPR, and relative yield for a given set of biological and exploitation pattern parameters. 
 
-## LB_pars Object
+## `LB_pars` Object
 The first thing to do is to create a `LB_pars` object that contains all of the required parameters for the simulation model. `LB_pars` is an S4 class object.  
 
 The S4 system is different to the S3 system that is commonly used in R, and that R users are familiar with.  Don't worry if you've never used S4 objects before. The main thing to know is that elements in a S4 object are called **slots** and you access them using the `@` symbol (rather than the `$` symbol that is used with data.frames). 
@@ -141,7 +141,7 @@ MyPars@BinMin <- 0
 
 We can also choose to set the units for the length parameters:
 ```{r}
-MyPars@Linf_units <- "mm"
+MyPars@L_units <- "mm"
 ```
 
 ### The `LB_obj` Object
@@ -296,7 +296,7 @@ MyPars@Linf <- 100
 MyPars@L50 <- 66 
 MyPars@L95 <- 70
 MyPars@MK <- 1.5 
-MyPars@Linf_units <- "mm"
+MyPars@L_units <- "mm"
 ```
 
 Note that only the life history parameters need to be specified for the estimation model. The exploitation parameters will be estimated.  
@@ -379,6 +379,8 @@ Finally, the `plotEsts` function can be used to visually display the estimated p
 plotEsts(myFit1)
 ```
 
+By default the plotting function adds the smoother line to the estimated points. 
+
 # Comparing Observed Length Data to Target Size Structure
 You can compare the observed size data against an expected size composition at a target SPR using the `plotTarg` function.  To do this, you need a `LB_pars` object with the life history parameters and the target SPR:
 
@@ -414,12 +416,12 @@ plotTarg(MyPars, LenDat, yr=yr)
 
 # References
 
-Hordyk, A.R., Ono, K., Sainsbury, K.J., Loneragan, N., and Prince, J.D. 2015a. Some explorations of the life history ratios to describe length composition, spawning-per-recruit, and the spawning potential ratio. ICES J. Mar. Sci. 72: 204–216.
+Hordyk, A.R., Ono, K., Sainsbury, K.J., Loneragan, N., and Prince, J.D. 2015a. Some explorations of the life history ratios to describe length composition, spawning-per-recruit, and the spawning potential ratio. ICES J. Mar. Sci. 72: 204 - 216.
 
-Hordyk, A.R., Ono, K., Valencia, S.R., Loneragan, N.R., and Prince, J.D. 2015b. A novel length-based empirical estimation method of spawning potential ratio (SPR), and tests of its performance, for small-scale, data-poor fisheries. ICES J. Mar. Sci. 72: 217–231. 
+Hordyk, A.R., Ono, K., Valencia, S.R., Loneragan, N.R., and Prince, J.D. 2015b. A novel length-based empirical estimation method of spawning potential ratio (SPR), and tests of its performance, for small-scale, data-poor fisheries. ICES J. Mar. Sci. 72: 217 – 231. 
 
-Hordyk, A.R., Loneragan, N.R., and Prince, J.D. 2015c. An evaluation of an iterative harvest strategy for data-poor fisheries using the length-based spawning potential ratio assessment methodology. Fish. Res. 171: 20–32.
+Hordyk, A.R., Loneragan, N.R., and Prince, J.D. 2015c. An evaluation of an iterative harvest strategy for data-poor fisheries using the length-based spawning potential ratio assessment methodology. Fish. Res. 171: 20– 32.
 
-Hordyk, A., Ono, K., Prince, J.D., and Walters, C.J. 2016. A simple length-structured model based on life history ratios and incorporating size-dependent selectivity: application to spawning potential ratios for data-poor stocks. Can. J. Fish. Aquat. Sci. 13: 1–13. doi: 10.1139/cjfas-2015-0422.
+Hordyk, A., Ono, K., Prince, J.D., and Walters, C.J. 2016. A simple length-structured model based on life history ratios and incorporating size-dependent selectivity: application to spawning potential ratios for data-poor stocks. Can. J. Fish. Aquat. Sci. 13: 1– 13. doi: 10.1139/cjfas-2015-0422.
 
-Prince, J.D., Hordyk, A.R., Valencia, S.R., Loneragan, N.R., and Sainsbury, K.J. 2015. Revisiting the concept of Beverton–Holt life-history invariants with the aim of informing data-poor fisheries assessment. ICES J. Mar. Sci. 72: 194–203.
+Prince, J.D., Hordyk, A.R., Valencia, S.R., Loneragan, N.R., and Sainsbury, K.J. 2015. Revisiting the concept of Beverton–Holt life-history invariants with the aim of informing data-poor fisheries assessment. ICES J. Mar. Sci. 72: 194 - 203.
