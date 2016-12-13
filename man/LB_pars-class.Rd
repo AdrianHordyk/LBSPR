@@ -18,7 +18,7 @@ An S4 class containing life history and other parameters
 
 \item{\code{Linf}}{A length-one numeric vector for Linf}
 
-\item{\code{Linf_units}}{Character describing units of length parameters}
+\item{\code{L_units}}{Character describing units of length parameters}
 
 \item{\code{CVLinf}}{A length-one numeric vector for CV of length-at-age}
 

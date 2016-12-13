@@ -2,7 +2,7 @@
 % Please edit documentation in R/functions.r
 \name{LBSPRsim_}
 \alias{LBSPRsim_}
-\title{Interal LBSPR Simulation Model}
+\title{Internal LBSPR Simulation Model}
 \usage{
 LBSPRsim_(LB_pars = NULL, Control = list(), verbose = TRUE,
   doCheck = TRUE)

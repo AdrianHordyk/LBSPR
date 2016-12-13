@@ -2,7 +2,7 @@
 % Please edit documentation in R/functions.r
 \name{LBSPRfit_}
 \alias{LBSPRfit_}
-\title{Interal function to fit LBSPR model to length data}
+\title{Internal function to fit LBSPR model to length data}
 \usage{
 LBSPRfit_(yr = 1, LB_pars = NULL, LB_lengths = NULL, Control = list(),
   pen = TRUE, useCPP = TRUE, verbose = TRUE)
