@@ -21,7 +21,13 @@
 <li>
   <a href="articles/index.html">Articles</a>
 </li>
-      </ul><ul class="nav navbar-nav navbar-right"></ul></div><!--/.nav-collapse -->
+      </ul><ul class="nav navbar-nav navbar-right"><li>
+  <a href="https://github.com/AdrianHordyk/LBSPR">
+    <span class="fa fa-github fa-lg"></span>
+     
+  </a>
+</li>
+      </ul></div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
 
@@ -32,30 +38,40 @@
 <div class="page-header"><h1 class="hasAnchor">
 <a href="#length-based-spawning-potential-ratio-lbspr" class="anchor"> </a>Length-Based Spawning Potential Ratio (LBSPR)</h1></div>
 
+<p>The LBSPR package contains functions to run the Length-Based Spawning Potential Ratio (LBSPR) method. The LBSPR package can be used in two ways: 1) simulating the expected length composition, growth curve, and SPR and yield curves using the LBSPR model and 2) fitting to empirical length data to provide an estimate of the spawning potential ratio (SPR).</p>
+<p>The LBSPR method has been developed for data-limited fisheries, where few data are available other than a representative sample of the size structure of the vulnerable portion of the population (e.g., the catch) and an understanding of the life history of the species.</p>
+<div id="installing" class="section level2">
+<h2 class="hasAnchor">
+<a href="#installing" class="anchor"> </a>Installing</h2>
+<p>The <code>LBSPR</code> package can be installed from CRAN:</p>
+<pre><code>install.packages("LBSPR")</code></pre>
+<p>The development version of the package can be installed from GitHub using the <code>devtools</code> package:</p>
+<pre><code># install.packages("devtools")
+devtools::install_github("adrianhordyk/LBSPR")</code></pre>
+</div>
 <div id="lbspr-documentation" class="section level2">
 <h2 class="hasAnchor">
 <a href="#lbspr-documentation" class="anchor"> </a>LBSPR Documentation</h2>
 <p>Documentation for the LBSPR package can be found <a href="http://adrianhordyk.com/LBSPR/">here</a>.</p>
 </div>
-<div id="installing" class="section level2">
+<div id="shiny-applications" class="section level2">
 <h2 class="hasAnchor">
-<a href="#installing" class="anchor"> </a>Installing</h2>
-<p>The <code>LBSPR</code> package is not yet available on CRAN.</p>
-<p>It can be installed from GitHub using the <code>devtools</code> package:</p>
-<pre><code># install.packages("devtools")
-devtools::install_github("adrianhordyk/LBSPR")</code></pre>
+<a href="#shiny-applications" class="anchor"> </a>Shiny Applications</h2>
+<p>Many of the functions in the LBSPR package are available as online applications at <a href="http://barefootecologist.com.au/" class="uri">http://barefootecologist.com.au/</a></p>
 </div>
 <div id="bugs-and-feedback" class="section level2">
 <h2 class="hasAnchor">
 <a href="#bugs-and-feedback" class="anchor"> </a>Bugs and Feedback</h2>
-<p>Please alert me to any bugs or issues by using <a href="https://github.com/AdrianHordyk/LBSPR/issues">GitHub</a>.</p>
+<p>Please alert me to any bugs or issues on <a href="https://github.com/AdrianHordyk/LBSPR/issues">GitHub</a>.</p>
 <p>Comments and suggestions for additional features are welcome. <a href="https://github.com/AdrianHordyk/LBSPR/pulls">GitHub pull requests</a> with modifications or extensions are even more welcome!</p>
 </div>
 </div>
   </div>
 
   <div class="col-md-3" id="sidebar">
-    <h2>License</h2>
+    <h2>Links</h2><ul class="list-unstyled"><li>Browse source code at <br><a href="https://github.com/AdrianHordyk/LBSPR">https://&#8203;github.com/&#8203;AdrianHordyk/&#8203;LBSPR</a></li>
+<li>Report a bug at <br><a href="https://github.com/AdrianHordyk/LBSPR/issues">https://&#8203;github.com/&#8203;AdrianHordyk/&#8203;LBSPR/&#8203;issues</a></li>
+</ul><h2>License</h2>
 <p><a href="https://www.r-project.org/Licenses/GPL-3">GPL-3</a></p>
 <h2>Developers</h2><ul class="list-unstyled"><li>Adrian Hordyk <br><small class="roles"> Author, maintainer </small> </li>
 </ul><html><body><h2>Dev status</h2><ul class="list-unstyled"><li><a href="https://travis-ci.org/AdrianHordyk/LBSPR">
