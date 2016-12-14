@@ -21,6 +21,9 @@
 <li>
   <a href="../articles/index.html">Articles</a>
 </li>
+<li>
+  <a href="../news/index.html">News</a>
+</li>
       </ul><ul class="nav navbar-nav navbar-right"><li>
   <a href="https://github.com/AdrianHordyk/LBSPR">
     <span class="fa fa-github fa-lg"></span>
@@ -38,7 +41,7 @@
       <h1>LBSPR: An R package for simulation and estimation using life-history ratios and length composition data</h1>
                         <h4 class="author">Adrian Hordyk</h4>
             
-            <h4 class="date">2016-12-13</h4>
+            <h4 class="date">2016-12-14</h4>
           </div>
 
     
@@ -70,11 +73,11 @@
 <h1 class="hasAnchor"><html><body><a href="#first-steps" class="anchor"> </a></body></html>First Steps</h1>
 <div id="installing-the-package" class="section level2">
 <h2 class="hasAnchor"><html><body><a href="#installing-the-package" class="anchor"> </a></body></html>Installing the Package</h2>
-<p>The LBSPR package is not available on CRAN.</p>
-<p>You can install the latest version of the package directly from GitHub using the <code>devtools</code> package:</p>
+<p>The LBSPR package is now available on CRAN:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">install.packages</span>(<span class="st">"LBSPR"</span>)</code></pre></div>
+<p>You can install the latest development version of the package from GitHub using the <code>devtools</code> package:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># installed.packages("devtools")</span>
-<span class="kw">library</span>(devtools)
-<span class="kw">install_github</span>(<span class="st">"AdrianHordyk/LBSPR"</span>)</code></pre></div>
+devtools::<span class="kw">install_github</span>(<span class="st">"AdrianHordyk/LBSPR"</span>)</code></pre></div>
 </div>
 <div id="load-the-package" class="section level2">
 <h2 class="hasAnchor"><html><body><a href="#load-the-package" class="anchor"> </a></body></html>Load the Package</h2>
@@ -169,20 +172,20 @@ MyPars@BinMin &lt;-<span class="st"> </span><span class="dv">0</span></code></pr
 MyPars@FM &lt;-<span class="st"> </span><span class="dv">1</span> <span class="co"># set value for FM</span>
 MySim &lt;-<span class="st"> </span><span class="kw"><a href="../reference/LBSPRsim.html">LBSPRsim</a></span>(MyPars)
 MySim@SPR <span class="co"># SPR at F/M = 1 </span></code></pre></div>
-<pre><code>## [1] 0.27</code></pre>
+<pre><code>## [1] 0.2714598</code></pre>
 <p>Change the life history parameters:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">MyPars@MK &lt;-<span class="st"> </span><span class="fl">2.0</span> 
 MySim &lt;-<span class="st"> </span><span class="kw"><a href="../reference/LBSPRsim.html">LBSPRsim</a></span>(MyPars)
 MySim@SPR <span class="co"># SPR </span></code></pre></div>
-<pre><code>## [1] 0.24</code></pre>
+<pre><code>## [1] 0.2435621</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">MyPars@MK &lt;-<span class="st"> </span><span class="fl">0.5</span>
 MySim &lt;-<span class="st"> </span><span class="kw"><a href="../reference/LBSPRsim.html">LBSPRsim</a></span>(MyPars)
 MySim@SPR <span class="co"># SPR </span></code></pre></div>
-<pre><code>## [1] 0.36</code></pre>
+<pre><code>## [1] 0.3605154</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">MyPars@Linf &lt;-<span class="st"> </span><span class="dv">120</span>
 MySim &lt;-<span class="st"> </span><span class="kw"><a href="../reference/LBSPRsim.html">LBSPRsim</a></span>(MyPars)
 MySim@SPR <span class="co"># SPR </span></code></pre></div>
-<pre><code>## [1] 0.35</code></pre>
+<pre><code>## [1] 0.3497405</code></pre>
 <p>Change selectivity parameters:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">MyPars@MK &lt;-<span class="st"> </span><span class="fl">1.5</span> 
 MyPars@SL50 &lt;-<span class="st"> </span><span class="dv">10</span>
@@ -190,12 +193,12 @@ MyPars@SL95 &lt;-<span class="st"> </span><span class="dv">15</span>
 MyPars@FM &lt;-<span class="st"> </span><span class="dv">1</span> 
 MySim &lt;-<span class="st"> </span><span class="kw"><a href="../reference/LBSPRsim.html">LBSPRsim</a></span>(MyPars)
 MySim@SPR <span class="co"># SPR </span></code></pre></div>
-<pre><code>## [1] 0.13</code></pre>
+<pre><code>## [1] 0.1345684</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">MyPars@SL50 &lt;-<span class="st"> </span><span class="dv">80</span>
 MyPars@SL95 &lt;-<span class="st"> </span><span class="dv">85</span> 
 MySim &lt;-<span class="st"> </span><span class="kw"><a href="../reference/LBSPRsim.html">LBSPRsim</a></span>(MyPars)
 MySim@SPR <span class="co"># SPR </span></code></pre></div>
-<pre><code>## [1] 0.57</code></pre>
+<pre><code>## [1] 0.5678794</code></pre>
 </div>
 <div id="control-options" class="section level3">
 <h3 class="hasAnchor"><html><body><a href="#control-options" class="anchor"> </a></body></html>Control Options</h3>
@@ -218,14 +221,14 @@ MySim@FM  <span class="co"># lower F/M for the GTG model</span></code></pre></di
 <h3 class="hasAnchor"><html><body><a href="#plotting-the-simulation" class="anchor"> </a></body></html>Plotting the Simulation</h3>
 <p>The <code>plotSim</code> function can be used to plot <code>MySim</code>:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/plotSim.html">plotSim</a></span>(MySim) </code></pre></div>
-<p><img src="LBSPR_files/figure-html/unnamed-chunk-16-1.png" width="576"></p>
+<p><img src="LBSPR_files/figure-html/unnamed-chunk-17-1.png" width="576"></p>
 <p>By default the function plots: a) the expected size structure of the catch and the expected unfished size structure of the vulnerable population, b) the maturity and selectivity-at-length curves, c) the growth curve, and d) the SPR and relative yield curves as a function of relative fishing mortality.</p>
 <p>The <code>plotSim</code> function can be controlled in a number of ways. For example, you can plot the expected unfished and fished size structure of the population by changing the <code>lf.type</code> argument:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/plotSim.html">plotSim</a></span>(MySim, <span class="dt">lf.type=</span><span class="st">"pop"</span>)</code></pre></div>
-<p><img src="LBSPR_files/figure-html/unnamed-chunk-17-1.png" width="576"></p>
+<p><img src="LBSPR_files/figure-html/unnamed-chunk-18-1.png" width="576"></p>
 <p>Individual plots can be created using the <code>type</code> argument:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/plotSim.html">plotSim</a></span>(MySim, <span class="dt">type=</span><span class="st">"len.freq"</span>)</code></pre></div>
-<p><img src="LBSPR_files/figure-html/unnamed-chunk-18-1.png" width="384"></p>
+<p><img src="LBSPR_files/figure-html/unnamed-chunk-19-1.png" width="384"></p>
 <p>See <code><a href="../reference/plotSim.html">?plotSim</a></code> for more options for plotting the output of the LBSPR simulation model.</p>
 </div>
 </div>
@@ -285,11 +288,11 @@ MyPars@L_units &lt;-<span class="st"> "mm"</span></code></pre></div>
 <h2 class="hasAnchor"><html><body><a href="#plotting-length-data" class="anchor"> </a></body></html>Plotting Length Data</h2>
 <p>The <code>plotSize</code> function can be used to plot the imported length data. This is usually a good idea to do before proceeding with fitting the model, to confirm that everything has been read in correctly:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/plotSize.html">plotSize</a></span>(Len1)</code></pre></div>
-<p><img src="LBSPR_files/figure-html/unnamed-chunk-27-1.png" width="672"></p>
+<p><img src="LBSPR_files/figure-html/unnamed-chunk-28-1.png" width="672"></p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/plotSize.html">plotSize</a></span>(Len2)</code></pre></div>
-<p><img src="LBSPR_files/figure-html/unnamed-chunk-27-2.png" width="672"></p>
+<p><img src="LBSPR_files/figure-html/unnamed-chunk-28-2.png" width="672"></p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/plotSize.html">plotSize</a></span>(Len3)</code></pre></div>
-<p><img src="LBSPR_files/figure-html/unnamed-chunk-27-3.png" width="672"></p>
+<p><img src="LBSPR_files/figure-html/unnamed-chunk-28-3.png" width="672"></p>
 </div>
 <div id="fit-the-model" class="section level2">
 <h2 class="hasAnchor"><html><body><a href="#fit-the-model" class="anchor"> </a></body></html>Fit the Model</h2>
@@ -330,13 +333,13 @@ myFit2 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/LBSP
 ## 6   46.15   59.42  0.36 0.5463732</code></pre>
 <p>The <code>plotSize</code> function can also be used to show the model fit to the data:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/plotSize.html">plotSize</a></span>(myFit1)</code></pre></div>
-<p><img src="LBSPR_files/figure-html/unnamed-chunk-32-1.png" width="672"></p>
+<p><img src="LBSPR_files/figure-html/unnamed-chunk-33-1.png" width="672"></p>
 <p>Similarly, the <code>plotMat</code> function can be used to show the specified maturity-at-length curve, and the estimated selectivity-at-length curve:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/plotMat.html">plotMat</a></span>(myFit1)</code></pre></div>
-<p><img src="LBSPR_files/figure-html/unnamed-chunk-33-1.png" width="480"></p>
+<p><img src="LBSPR_files/figure-html/unnamed-chunk-34-1.png" width="480"></p>
 <p>Finally, the <code>plotEsts</code> function can be used to visually display the estimated parameters. Note that this works for all data sets, but only makes sense when there are several years of data:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/plotEsts.html">plotEsts</a></span>(myFit1)</code></pre></div>
-<p><img src="LBSPR_files/figure-html/unnamed-chunk-34-1.png" width="768"></p>
+<p><img src="LBSPR_files/figure-html/unnamed-chunk-35-1.png" width="768"></p>
 <p>By default the plotting function adds the smoother line to the estimated points.</p>
 </div>
 </div>
@@ -362,7 +365,7 @@ MyPars@SL50 &lt;-<span class="st"> </span>Mod@SL50[yr]
 MyPars@SL95 &lt;-<span class="st"> </span>Mod@SL95[yr] 
 
 <span class="kw"><a href="../reference/plotTarg.html">plotTarg</a></span>(MyPars, LenDat, <span class="dt">yr=</span>yr)</code></pre></div>
-<p><img src="LBSPR_files/figure-html/unnamed-chunk-37-1.png" width="480"></p>
+<p><img src="LBSPR_files/figure-html/unnamed-chunk-38-1.png" width="480"></p>
 </div>
 <div id="references" class="section level1">
 <h1 class="hasAnchor"><html><body><a href="#references" class="anchor"> </a></body></html>References</h1>
