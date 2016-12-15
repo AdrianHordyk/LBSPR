@@ -7,7 +7,8 @@
 plotSim(LB_obj = NULL, type = c("all", "len.freq", "growth",
   "maturity.select", "yield.curve"), lf.type = c("catch", "pop"),
   growth.type = c("LAA", "WAA"), perRec = FALSE, incSPR = TRUE,
-  Cols = NULL, size.axtex = 12, size.title = 14, size.SPR = 4)
+  Cols = NULL, size.axtex = 12, size.title = 14, size.SPR = 4,
+  size.pt = 4)
 }
 \arguments{
 \item{LB_obj}{an object of class \code{'LB_obj'} that contains the life history and fishing information}
@@ -29,6 +30,8 @@ plotSim(LB_obj = NULL, type = c("all", "len.freq", "growth",
 \item{size.title}{size of axis title}
 
 \item{size.SPR}{size of SPR text}
+
+\item{size.pt}{size of the points on the plots}
 }
 \value{
 a ggplot object
