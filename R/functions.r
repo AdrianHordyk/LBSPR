@@ -882,7 +882,7 @@ plotSim <- function(LB_obj=NULL, type=c("all", "len.freq", "growth", "maturity.s
 
 
  # Maturity & Selectivity
- MatSel.Plot <- plotMat(LB_obj, size.axtex=size.axtex, size.title=size.title, useSmooth=TRUE, Title=NULL, Cols=Cols)
+ MatSel.Plot <- plotMat(LB_obj, size.axtex=size.axtex, size.title=size.title, useSmooth=TRUE, Title=NULL)
  
 
  Age <- Length <- Weight <- Y <- Reference <- FM <- Value <- Type  <- NULL # hack to get past CRAN check
