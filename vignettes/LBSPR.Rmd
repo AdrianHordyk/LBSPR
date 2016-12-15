@@ -148,7 +148,7 @@ MyPars@L_units <- "mm"
 ### The `LB_obj` Object
 The output of the `LBSPRsim` function is an object of class `LB_obj`.  This is another S4 object, and contains all of the information from the `LB_pars` object and the output of the `LBSPRsim` function. 
 
-Many of the functions in the LBSPR package return an object of class `LB_obj`.  You should not modify the `LB_obj` object directly. Rather, make changes to the `LB_pars` object (`MyPars`) in this case, and re-run the simulation model (or other functions, covered later in the vignette).
+Many of the functions in the LBSPR package return an object of class `LB_obj`.  You should not modify the `LB_obj` object directly. Rather, make changes to the `LB_pars` object (`MyPars` in this case), and re-run the simulation model (or other functions, covered later in the vignette).
 
 ### Simulation Output
 Let's take a look at some of the simulated output.
@@ -354,7 +354,6 @@ The smoother parameter estimates can be accessed from the `myFit` object (which 
 
 ```{r}
 myFit1@Ests
-myFit2@Ests
 ```
 
 Note that by default the smoothed estimates are used in the plotting routines.
