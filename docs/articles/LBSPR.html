@@ -41,7 +41,7 @@
       <h1>LBSPR: An R package for simulation and estimation using life-history ratios and length composition data</h1>
                         <h4 class="author">Adrian Hordyk</h4>
             
-            <h4 class="date">2016-12-14</h4>
+            <h4 class="date">2016-12-15</h4>
           </div>
 
     
@@ -153,7 +153,7 @@ MyPars@BinMin &lt;-<span class="st"> </span><span class="dv">0</span></code></pr
 <div id="the-lb_obj-object" class="section level3">
 <h3 class="hasAnchor"><html><body><a href="#the-lb_obj-object" class="anchor"> </a></body></html>The <code>LB_obj</code> Object</h3>
 <p>The output of the <code>LBSPRsim</code> function is an object of class <code>LB_obj</code>. This is another S4 object, and contains all of the information from the <code>LB_pars</code> object and the output of the <code>LBSPRsim</code> function.</p>
-<p>Many of the functions in the LBSPR package return an object of class <code>LB_obj</code>. You should not modify the <code>LB_obj</code> object directly. Rather, make changes to the <code>LB_pars</code> object (<code>MyPars</code>) in this case, and re-run the simulation model (or other functions, covered later in the vignette).</p>
+<p>Many of the functions in the LBSPR package return an object of class <code>LB_obj</code>. You should not modify the <code>LB_obj</code> object directly. Rather, make changes to the <code>LB_pars</code> object (<code>MyPars</code> in this case), and re-run the simulation model (or other functions, covered later in the vignette).</p>
 </div>
 <div id="simulation-output" class="section level3">
 <h3 class="hasAnchor"><html><body><a href="#simulation-output" class="anchor"> </a></body></html>Simulation Output</h3>
@@ -313,14 +313,6 @@ myFit2 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/LBSP
 ## [4,] 48.46 62.36 0.53 0.45
 ## [5,] 48.40 62.19 0.54 0.45
 ## [6,] 48.19 61.94 0.52 0.46</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">myFit2@Ests</code></pre></div>
-<pre><code>##       SL50  SL95   FM  SPR
-## [1,] 48.44 62.38 0.54 0.45
-## [2,] 48.45 62.44 0.54 0.45
-## [3,] 48.45 62.33 0.54 0.45
-## [4,] 48.46 62.35 0.53 0.45
-## [5,] 48.40 62.19 0.54 0.45
-## [6,] 48.19 61.93 0.52 0.46</code></pre>
 <p>Note that by default the smoothed estimates are used in the plotting routines.</p>
 <p>The individual point estimates for each year can be accessed from the <code>LB_obj</code> object:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">data.frame</span>(<span class="dt">rawSL50=</span>myFit1@SL50, <span class="dt">rawSL95=</span>myFit1@SL95, <span class="dt">rawFM=</span>myFit1@FM, <span class="dt">rawSPR=</span>myFit1@SPR)</code></pre></div>
