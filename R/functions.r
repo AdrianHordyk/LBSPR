@@ -37,9 +37,7 @@ LBSPRsim <- function(LB_pars=NULL, Control=list(), verbose=TRUE) {
 	}
 	return(temp)
   } else {
-    out <- LBSPRsim_(LB_pars, Control=Control, verbose=verbose)
-	out@SPR <- round(out@SPR, 2)
-    return(out)
+    return(LBSPRsim_(LB_pars, Control=Control, verbose=verbose))
   }
 }
 
@@ -884,7 +882,8 @@ plotSim <- function(LB_obj=NULL, type=c("all", "len.freq", "growth", "maturity.s
 
 
  # Maturity & Selectivity
- MatSel.Plot <- plotMat(LB_obj, size.axtex=size.axtex, size.title=size.title, useSmooth=TRUE, Title=NULL)
+ MatSel.Plot <- plotMat(LB_obj, size.axtex=size.axtex, size.title=size.title, useSmooth=TRUE, Title=NULL, Cols=Cols)
+ 
 
  Age <- Length <- Weight <- Y <- Reference <- FM <- Value <- Type  <- NULL # hack to get past CRAN check
  # Length at Age
@@ -940,7 +939,7 @@ plotSim <- function(LB_obj=NULL, type=c("all", "len.freq", "growth", "maturity.s
   if (growth.type=="WAA") LaA.Plot <- WaA.Plot1
 
  # SPR versus F &  # Yield versus F
- if ("yield.curve" %in% type) {
+ if ("yield.curve" %in% type | "all" %in% type) {
    FMVec <- seq(from=0, to=LB_obj@maxFM, by=0.05)
    SPROut <- matrix(NA, nrow=length(FMVec), ncol=2)
    YieldOut <- matrix(NA, nrow=length(FMVec), ncol=2)
@@ -1104,7 +1103,6 @@ plotMat <- function(LB_obj=NULL, size.axtex=12, size.title=14, useSmooth=TRUE, T
     }
   }
   if (!(is.null(Title)) & class(Title)=="character")  mplot <- mplot + ggtitle(Title)
-
   mplot
 }
 
