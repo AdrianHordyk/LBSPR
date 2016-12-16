@@ -5,6 +5,7 @@ Current development version
 - added SSB/SSB0 to yield and spr plot (plotSim function)
 
 ## Major Changes
+- added the Shiny apps to the  package.  Add more details of this later
 
 ## Minor Changes
 
