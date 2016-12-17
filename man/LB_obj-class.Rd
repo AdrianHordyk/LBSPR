@@ -16,6 +16,8 @@ An S4 class containing all parameters for the LBSPR model
 
 \item{\code{YPR}}{Yield per recruit}
 
+\item{\code{SSB}}{Spawning stock biomass (relative only)}
+
 \item{\code{LMids}}{A numeric vector containing the mid-points of the length bins}
 
 \item{\code{pLCatch}}{A numeric vector containg expected proportion for each length class in the catch}
