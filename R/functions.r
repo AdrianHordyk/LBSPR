@@ -24,7 +24,7 @@
 LBSPRsim <- function(LB_pars=NULL, Control=list(), verbose=TRUE) {
   # if (class(LB_pars) != "LB_pars") stop("LB_pars must be of class 'LB_pars'. Use: new('LB_pars')")
   if (length(LB_pars@SPR)>0) {
-    if (LB_pars@SPR > 1 | LB_pars@SPR < 0) stop("SPR must be between 0 and 1")
+    if (LB_pars@SPR > 1 | LB_pars@SPR < 0) stop("SPR must be between 0 and 1", call. = FALSE)
     if (length(LB_pars@FM) >0) message("Both SPR and F/M have been specified. Using SPR and ignoring F/M")
 	opt <- optimise(getFMfun, interval=c(0.001, 7), LB_pars, Control=Control)
 	LB_pars@FM <- opt$minimum
@@ -32,7 +32,7 @@ LBSPRsim <- function(LB_pars=NULL, Control=list(), verbose=TRUE) {
 	temp@SPR <- round(temp@SPR,2)
 	temp@FM <- round(temp@FM, 2)
 	if (temp@SPR != round(LB_pars@SPR,2)) {
-	  warning("Not possible to reach specified SPR. SPR may be too low for current selectivity pattern")
+	  warning("Not possible to reach specified SPR. SPR may be too low for current selectivity pattern", call. = FALSE)
 	  message("SPR is ", temp@SPR, " instead of ", LB_pars@SPR)
 	}
 	return(temp)
@@ -102,7 +102,7 @@ LBSPRsim_ <- function(LB_pars=NULL, Control=list(), verbose=TRUE, doCheck=TRUE) 
       if (verbose) message("Steepness not set. Only used for yield analysis. Not sensitive if per-recruit. Using default of 1 (per-recruit model)")
 	LB_pars@Steepness <- Steepness <- 0.99
   }
-  if (Steepness <= 0.2 | Steepness >= 1) stop("Steepness must be greater than 0.2 and less than 1.0")
+  if (Steepness <= 0.2 | Steepness >= 1) stop("Steepness must be greater than 0.2 and less than 1.0", call. = FALSE)
 
   Mpow <- LB_pars@Mpow
   if (is.null(Mpow) | length(Mpow) < 1) Mpow <- 0
@@ -140,23 +140,23 @@ LBSPRsim_ <- function(LB_pars=NULL, Control=list(), verbose=TRUE, doCheck=TRUE) 
 	  LBins <- c(fstBins, LBins)
 	  LMids <- seq(from=LBins[1] + 0.5*BinWidth, by=BinWidth, length.out=length(LBins)-1)
   }
-  if (MaxL < Linf) stop(paste0("Maximum length bin (", MaxL, ") can't be smaller than asymptotic size (", Linf ,"). Increase size of maximum length class ['maxL']"))
+  if (MaxL < Linf) stop(paste0("Maximum length bin (", MaxL, ") can't be smaller than asymptotic size (", Linf ,"). Increase size of maximum length class ['maxL']"), call. = FALSE)
   # Control Parameters
   con <- list(maxsd=2, modtype=c("GTG","absel"), ngtg=13, P=0.01, Nage=101,
     maxFM=4, method="BFGS")
   nmsC <- names(con)
   con[(namc <- names(Control))] <- Control
   if (length(noNms <- namc[!namc %in% nmsC]))
-        warning("unknown names in Control: ", paste(noNms, collapse = ", "))
+        warning("unknown names in Control: ", paste(noNms, collapse = ", "), call. = FALSE)
   maxsd <- con$maxsd # maximum number of standard deviations from the mean for length-at-age distributions
-  if (maxsd < 1) warning("maximum standard deviation is too small. See the help documentation")
+  if (maxsd < 1) warning("maximum standard deviation is too small. See the help documentation", call. = FALSE)
   modType <- match.arg(arg=con$modtype, choices=c("GTG", "absel"))
 
   # Model control parameters
   P <- con$P
-  if (P > 0.1 | P < 0.0001) warning("P parameter may be set to high or too low. See the help documentation")
+  if (P > 0.1 | P < 0.0001) warning("P parameter may be set to high or too low. See the help documentation", call. = FALSE)
   Nage <- con$Nage
-  if (Nage < 90) warning("Nage should be higher. See the help documentation")
+  if (Nage < 90) warning("Nage should be higher. See the help documentation", call. = FALSE)
   maxFM <- con$maxFM
   ngtg <- con$ngtg
   Yield <- vector()
@@ -247,6 +247,9 @@ LBSPRsim_ <- function(LB_pars=NULL, Control=list(), verbose=TRUE, doCheck=TRUE) 
     # RelRec/R0 - relative recruitment
     YPR <- sum(NatLC  * Weight * SelLen2) * FM
     Yield <- YPR * RelRec
+	
+	# Spawning Stock Biomass 
+	SSB <- sum(NatLF  * RelRec * Weight * MatLengtg) 
 
     # Calc Unfished Fitness - not used here
     Fit <- apply(FecGTG, 2, sum, na.rm=TRUE) # Total Fecundity per Group
@@ -307,7 +310,6 @@ LBSPRsim_ <- function(LB_pars=NULL, Control=list(), verbose=TRUE, doCheck=TRUE) 
     VulnUF	<- apply(N0 * Cx, 2, sum) #
 	VulnUF <- VulnUF/sum(VulnUF)
     SPR <- sum(Ma * Ns * rLens^FecB)/sum(Ma * N0 * rLens^FecB)
-
 	# Equilibrium Relative Recruitment
 	EPR0 <- sum(Ma * N0 * rLens^FecB)
 	EPRf <- sum(Ma * Ns * rLens^FecB)
@@ -316,6 +318,7 @@ LBSPRsim_ <- function(LB_pars=NULL, Control=list(), verbose=TRUE, doCheck=TRUE) 
     recb <- (reca * EPR0 - 1)/(R0*EPR0)
     RelRec <- max(0, (reca * EPRf-1)/(recb*EPRf))
     if (!is.finite(RelRec)) RelRec <- 0
+	SSB <- sum(Ns * RelRec * rLens^Wbeta * Ma) 
 
     # RelRec/R0 - relative recruitment
     YPR <- sum(Nc  * LMids^FecB ) * FM
@@ -338,6 +341,7 @@ LBSPRsim_ <- function(LB_pars=NULL, Control=list(), verbose=TRUE, doCheck=TRUE) 
   LBobj@SPR <- SPR
   LBobj@Yield <- Yield
   LBobj@YPR <- YPR
+  LBobj@SSB <- SSB
   LBobj@LMids <- LenOut[,1]
   LBobj@pLCatch <- matrix(LenOut[,2])
   LBobj@RelRec <- RelRec
@@ -405,8 +409,8 @@ getFMfun <- function(FM, LB_pars, Control=list()) {
 #' @export
 LBSPRfit <- function(LB_pars=NULL, LB_lengths=NULL, yrs=NA, Control=list(), pen=TRUE, verbose=TRUE, useCPP=TRUE, ...) {
 
-  if (class(LB_pars) != "LB_pars") stop("LB_pars must be of class 'LB_pars'. Use: new('LB_pars')")
-  if (class(LB_lengths) != "LB_lengths") stop("LB_lengths must be of class 'LB_lengths'. Use: new('LB_lengths')")
+  if (class(LB_pars) != "LB_pars") stop("LB_pars must be of class 'LB_pars'. Use: new('LB_pars')", call. = FALSE)
+  if (class(LB_lengths) != "LB_lengths") stop("LB_lengths must be of class 'LB_lengths'. Use: new('LB_lengths')", call. = FALSE)
 
   # Error Checks
   # if (length(LB_pars@Species) < 1) {
@@ -421,7 +425,7 @@ LBSPRfit <- function(LB_pars=NULL, LB_lengths=NULL, yrs=NA, Control=list(), pen=
   validObject(LB_pars)
 
   if (class(LB_lengths@Years) != "numeric" & class(LB_lengths@Years) != "integer") {
-    warning("Years must be numeric values")
+    warning("Years must be numeric values", call. = FALSE)
 	message("Attempting to convert to numeric values")
 	options(warn=-1)
 	LB_lengths@Years <-  gsub("X", "", LB_lengths@Years)
@@ -438,7 +442,7 @@ LBSPRfit <- function(LB_pars=NULL, LB_lengths=NULL, yrs=NA, Control=list(), pen=
 	cols <- 1:nyrs
   } else { # run model on some years
     if (class(yrs) != "numeric" & class(yrs) != "integer")
-	  stop("yrs must numeric value indicating column(s), or NA for all")
+	  stop("yrs must numeric value indicating column(s), or NA for all", call. = FALSE)
     nyrs <- length(yrs)
     yearNames <- LB_lengths@Years[yrs]
     if (is.null(yearNames)) yearNames <- yrs
@@ -558,9 +562,9 @@ LBSPRfit_ <- function(yr=1, LB_pars=NULL, LB_lengths=NULL, Control=list(),
   if (verbose) message(yr)
   flush.console()
 
-  if (class(LB_pars) != "LB_pars") stop("LB_pars must be of class 'LB_pars'. Use: new('LB_pars')")
-  if (class(LB_lengths) != "LB_lengths") stop("LB_lengths must be of class 'LB_lengths'. Use: new('LB_lengths')")
-  if (yr > LB_lengths@NYears) stop("yr greater than LBSPR_obj@NYears")
+  if (class(LB_pars) != "LB_pars") stop("LB_pars must be of class 'LB_pars'. Use: new('LB_pars')", call. = FALSE)
+  if (class(LB_lengths) != "LB_lengths") stop("LB_lengths must be of class 'LB_lengths'. Use: new('LB_lengths')", call. = FALSE)
+  if (yr > LB_lengths@NYears) stop("yr greater than LBSPR_obj@NYears", call. = FALSE)
 
   SingYear <- LB_lengths
   SingYear@LData <- as.matrix(SingYear@LData[,yr])
@@ -579,11 +583,11 @@ LBSPRfit_ <- function(yr=1, LB_pars=NULL, LB_lengths=NULL, Control=list(),
   nmsC <- names(con)
   con[(namc <- names(Control))] <- Control
   if (length(noNms <- namc[!namc %in% nmsC])) {
-    warning("unknown names in Control: ", paste(noNms, collapse = ", "))
+    warning("unknown names in Control: ", paste(noNms, collapse = ", "), call. = FALSE)
 	cat("Options are: ", paste(names(con), collapse = ", "), "\n")
   }
   maxsd <- con$maxsd # maximum number of standard deviations from the mean for length-at-age distributions
-  if (maxsd < 1) warning("maximum standard deviation is too small. See the help documentation")
+  if (maxsd < 1) warning("maximum standard deviation is too small. See the help documentation", call. = FALSE)
   modType <- match.arg(arg=con$modtype, choices=c("GTG", "absel"))
   ngtg <- con$ngtg
   # Starts
@@ -671,7 +675,7 @@ LBSPRfit_ <- function(yr=1, LB_pars=NULL, LB_lengths=NULL, Control=list(),
   elog <- 0
   # Error Logs
   if (all(is.na(varcov)) | any(diag(varcov) < 0)) {
-    warning("The final Hessian is not positive definite. Estimates may be unreliable")
+    warning("The final Hessian is not positive definite. Estimates may be unreliable", call. = FALSE)
 	flush.console()
 	elog <- 1 #
   }
@@ -775,8 +779,8 @@ derivative <- function(f, x, ..., order = 1, delta = 0.01, sig = 6) {
 #'
 #' @export
 LBSPRopt <- function(trypars, yr=1, LB_pars=NULL, LB_lengths=NULL,  Control=list(), pen=TRUE) {
-  if (class(LB_pars) != "LB_pars") stop("LB_pars must be of class 'LB_pars'. Use: new('LB_pars')")
-  if (class(LB_lengths) != "LB_lengths") stop("LB_lengths must be of class 'LB_lengths'. Use: new('LB_lengths')")
+  if (class(LB_pars) != "LB_pars") stop("LB_pars must be of class 'LB_pars'. Use: new('LB_pars')", call. = FALSE)
+  if (class(LB_lengths) != "LB_lengths") stop("LB_lengths must be of class 'LB_lengths'. Use: new('LB_lengths')", call. = FALSE)
 
   LB_pars@SL50 <- exp(trypars)[1] * LB_pars@Linf
   LB_pars@SL95 <- LB_pars@SL50 + (exp(trypars)[2]* LB_pars@Linf)
@@ -800,20 +804,25 @@ LBSPRopt <- function(trypars, yr=1, LB_pars=NULL, LB_lengths=NULL,  Control=list
   NLL
 }
 
-#' Plot simulated size composition
+#' General plotting function for simulated data
 #'
-#' A function that plots the expected size composition in the fished and unfished state
+#' A general function that plots the simulation object. Includes four different plots: 
+#' equilbrium size structure, maturity and selectivity curves, growth curves, and relative Yield, YPR, SPR, SSB, and Recruitment curves.
 #'
 #' @param LB_obj an object of class \code{'LB_obj'} that contains the life history and fishing information
 #' @param type a character value indicating which plots to include: "all", "len.freq", "growth", "maturity.select", "yield.curve"
 #' @param lf.type a character value indicating if the \code{catch} or \code{pop} (population) should be plotted for the length frequency
 #' @param growth.type should growth be plotted as length-at-age (\code{"LAA"}) or weight-at-age (\code{"WAA"})
+#' @param y.type what curves should be plotted on y-axis? \code{"SPR"}, \code{"SSB"}, \code{"Yield"}, \code{"YPR"}
+#' @param x.type what curves should be plotted on x-axis? \code{"FM"}, \code{"SSB"}, \code{"SPR"}
 #' @param perRec a logical to indicate if plot should be per-recruit (ignore steepness) or not (zero recruitment if SPR below replacement level)
-#' @param incSPR a logical to indicate if SPR value should be printed in top right corner of plot
+#' @param inc.SPR a logical to indicate if SPR value should be printed in top right corner of plot
 #' @param Cols optional character vector of colours for the plot
 #' @param size.axtex size of the axis text
 #' @param size.title size of axis title
 #' @param size.SPR size of SPR text
+#' @param size.leg size of legend text
+#' @param inc.pts Include points on the plots?
 #' @param size.pt size of the points on the plots
 #' @return a ggplot object
 #' @author A. Hordyk
@@ -823,9 +832,10 @@ LBSPRopt <- function(trypars, yr=1, LB_pars=NULL, LB_lengths=NULL,  Control=list
 
 
 plotSim <- function(LB_obj=NULL, type=c("all", "len.freq", "growth", "maturity.select", "yield.curve"),
-  lf.type=c("catch", "pop"), growth.type=c("LAA", "WAA"), perRec=FALSE, incSPR=TRUE,
-  Cols=NULL, size.axtex=12, size.title=14, size.SPR=4, size.pt=4) {
-  if (class(LB_obj) != "LB_obj") stop("LB_obj must be of class 'LB_obj'. Use: LBSPRsim")
+  lf.type=c("catch", "pop"), growth.type=c("LAA", "WAA"), y.type=c("SPR", "SSB", "Yield", "YPR"), x.type=c("FM", "SSB", "SPR"),
+  perRec=FALSE, inc.SPR=TRUE,
+  Cols=NULL, size.axtex=12, size.title=14, size.SPR=4, size.leg=12, inc.pts=TRUE, size.pt=4) {
+  if (class(LB_obj) != "LB_obj") stop("LB_obj must be of class 'LB_obj'. Use: LBSPRsim", call. = FALSE)
   type <- match.arg(type, several.ok=TRUE)
   growth.type <- match.arg(growth.type)
   lf.type <- match.arg(lf.type)
@@ -834,7 +844,7 @@ plotSim <- function(LB_obj=NULL, type=c("all", "len.freq", "growth", "maturity.s
   pLCatch <- LB_obj@pLCatch # predicted size comp of catch
   pLPop <- LB_obj@pLPop # predicted size comp of population
 
-  if (length(pLPop) < 1) stop("No simulated population data")
+  if (length(pLPop) < 1) stop("No simulated population data", call. = FALSE)
   PopF <- pLPop[,"PopF"]
   PopUF <- pLPop[,"PopUF"]
   PopSizeDat <- data.frame(pLPop)
@@ -872,19 +882,21 @@ plotSim <- function(LB_obj=NULL, type=c("all", "len.freq", "growth", "maturity.s
     ylab("Relative Number") +
 	theme_bw() +
 	theme(axis.text=element_text(size=size.axtex),
-        axis.title=element_text(size=size.title,face="bold"), legend.position="top")
+        axis.title=element_text(size=size.title,face="bold"), 
+		legend.position="top", legend.text=element_text(size=size.leg),
+		legend.title=element_text(size=size.leg))
  if (all(is.null(Cols))) LF.Plot <- LF.Plot + scale_fill_discrete(Title, labels = Leg)
  if (!all(is.null(Cols))) LF.Plot <- LF.Plot + scale_fill_manual(Title, labels = Leg, values=Cols)
- if (incSPR) {
+ if (inc.SPR) {
     LF.Plot <- LF.Plot + annotate("text", x = 0.8*max(longDat$LMids),
-	  y = 0.95*max(longDat$PLength), label = paste("SPR =", LB_obj@SPR), size=size.SPR)
+	  y = 0.95*max(longDat$PLength), label = paste("SPR =", round(LB_obj@SPR,2)), size=size.SPR)
  }
 
 
  # Maturity & Selectivity
- MatSel.Plot <- plotMat(LB_obj, size.axtex=size.axtex, size.title=size.title, useSmooth=TRUE, Title=NULL)
+ MatSel.Plot <- plotMat(LB_obj, size.axtex=size.axtex, size.title=size.title, 
+   size.leg=size.leg, useSmooth=TRUE, Title=NULL)
  
-
  Age <- Length <- Weight <- Y <- Reference <- FM <- Value <- Type  <- NULL # hack to get past CRAN check
  # Length at Age
  P <- 0.01
@@ -920,76 +932,34 @@ plotSim <- function(LB_obj=NULL, type=c("all", "len.freq", "growth", "maturity.s
  }
 
  LaA.Plot1 <- ggplot(lendat, aes(x=Age, y=Length)) + geom_line(size=1.5) +
-   geom_point(data=matdat, aes(x=X, y=Y, colour=Reference), size=size.pt) +
    theme_bw() +
    guides(color=guide_legend(title="")) +
    theme(axis.text=element_text(size=size.axtex),
-        axis.title=element_text(size=size.title,face="bold"), legend.position="top") +
+        axis.title=element_text(size=size.title,face="bold"), 
+		legend.position="top", legend.text=element_text(size=size.leg)) +
    xlab(XLab) + ylab(YLab)
-
+  if (inc.pts) LaA.Plot1 <-  LaA.Plot1 +  geom_point(data=matdat, aes(x=X, y=Y, colour=Reference), size=size.pt) 
  WaA.Plot1 <- ggplot(lendat2, aes(x=Age, y=Weight)) + geom_line(size=1.5) +
-   geom_point(data=matdat2, aes(x=X, y=Y, colour=Reference), size=size.pt) +
    theme_bw() +
    guides(color=guide_legend(title="")) +
    theme(axis.text=element_text(size=size.axtex),
-        axis.title=element_text(size=size.title,face="bold"), legend.position="top") +
+        axis.title=element_text(size=size.title,face="bold"), legend.position="top", 
+		legend.text=element_text(size=size.leg)) +
    xlab(XLab) + ylab(YLab)
-
+  if (inc.pts) WaA.Plot1 <- WaA.Plot1 +  geom_point(data=matdat2, aes(x=X, y=Y, colour=Reference), size=size.pt) 
   if (growth.type=="LAA") LaA.Plot <- LaA.Plot1
   if (growth.type=="WAA") LaA.Plot <- WaA.Plot1
 
  # SPR versus F &  # Yield versus F
  if ("yield.curve" %in% type | "all" %in% type) {
-   FMVec <- seq(from=0, to=LB_obj@maxFM, by=0.05)
-   SPROut <- matrix(NA, nrow=length(FMVec), ncol=2)
-   YieldOut <- matrix(NA, nrow=length(FMVec), ncol=2)
-   YPROut <- matrix(NA, nrow=length(FMVec), ncol=2)
-
-   LB_obj2 <- LB_obj
-   LB_obj2@SPR <- numeric()
-   nsim <- length(FMVec)
-   Vals <- vapply(1:nsim, function(X) {
-     LB_obj2@FM <- FMVec[X]
-     c(SPR=LBSPRsim(LB_obj2)@SPR,
-     LBSPRsim(LB_obj2)@YPR,
-     LBSPRsim(LB_obj2)@Yield)
-   }, FUN.VALUE=array(0,dim=c(3)))
-   Vals <- t(Vals)
-   colnames(Vals) <- c("SPR", "YPR", "Yield")
-
-   # Add units for size
-   Vals[,"YPR"] <- Vals[,"YPR"]/max(Vals[,"YPR"])
-   Vals[,"Yield"] <- Vals[,"Yield"]/max(Vals[,"Yield"])
-
-   if (perRec) {
-     ValDF <- data.frame(Value=c(Vals[,"SPR"],  Vals[,"YPR"]),
-     Type=c(rep("SPR", nsim), rep("Relative Yield-per-Recruit", nsim)), FM=FMVec)
-     ValDF$Type <- factor(ValDF$Type, levels = c("SPR", "Relative Yield-per-Recruit"))
-	 tempVal <- min(which(FMVec >= LB_obj@FM))
-	 yieldpoint <- Vals[tempVal,"YPR"]
-	 pointdat <- data.frame(X=c(LB_obj@FM, LB_obj@FM), Y=c(LB_obj@SPR, yieldpoint),
-     Type=c("SPR", "Relative Yield-per-Recruit"))
-   } else {
-     ValDF <- data.frame(Value=c(Vals[,"SPR"],  Vals[,"Yield"]),
-     Type=c(rep("SPR", nsim), rep("Relative Yield", nsim)), FM=FMVec)
-     ValDF$Type <- factor(ValDF$Type, levels = c("SPR", "Relative Yield"))
-	 tempVal <- min(which(FMVec >= LB_obj@FM))
-	 yieldpoint <- Vals[tempVal,"Yield"]
-	 pointdat <- data.frame(X=c(LB_obj@FM, LB_obj@FM), Y=c(LB_obj@SPR, yieldpoint),
-     Type=c("SPR", "Relative Yield"))
-   }
-
-   Yield.Plot <- ggplot(ValDF, aes(x=FM, y=Value)) + geom_line(size=1.5, aes(color=Type)) +
-     theme_bw() +
-     guides(color=guide_legend(title="")) +
-     theme(axis.text=element_text(size=size.axtex),
-          axis.title=element_text(size=size.title,face="bold"), legend.position="top") +
-     xlab("Relative Fishing Mortality \n(F/M)") +
-     ylab("") +
-	 geom_point(data=pointdat, aes(x=X, y=Y, color=Type), size=size.pt)
-
+   if ("Yield" %in% y.type & perRec) y.type <- y.type[!y.type == "Yield"]
+   if ("YPR" %in% y.type & !perRec) y.type <- y.type[!y.type == "YPR"]
+   Yield.Plot <- plotCurves(LB_obj, X=x.type, 
+     Y=y.type, size.axtex=size.axtex, size.title=size.title, 
+     size.pt=size.pt, inc.pts=inc.pts, size.leg=size.leg)
  }
 
+ 
  L <- list()
  if ("all" %in% type) {
    L[[1]] <- LF.Plot
@@ -1017,6 +987,7 @@ plotSim <- function(LB_obj=NULL, type=c("all", "len.freq", "growth", "maturity.s
 #' @param LB_obj an object of class \code{'LB_obj'} that contains the life history and fishing information
 #' @param size.axtex size of the axis text
 #' @param size.title size of axis title
+#' @param size.leg size of legend text
 #' @param useSmooth use the smoothed estimates?
 #' @param Title optional character string for plot title
 #' @return a ggplot object
@@ -1026,8 +997,8 @@ plotSim <- function(LB_obj=NULL, type=c("all", "len.freq", "growth", "maturity.s
 #' @importFrom tidyr gather
 #' @importFrom RColorBrewer brewer.pal
 #' @export
-plotMat <- function(LB_obj=NULL, size.axtex=12, size.title=14, useSmooth=TRUE, Title=NULL) {
-  if (class(LB_obj) != "LB_obj" & class(LB_obj) != "LB_pars") stop("LB_obj must be of class 'LB_obj' or class 'LB_pars'")
+plotMat <- function(LB_obj=NULL, size.axtex=12, size.title=14, size.leg=12, useSmooth=TRUE, Title=NULL) {
+  if (class(LB_obj) != "LB_obj" & class(LB_obj) != "LB_pars") stop("LB_obj must be of class 'LB_obj' or class 'LB_pars'", call. = FALSE)
 
   if ("LMids" %in% slotNames(LB_obj)) Lens <- seq(from=LB_obj@LMids[1], to=LB_obj@LMids[length(LB_obj@LMids)], by=1)
   if (!("LMids" %in% slotNames(LB_obj))) Lens <- seq(from=0, to=LB_obj@Linf, by=1)
@@ -1047,11 +1018,13 @@ plotMat <- function(LB_obj=NULL, size.axtex=12, size.title=14, useSmooth=TRUE, T
 	theme_bw() +
 	theme(axis.text=element_text(size=size.axtex),
     axis.title=element_text(size=size.title,face="bold"), legend.position="top",
-	plot.title = element_text(lineheight=.8, face="bold"))
-
+	plot.title = element_text(lineheight=.8, face="bold"),
+	legend.text=element_text(size=size.leg),
+	legend.title=element_text(size=size.leg))
+	
   if (class(LB_obj) == "LB_obj") {
     if (length(LB_obj@Ests)>0 & (class(LB_obj@Years) != "numeric" & class(LB_obj@Years) != "integer")) {
-      warning("Years must be numeric values")
+      warning("Years must be numeric values", call. = FALSE)
 	  message("Attempting to convert to numeric values")
 	  options(warn=-1)
       LB_obj@Years <-  gsub("X", "", LB_obj@Years)
@@ -1082,7 +1055,10 @@ plotMat <- function(LB_obj=NULL, size.axtex=12, size.title=14, useSmooth=TRUE, T
 	    guides(color=guide_legend(title="")) +
 	    theme_bw() +
 	    theme(axis.text=element_text(size=size.axtex),
-        axis.title=element_text(size=size.title,face="bold"), legend.position="top")
+        axis.title=element_text(size=size.title,face="bold"), legend.position="top",
+	    plot.title = element_text(lineheight=.8, face="bold"),
+	    legend.text=element_text(size=size.leg),
+	    legend.title=element_text(size=size.leg))
     }
     if (length(SL50) > 0 & (length(years) > 1 | length(SL50) > 1)) { # Multiple years exist
       LenSel <- sapply(1:length(years), function(X)
@@ -1120,10 +1096,10 @@ plotMat <- function(LB_obj=NULL, size.axtex=12, size.title=14, useSmooth=TRUE, T
 #' @importFrom ggplot2 facet_wrap geom_text
 #' @export
 plotSize <- function(LB_obj=NULL, size.axtex=12, size.title=14, Title=NULL) {
-  if (class(LB_obj) != "LB_obj" & class(LB_obj) != "LB_lengths") stop("Require LB_lengths or LB_obj object")
+  if (class(LB_obj) != "LB_obj" & class(LB_obj) != "LB_lengths") stop("Require LB_lengths or LB_obj object", call. = FALSE)
 
   if (class(LB_obj@Years) != "numeric" & class(LB_obj@Years) != "integer") {
-    warning("Years must be numeric values")
+    warning("Years must be numeric values", call. = FALSE)
 	message("Attempting to convert to numeric values")
 	options(warn=-1)
     LB_obj@Years <-  gsub("X", "", LB_obj@Years)
@@ -1135,7 +1111,7 @@ plotSize <- function(LB_obj=NULL, size.axtex=12, size.title=14, Title=NULL) {
   NYrs <- max(1, length(LB_obj@Years))
   Years <- LB_obj@Years
   Ldat <- LB_obj@LData
-  if (length(Ldat) < 1) stop("No length data found")
+  if (length(Ldat) < 1) stop("No length data found", call. = FALSE)
   LMids <- LB_obj@LMids
   Ldat <- data.frame(Ldat, check.names=FALSE)
   colnames(Ldat) <- as.character(Years)
@@ -1239,7 +1215,7 @@ plotSize <- function(LB_obj=NULL, size.axtex=12, size.title=14, Title=NULL) {
 plotSPRCirc <- function(LB_obj=NULL, SPRTarg=0.4, SPRLim=0.2, useSmooth=TRUE,
   Title=FALSE, Leg=TRUE, limcol="#ff1919", targcol="#ffb732", abtgcol="#32ff36",
   labcol=NULL, bgcol="#FAFAFA", labcex=2, texcex=1.3) {
-  if (class(LB_obj) != "LB_obj") stop("LB_obj must be of class 'LB_obj'. Use LBSPRfit")
+  if (class(LB_obj) != "LB_obj") stop("LB_obj must be of class 'LB_obj'. Use LBSPRfit", call. = FALSE)
 
   par(mfrow=c(1,1), mar=c(1,2,3,2), oma=c(1,1,1,1))
   plot(1:10, asp = 1,main="", type="n", bty="n", axes=FALSE,
@@ -1335,12 +1311,12 @@ plotSPRCirc <- function(LB_obj=NULL, SPRTarg=0.4, SPRLim=0.2, useSmooth=TRUE,
 #' @export
 plotEsts <- function(LB_obj=NULL, pars=c("Sel", "FM", "SPR"), Lwd=2.5, ptCex=1.25,
   axCex=1.45, labCex=1.55, doSmooth=TRUE, incL50=FALSE, CIcol="darkgray", L50col="gray") {
-  if (class(LB_obj) != "LB_obj") stop("LB_obj must be of class 'LB_obj'. Use LBSPRfit")
-  if (length(LB_obj@Ests) < 1) stop("No estimates found. Use LBSPRfit")
+  if (class(LB_obj) != "LB_obj") stop("LB_obj must be of class 'LB_obj'. Use LBSPRfit", call. = FALSE)
+  if (length(LB_obj@Ests) < 1) stop("No estimates found. Use LBSPRfit", call. = FALSE)
   pars <- match.arg(pars, several.ok=TRUE)
   rawEsts <- data.frame(SL50=LB_obj@SL50, SL95=LB_obj@SL95, FM=LB_obj@FM, SPR=LB_obj@SPR)
   if (class(LB_obj@Years) != "numeric" & class(LB_obj@Years) != "integer") {
-    warning("Years must be numeric values")
+    warning("Years must be numeric values", call. = FALSE)
 	message("Attempting to convert to numeric values")
 	options(warn=-1)
     LB_obj@Years <-  gsub("X", "", LB_obj@Years)
@@ -1480,12 +1456,12 @@ DataDir<-function(){
 #' @importFrom stats optimize quantile
 #' @export
 plotTarg <- function(LB_pars=NULL, LB_lengths=NULL, yr=1, Cols=NULL, size.axtex=12, size.title=14) {
-  if (class(LB_pars) != "LB_pars") stop("LB_pars must be of class 'LB_pars' Use: new('LB_lengths')")
-  if (class(LB_lengths) != "LB_lengths") stop("LB_lengths must be of class 'LB_lengths'. Use: new('LB_lengths')")
+  if (class(LB_pars) != "LB_pars") stop("LB_pars must be of class 'LB_pars' Use: new('LB_lengths')", call. = FALSE)
+  if (class(LB_lengths) != "LB_lengths") stop("LB_lengths must be of class 'LB_lengths'. Use: new('LB_lengths')", call. = FALSE)
 
-  if (length(LB_pars@SPR) < 1) stop("Must supply SPR target (LB_pars@SPR)")
-  if (length(LB_pars@SL50) < 1) stop("Must supply SL50 (LB_pars@SL50)")
-  if (length(LB_pars@SL95) < 1) stop("Must supply SL95 (LB_pars@SL95)")
+  if (length(LB_pars@SPR) < 1) stop("Must supply SPR target (LB_pars@SPR)", call. = FALSE)
+  if (length(LB_pars@SL50) < 1) stop("Must supply SL50 (LB_pars@SL50)", call. = FALSE)
+  if (length(LB_pars@SL95) < 1) stop("Must supply SL95 (LB_pars@SL95)", call. = FALSE)
 
   LMids <- LB_lengths@LMids
   LB_pars@BinWidth <- LMids[2] - LMids[1]
@@ -1532,7 +1508,7 @@ plotTarg <- function(LB_pars=NULL, LB_lengths=NULL, yr=1, Cols=NULL, size.axtex=
 	scale_alpha_manual(values = c("0.6"=0.6, "1"=1), guide='none') +
 	theme_bw() +
 	theme(axis.text=element_text(size=size.axtex),
-        axis.title=element_text(size=size.title,face="bold"))
+        axis.title=element_text(size=size.title,face="bold"))	
   if (all(is.null(Cols))) Plot <- Plot + scale_fill_discrete(Title, labels = Leg)
   if (!all(is.null(Cols))) Plot <- Plot + scale_fill_manual(Title, labels = Leg,
     values=Cols)
@@ -1540,3 +1516,183 @@ plotTarg <- function(LB_pars=NULL, LB_lengths=NULL, yr=1, Cols=NULL, size.axtex=
 
   Plot
 }
+
+
+
+#' Calculate Relative Yield, YPR, SPR, SSB, and Recruitment curves for F/M 
+#'
+#' A function that takes a LB_pars or LB_obj object and returns a data frame of values 
+#' for relative Yield, YPR, SPR, SSB, and Recruitment at different values of F/M  
+#' @param LB_obj An object of class \code{'LB_obj'} or class \code{'LB_pars'} that contains the life history and fishing information
+#' @return a dataframe with YPR, Yield, SSB, Rec, and FM
+#' @author A. Hordyk
+#' @export
+calcCurves <- function(LB_obj) {
+  if (class(LB_obj) != "LB_obj" & class(LB_obj) != "LB_pars") 
+    stop("LB_obj must be of class 'LB_obj' or class 'LB_pars'", call. = FALSE)
+  LB_obj@SPR <- numeric()
+  if (class(LB_obj) == "LB_pars") maxFM <- 4 
+  if (class(LB_obj) == "LB_obj") maxFM <- LB_obj@maxFM
+
+  FMVec <- seq(from=0, to=maxFM, by=0.01) 
+  nsim <- length(FMVec)
+
+  Vals <- vapply(1:nsim, function(X) {
+    LB_obj@FM <- FMVec[X]
+	sim <- LBSPRsim(LB_obj, verbose=FALSE)
+    c(SPR=sim@SPR,
+    sim@YPR,
+    sim@Yield,
+    sim@SSB,
+    sim@RelRec)
+   }, FUN.VALUE=array(0,dim=5))
+  Vals <- t(Vals)
+  colnames(Vals) <- c("SPR", "YPR", "Yield", "SSB", "Rec")
+  
+  Vals[,"YPR"] <- Vals[,"YPR"]/max(Vals[,"YPR"])
+  Vals[,"Yield"] <- Vals[,"Yield"]/max(Vals[,"Yield"])
+  Vals[,"SSB"] <- Vals[,"SSB"]/max(Vals[,"SSB"])
+  Vals[,"Rec"] <- Vals[,"Rec"]/max(Vals[,"Rec"]) 
+  DF <- data.frame(Vals)
+  # DF$SPR[DF$SSB == 0] <- 0 
+  DF$FM <- FMVec 
+  DF
+}
+
+#' Plot the Relative Yield, YPR, SPR, SSB, and Recruitment curves
+#'
+#' A function that plots the Relative Yield, YPR, SPR, SSB, and Recruitment curves
+#'
+#' @param LB_obj An object of class \code{'LB_obj'} that contains the life history and fishing information
+#' @param X a character value indicating what to plot on the x-axis: F/M (\code{"FM"}) or SSB (\code{"SSB"})
+#' @param Y a character value indicating what to plot on the y-axis: \code{SPR}, \code{SSB}, \code{Yield}, \code{YPR} or \code{Rec}(multiple okay)
+#' @param size.axtex size of the axis text
+#' @param size.title size of axis title
+#' @param size.leg size of legend text 
+#' @param inc.pts Include points on the plots?
+#' @param size.pt size of the points on the plots
+#' @return a ggplot object 
+#' @author A. Hordyk
+#' @export
+
+plotCurves <- function(LB_obj, X=c("FM", "SSB", "SPR"), 
+  Y=c("SPR", "SSB", "Yield"), size.axtex=12, size.title=14, size.leg=12,
+  size.pt=4, inc.pts=TRUE) {
+  if (class(LB_obj) != "LB_obj") stop("LB_obj must be of class 'LB_obj'", call. = FALSE)  
+  X <- match.arg(X)
+  Y <- match.arg(Y, choices=c("SPR", "SSB", "Yield", "YPR", "Rec"), several.ok=TRUE)
+  if (all(X == Y)) stop("X is identical to Y", call. = FALSE)
+  Y <- Y[!Y %in% X]
+  if (length(LB_obj@SPR) > 1) {
+    if (inc.pts) message("Multiple values in input object. Using last parameter values. \n Not plotting points")
+    LB_obj@SPR <- LB_obj@SPR[length(LB_obj@SPR)] 
+	LB_obj@FM <- LB_obj@FM[length(LB_obj@FM)] 
+	LB_obj@SL50 <- LB_obj@SL50[length(LB_obj@SL50)]
+	LB_obj@SL95 <- LB_obj@SL95[length(LB_obj@SL95)]
+	inc.pts <- FALSE
+  }
+
+  Vals <- calcCurves(LB_obj)
+  if (length(LB_obj@FM) > 0) {
+    if (max(Vals$FM) >= LB_obj@FM) tempVal <- min(which(Vals$FM >= LB_obj@FM)) 
+	if (max(Vals$FM) < LB_obj@FM) {
+	  tempVal <- NULL
+	  inc.pts <- FALSE 
+	}
+	xF <- min(LB_obj@FM, LB_obj@maxFM)
+  }
+  if (length(LB_obj@FM) == 0) { 
+    tempVal <- NULL
+	inc.pts <- FALSE 
+	xF <- NULL
+  }
+  
+  yieldp <- Vals[tempVal,"Yield"]
+  YPRp <- Vals[tempVal,"YPR"]
+  SSBp <- Vals[tempVal,"SSB"]
+  Recp <- Vals[tempVal,"Rec"]  
+  
+  t1 <- c("SPR", "SSB", "Yield", "YPR", "Rec")
+  t2 <- c("SPR", "SSB/SSB0", "Relative Yield", "Relative Yield-per-Recruit", "Recruitment")
+  t3 <- t2[t1 %in% Y]
+  t4 <- t1[t1 %in% Y]
+
+  if (length(LB_obj@Steepness) < 1) inc.pts <- FALSE 
+  if (length(LB_obj@Steepness) == 1) pointdat2 <- data.frame(X=0.2, Y=LB_obj@Steepness, Type2="Recruitment") 
+	
+  xdat <- dplyr::select(Vals, dplyr::starts_with(X))  
+  dropN <- names(Vals)[!names(Vals) %in% X & !names(Vals) %in% Y]
+  keepN <- names(Vals)[!names(Vals) %in% dropN]
+  Vals2 <- dplyr::select(Vals, dplyr::one_of(keepN))
+  
+  T1 <- value <- key2 <- Type <- Type2 <- NULL # hack from CRAN Check
+  if (length(c(xF, LB_obj@SPR, SSBp, yieldp, YPRp, Recp)) != 6) inc.pts <- FALSE 
+  if (length(c(xF, LB_obj@SPR, SSBp, yieldp, YPRp, Recp)) == 6) {
+    SPRp <- LB_obj@SPR
+	if (SPRp < min(Vals$SPR)) inc.pts <- FALSE
+    pointdat <- data.frame(FM=xF, 
+      Y=c(SPRp, SSBp, yieldp, YPRp, Recp),
+      Type=t2, T1=t1)	
+    pointdat <- dplyr::filter(pointdat, T1 %in% keepN)	  
+  }
+
+  ydat <- dplyr::select(Vals2, -dplyr::starts_with(X))
+  ydat2 <- tidyr::gather(ydat)
+  dat <- data.frame(X=xdat, ydat2)
+  
+  dat$key <- factor(dat$key, levels=Y)
+  dat$key2 <- factor(t3, levels=t3)
+  for (tt in 1:length(t1)) {
+   if (t1[tt] %in% Y) dat$key2[dat$key == t1[tt]] <- t2[tt]
+  }	
+  
+  if (X == "FM") XLab <- "Relative Fishing Mortality \n(F/M)"
+  if (X == "SSB") XLab <- "Spawning Stock Biomass"
+  if (X == "SPR") XLab <- "Spawning Potential Ratio"
+  
+  Pout <- ggplot(dat, aes(x=get(X), y=value, color=key2)) + geom_line(size=1.5) +
+     theme_bw() +
+     guides(color=guide_legend(title="")) +
+     theme(axis.text=element_text(size=size.axtex),
+          axis.title=element_text(size=size.title,face="bold"), 
+		  legend.position="top", legend.text=element_text(size=size.leg)) +
+     xlab(XLab) + ylab("Proportion")
+  if (inc.pts & X == "FM") Pout <- Pout + geom_point(data=pointdat, aes(x=get(X), 
+    y=Y, color=Type), size=size.pt)
+  if (inc.pts & X == "SSB" & "Rec" %in% Y) Pout <- Pout + geom_point(data=pointdat2, aes(x=X, 
+    y=Y, color=Type2), size=size.pt)	
+  Pout
+
+  # out <- list()
+  # out$data <- dat
+  # if (exists("pointdat")) out$points <- pointdat
+  # if (exists("pointdat2")) out$rec_point <- pointdat2
+  # invisible(out)
+}
+
+#' Run a Shiny Application
+#'
+#' \code{Shiny} runs one of the Shiny Applications that are included in the package
+#'
+#' @param app The name of the Shiny application to run. Currently the available Shiny apps are "LBSPR" and "Sim"
+#' @author A. Hordyk
+#' @references Modified from Deal Attali's code: \url{http://deanattali.com/2015/04/21/r-package-shiny-app/}
+#' @export
+Shiny <- function(app) {
+  temp <- try(class(app), silent=TRUE)
+  if (class(temp) == "try-error") app <- deparse(substitute(app))
+  Apps <- list.files(system.file("shiny_apps", package = "LBSPR"))
+  validAppMsg <- paste0("Valid examples are:\n '", paste(Apps, collapse = "', '"), "'")
+  if (missing(app) || !nzchar(app) || !app %in% Apps) {
+    stop(
+      'Please run `Shiny()` with a valid Shiny app',
+      validAppMsg,
+      call. = FALSE)
+  }
+  appDir <- system.file("shiny_apps", app, package = "LBSPR")
+  shiny::runApp(appDir, display.mode = "normal")
+}
+
+
+  
+  
