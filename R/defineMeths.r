@@ -60,7 +60,7 @@ check_LB_pars <- function(object) {
     message("Required values for either FM or SPR")
 	errors <- errors + 1
   }
-  if (errors == 0) TRUE else stop(paste(errors, "errors in LB_pars"))
+  if (errors == 0) TRUE else stop(paste(errors, "errors in LB_pars"), call. = FALSE)
 }
 
 
@@ -191,7 +191,7 @@ setMethod("initialize", "LB_lengths", function(.Object, file="none", LB_pars=NUL
       return(.Object)
     }
 
-    if (class(LB_pars) != "LB_pars") stop("Must use a valid LB_pars object")
+    if (class(LB_pars) != "LB_pars") stop("Must use a valid LB_pars object", call. = FALSE)
 	if (length(LB_pars@SL50) == 0) LB_pars@SL50 <- 1
 	if (length(LB_pars@SL95) == 0) LB_pars@SL95 <- 2
 	if (length(LB_pars@FM) == 0) LB_pars@FM <- 1
@@ -199,7 +199,7 @@ setMethod("initialize", "LB_lengths", function(.Object, file="none", LB_pars=NUL
     check_LB_pars(LB_pars)
     if (file != "none"  & file.exists(file)) {
       dat <- read.csv(file, header=header, stringsAsFactors=FALSE,check.names=FALSE, ...)
-	  if (any(apply(dat, 1, class) == "character")) stop("Text in data file. Do you have header?")
+	  if (any(apply(dat, 1, class) == "character")) stop("Text in data file. Do you have header?", call. = FALSE)
 	  # dat <- as.data.frame(dat)
 	  # remove NAs 
 	  if (class(dat) == "data.frame" | class(dat) == "matrix") {
@@ -217,7 +217,7 @@ setMethod("initialize", "LB_lengths", function(.Object, file="none", LB_pars=NUL
       if (dataType == "freq") {
         .Object@LMids <- LMids <- dat[,1]
         chk <- all(diff(LMids) == median(diff(LMids)))
-        if (!chk) stop("Intervals in length mid-points (first column in data file) are not consistent. Perhaps use dataType='raw'?")
+        if (!chk) stop("Intervals in length mid-points (first column in data file) are not consistent. Perhaps use dataType='raw'?", call. = FALSE)
         .Object@Years <- names(dat[2:ncol(dat)])
 		options(warn=-1)
         .Object@Years <-  gsub("X", "", .Object@Years)
@@ -251,7 +251,7 @@ setMethod("initialize", "LB_lengths", function(.Object, file="none", LB_pars=NUL
 		  LB_pars@BinWidth <- 1/20 * LB_pars@BinMax
 	    }
 	    chk <- all(diff(dat[,1]) == median(diff( dat[,1]), na.rm=TRUE))
-		if (is.na(chk)) stop("There is a problem with the data file. Is there a header row?")
+		if (is.na(chk)) stop("There is a problem with the data file. Is there a header row?", call. = FALSE)
 	    if (chk) { # a length frequency file has been uploaded
 	      if (verbose) warning("It looks like you may have uploaded a length frequency file? Perhaps use dataType='freq'?")
 	  	  .Object@Elog <- 2
@@ -296,7 +296,7 @@ setMethod("initialize", "LB_lengths", function(.Object, file="none", LB_pars=NUL
     if (dataType == "freq") {
       .Object@LMids <- LMids <- dat[,1]
       chk <- all(diff(LMids) == median(diff(LMids)),na.rm=TRUE)
-      if (!chk) stop("Intervals in length mid-points (first column in data file) are not consistent. Perhaps use dataType='raw'?")
+      if (!chk) stop("Intervals in length mid-points (first column in data file) are not consistent. Perhaps use dataType='raw'?", call. = FALSE)
       .Object@Years <- names(dat[2:ncol(dat)])
       .Object@NYears <- ncol(dat) - 1
 	  .Object@LData <- as.matrix(dat[, 2:ncol(dat)])
@@ -360,6 +360,7 @@ setMethod("initialize", "LB_lengths", function(.Object, file="none", LB_pars=NUL
 #' @slot SPR The Spawning Potential Ratio
 #' @slot Yield Relative yield
 #' @slot YPR Yield per recruit
+#' @slot SSB Spawning stock biomass (relative only)
 #' @slot LMids A numeric vector containing the mid-points of the length bins
 #' @slot pLCatch A numeric vector containg expected proportion for each length class in the catch
 #' @slot pLPop A numeric vector containg expected proportion for each length class in the population
@@ -374,6 +375,7 @@ setClass("LB_obj", representation(
   SPR = "vector",
   Yield = "vector",
   YPR = "vector",
+  SSB = "vector",
   LMids = "vector",
   pLCatch = "matrix",
   pLPop = "array",
