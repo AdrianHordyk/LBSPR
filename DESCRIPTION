@@ -25,5 +25,6 @@ Imports:
 RoxygenNote: 5.0.1
 LinkingTo: Rcpp
 Suggests: knitr,
-    rmarkdown
+    rmarkdown,
+	shiny
 VignetteBuilder: knitr
