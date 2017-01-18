@@ -23,10 +23,11 @@ Imports:
   dplyr,
   graphics,
   methods,
+  shiny,
+  shinyBS,
   Rcpp
 RoxygenNote: 5.0.1
 LinkingTo: Rcpp
 Suggests: knitr,
-    rmarkdown,
-	shiny
+    rmarkdown
 VignetteBuilder: knitr
