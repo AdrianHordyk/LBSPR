@@ -16,6 +16,6 @@ Shiny(app)
 A. Hordyk
 }
 \references{
-Modified from Deal Attali's code: \url{https://www.r-bloggers.com/supplementing-your-r-package-with-a-shiny-app-2/}
+Modified from Deal Attali's code: \url{http://deanattali.com/2015/04/21/r-package-shiny-app/}
 }
 

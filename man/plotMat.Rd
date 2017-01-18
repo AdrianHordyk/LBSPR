@@ -4,7 +4,7 @@
 \alias{plotMat}
 \title{Plot the maturity-at-length and selectivity-at-length curves}
 \usage{
-plotMat(LB_obj = NULL, size.axtex = 12, size.title = 14,
+plotMat(LB_obj = NULL, size.axtex = 12, size.title = 14, size.leg = 12,
   useSmooth = TRUE, Title = NULL)
 }
 \arguments{
@@ -13,6 +13,8 @@ plotMat(LB_obj = NULL, size.axtex = 12, size.title = 14,
 \item{size.axtex}{size of the axis text}
 
 \item{size.title}{size of axis title}
+
+\item{size.leg}{size of legend text}
 
 \item{useSmooth}{use the smoothed estimates?}
 
