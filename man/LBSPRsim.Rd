@@ -4,12 +4,14 @@
 \alias{LBSPRsim}
 \title{LBSPR Simulation Model}
 \usage{
-LBSPRsim(LB_pars = NULL, Control = list())
+LBSPRsim(LB_pars = NULL, Control = list(), verbose = TRUE)
 }
 \arguments{
 \item{LB_pars}{an object of class \code{'LB_pars'} that contains the life history information}
 
 \item{Control}{a list of control options for the LBSPR model.}
+
+\item{verbose}{display messages?}
 }
 \value{
 a object of class \code{'LB_obj'}

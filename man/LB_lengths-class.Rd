@@ -14,6 +14,8 @@ An S4 class containing length data
 
 \item{\code{LData}}{A numeric matrix containing length data}
 
+\item{\code{L_units}}{Character descrbing units of the length measurements}
+
 \item{\code{Years}}{A numeric vector containing the year indices}
 
 \item{\code{NYears}}{A length-one numeric vector for number of years}

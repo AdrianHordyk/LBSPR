@@ -1,2 +1,12 @@
 ^.*\.Rproj$
 ^\.Rproj\.user$
+^\.Rproj.user$
+README.MD
+.Rhistory
+^.*\.git
+## Ignore travis config file
+^\.travis\.yml$
+^appveyor\.yml$
+docs
+cran-comments.md
+NEWS.md

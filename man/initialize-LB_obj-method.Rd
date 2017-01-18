@@ -5,14 +5,14 @@
 \alias{initialize,LB_obj-method}
 \title{Create a new LB_obj object}
 \usage{
-\S4method{initialize}{LB_obj}(.Object, defaults = FALSE, msg = FALSE)
+\S4method{initialize}{LB_obj}(.Object, defaults = FALSE, verbose = FALSE)
 }
 \arguments{
 \item{.Object}{class of object to be created}
 
 \item{defaults}{use defaults?}
 
-\item{msg}{display a message?}
+\item{verbose}{display a message?}
 }
 \value{
 a object of class \code{'LB_obj'}

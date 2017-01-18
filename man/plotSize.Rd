@@ -4,14 +4,14 @@
 \alias{plotSize}
 \title{Plot the size data and model fits}
 \usage{
-plotSize(LB_obj = NULL, axTex = 12, axTitle = 14, Title = NULL)
+plotSize(LB_obj = NULL, size.axtex = 12, size.title = 14, Title = NULL)
 }
 \arguments{
 \item{LB_obj}{an object of class \code{'LB_obj'} that contains the life history and fishing information}
 
-\item{axTex}{size of the axis text}
+\item{size.axtex}{size of the axis text}
 
-\item{axTitle}{size of axis title}
+\item{size.title}{size of axis title}
 
 \item{Title}{optional character string for plot title}
 }

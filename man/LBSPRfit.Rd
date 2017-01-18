@@ -5,7 +5,7 @@
 \title{Fit LBSPR model to length data}
 \usage{
 LBSPRfit(LB_pars = NULL, LB_lengths = NULL, yrs = NA, Control = list(),
-  pen = TRUE, msg = TRUE, useCPP = TRUE, ...)
+  pen = TRUE, verbose = TRUE, useCPP = TRUE, ...)
 }
 \arguments{
 \item{LB_pars}{an object of class \code{'LB_pars'} that contains the life history information}
@@ -18,7 +18,7 @@ LBSPRfit(LB_pars = NULL, LB_lengths = NULL, yrs = NA, Control = list(),
 
 \item{pen}{apply a penalty if estimate of selectivity is very high?}
 
-\item{msg}{display messages?}
+\item{verbose}{display messages?}
 
 \item{useCPP}{use cpp optimization code?}
 
