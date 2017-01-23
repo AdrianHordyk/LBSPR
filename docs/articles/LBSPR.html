@@ -41,7 +41,7 @@
       <h1>LBSPR: An R package for simulation and estimation using life-history ratios and length composition data</h1>
                         <h4 class="author">Adrian Hordyk</h4>
             
-            <h4 class="date">2016-12-15</h4>
+            <h4 class="date">2017-01-23</h4>
           </div>
 
     
@@ -164,41 +164,45 @@ MyPars@BinMin &lt;-<span class="st"> </span><span class="dv">0</span></code></pr
 <p>What is the ratio of fishing mortality to natural mortality in this scenario?</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">MySim@FM </code></pre></div>
 <pre><code>## [1] 0.65</code></pre>
+<blockquote>
 <p>It is important to note that the F/M ratio reported in the LBSPR model refers to the <em>apical F</em> over the adult natural mortality rate. That is, the value for fishing mortality refers to the highest level of <em>F</em> experienced by any single size class.</p>
+</blockquote>
+<blockquote>
 <p>If the selectivity pattern excludes all but the largest individuals from being exploited, it is possible to have a <strong>very</strong> high F/M ratio in a sustainable fishery (high SPR).</p>
+</blockquote>
 <p>A couple of more simulations with alternative values:</p>
 <p>Specify F/M instead of SPR:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">MyPars@SPR &lt;-<span class="st"> </span><span class="kw">numeric</span>() <span class="co"># remove value for SPR </span>
 MyPars@FM &lt;-<span class="st"> </span><span class="dv">1</span> <span class="co"># set value for FM</span>
 MySim &lt;-<span class="st"> </span><span class="kw"><a href="../reference/LBSPRsim.html">LBSPRsim</a></span>(MyPars)
-MySim@SPR <span class="co"># SPR at F/M = 1 </span></code></pre></div>
-<pre><code>## [1] 0.2714598</code></pre>
+<span class="kw">round</span>(MySim@SPR, <span class="dv">2</span>) <span class="co"># SPR at F/M = 1 </span></code></pre></div>
+<pre><code>## [1] 0.27</code></pre>
 <p>Change the life history parameters:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">MyPars@MK &lt;-<span class="st"> </span><span class="fl">2.0</span> 
 MySim &lt;-<span class="st"> </span><span class="kw"><a href="../reference/LBSPRsim.html">LBSPRsim</a></span>(MyPars)
-MySim@SPR <span class="co"># SPR </span></code></pre></div>
-<pre><code>## [1] 0.2435621</code></pre>
+<span class="kw">round</span>(MySim@SPR, <span class="dv">2</span>) <span class="co"># SPR </span></code></pre></div>
+<pre><code>## [1] 0.24</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">MyPars@MK &lt;-<span class="st"> </span><span class="fl">0.5</span>
 MySim &lt;-<span class="st"> </span><span class="kw"><a href="../reference/LBSPRsim.html">LBSPRsim</a></span>(MyPars)
-MySim@SPR <span class="co"># SPR </span></code></pre></div>
-<pre><code>## [1] 0.3605154</code></pre>
+<span class="kw">round</span>(MySim@SPR, <span class="dv">2</span>) <span class="co"># SPR </span></code></pre></div>
+<pre><code>## [1] 0.36</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">MyPars@Linf &lt;-<span class="st"> </span><span class="dv">120</span>
 MySim &lt;-<span class="st"> </span><span class="kw"><a href="../reference/LBSPRsim.html">LBSPRsim</a></span>(MyPars)
-MySim@SPR <span class="co"># SPR </span></code></pre></div>
-<pre><code>## [1] 0.3497405</code></pre>
+<span class="kw">round</span>(MySim@SPR, <span class="dv">2</span>) <span class="co"># SPR </span></code></pre></div>
+<pre><code>## [1] 0.35</code></pre>
 <p>Change selectivity parameters:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">MyPars@MK &lt;-<span class="st"> </span><span class="fl">1.5</span> 
 MyPars@SL50 &lt;-<span class="st"> </span><span class="dv">10</span>
 MyPars@SL95 &lt;-<span class="st"> </span><span class="dv">15</span> 
 MyPars@FM &lt;-<span class="st"> </span><span class="dv">1</span> 
 MySim &lt;-<span class="st"> </span><span class="kw"><a href="../reference/LBSPRsim.html">LBSPRsim</a></span>(MyPars)
-MySim@SPR <span class="co"># SPR </span></code></pre></div>
-<pre><code>## [1] 0.1345684</code></pre>
+<span class="kw">round</span>(MySim@SPR, <span class="dv">2</span>) <span class="co"># SPR </span></code></pre></div>
+<pre><code>## [1] 0.13</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">MyPars@SL50 &lt;-<span class="st"> </span><span class="dv">80</span>
 MyPars@SL95 &lt;-<span class="st"> </span><span class="dv">85</span> 
 MySim &lt;-<span class="st"> </span><span class="kw"><a href="../reference/LBSPRsim.html">LBSPRsim</a></span>(MyPars)
-MySim@SPR <span class="co"># SPR </span></code></pre></div>
-<pre><code>## [1] 0.5678794</code></pre>
+<span class="kw">round</span>(MySim@SPR, <span class="dv">2</span>) <span class="co"># SPR </span></code></pre></div>
+<pre><code>## [1] 0.57</code></pre>
 </div>
 <div id="control-options" class="section level3">
 <h3 class="hasAnchor"><html><body><a href="#control-options" class="anchor"> </a></body></html>Control Options</h3>
@@ -222,7 +226,7 @@ MySim@FM  <span class="co"># lower F/M for the GTG model</span></code></pre></di
 <p>The <code>plotSim</code> function can be used to plot <code>MySim</code>:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/plotSim.html">plotSim</a></span>(MySim) </code></pre></div>
 <p><img src="LBSPR_files/figure-html/unnamed-chunk-17-1.png" width="576"></p>
-<p>By default the function plots: a) the expected size structure of the catch and the expected unfished size structure of the vulnerable population, b) the maturity and selectivity-at-length curves, c) the growth curve, and d) the SPR and relative yield curves as a function of relative fishing mortality.</p>
+<p>By default the function plots: a) the expected (equilibrium) size structure of the catch and the expected unfished size structure of the vulnerable population, b) the maturity and selectivity-at-length curves, c) the von Bertalanffy growth curve with relative age, and d) the SPR and relative yield curves as a function of relative fishing mortality (see note above on the <em>F/M</em> ratio).</p>
 <p>The <code>plotSim</code> function can be controlled in a number of ways. For example, you can plot the expected unfished and fished size structure of the population by changing the <code>lf.type</code> argument:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/plotSim.html">plotSim</a></span>(MySim, <span class="dt">lf.type=</span><span class="st">"pop"</span>)</code></pre></div>
 <p><img src="LBSPR_files/figure-html/unnamed-chunk-18-1.png" width="576"></p>
@@ -359,6 +363,16 @@ MyPars@SL95 &lt;-<span class="st"> </span>Mod@SL95[yr]
 <span class="kw"><a href="../reference/plotTarg.html">plotTarg</a></span>(MyPars, LenDat, <span class="dt">yr=</span>yr)</code></pre></div>
 <p><img src="LBSPR_files/figure-html/unnamed-chunk-38-1.png" width="480"></p>
 </div>
+<div id="shiny-applications" class="section level1">
+<h1 class="hasAnchor"><html><body><a href="#shiny-applications" class="anchor"> </a></body></html>Shiny Applications</h1>
+<p>The <a href="http://shiny.rstudio.com/">Shiny</a> package has made it possible to create user-friendly applications that use the computational power of R together with the interactivity of modern web browsers. A major advantage of this approach is that it allows a simple, user-friendly interface for using models built in R without having to interact directly with the R software.</p>
+<p>Several of the functions in the <code>LBSPR</code> package have been developed into interactive applications, which are included in the latest version of the package.</p>
+<p>The Shiny applications can be launched using the <code>Shiny</code> function. The LBSPR estimation application:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/Shiny.html">Shiny</a></span>(<span class="st">"LBSPR"</span>)</code></pre></div>
+<p>Simulation model calculating SPR, yield-per-recruit, expected size composition, etc:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/Shiny.html">Shiny</a></span>(<span class="st">"Sim"</span>)</code></pre></div>
+<p>The LBSPR Shiny applications, and several others, are also available at <a href="http://barefootecologist.com.au/">The Barefoot Ecologist&rsquo;s Toolbox</a>.</p>
+</div>
 <div id="references" class="section level1">
 <h1 class="hasAnchor"><html><body><a href="#references" class="anchor"> </a></body></html>References</h1>
 <p>Hordyk, A.R., Ono, K., Sainsbury, K.J., Loneragan, N., and Prince, J.D. 2015a. Some explorations of the life history ratios to describe length composition, spawning-per-recruit, and the spawning potential ratio. ICES J. Mar. Sci. 72: 204 - 216.</p>
@@ -390,6 +404,7 @@ MyPars@SL95 &lt;-<span class="st"> </span>Mod@SL95[yr]
       <li><a href="#examine-and-plot-results">Examine and Plot Results</a></li>
       </ul></li>
       <li><a href="#comparing-observed-length-data-to-target-size-structure">Comparing Observed Length Data to Target Size Structure</a></li>
+      <li><a href="#shiny-applications">Shiny Applications</a></li>
       <li><a href="#references">References</a></li>
       </ul></div>
       </div>

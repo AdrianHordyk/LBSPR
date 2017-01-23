@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>An S4 class containing all parameters for the LBSPR model — LB_obj-class â€¢ LBSPR</title>
+<title>Plot the Relative Yield, YPR, SPR, SSB, and Recruitment curves — plotCurves â€¢ LBSPR</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -77,41 +77,54 @@
       <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>An S4 class containing all parameters for the LBSPR model</h1>
+    <h1>Plot the Relative Yield, YPR, SPR, SSB, and Recruitment curves</h1>
     </div>
 
     
-    <p>An S4 class containing all parameters for the LBSPR model</p>
+    <p>A function that plots the Relative Yield, YPR, SPR, SSB, and Recruitment curves</p>
     
 
-        
-    <h2 class="hasAnchor" id="slots"><a class="anchor" href="#slots"></a>Slots</h2>
+    <pre><span class='fu'>plotCurves</span>(<span class='no'>LB_obj</span>, <span class='kw'>X</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"FM"</span>, <span class='st'>"SSB"</span>, <span class='st'>"SPR"</span>), <span class='kw'>Y</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"SPR"</span>, <span class='st'>"SSB"</span>, <span class='st'>"Yield"</span>),
+  <span class='kw'>size.axtex</span> <span class='kw'>=</span> <span class='fl'>12</span>, <span class='kw'>size.title</span> <span class='kw'>=</span> <span class='fl'>14</span>, <span class='kw'>size.leg</span> <span class='kw'>=</span> <span class='fl'>12</span>, <span class='kw'>size.pt</span> <span class='kw'>=</span> <span class='fl'>4</span>,
+  <span class='kw'>inc.pts</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
+    
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
+    <dl class="dl-horizontal">
+      <dt>LB_obj</dt>
+      <dd>An object of class <code>&#39;LB_obj&#39;</code> that contains the life history and fishing information</dd>
+      <dt>X</dt>
+      <dd>a character value indicating what to plot on the x-axis: F/M (<code>&quot;FM&quot;</code>) or SSB (<code>&quot;SSB&quot;</code>)</dd>
+      <dt>Y</dt>
+      <dd>a character value indicating what to plot on the y-axis: <code>SPR</code>, <code>SSB</code>, <code>Yield</code>, <code>YPR</code> or <code>Rec</code>(multiple okay)</dd>
+      <dt>size.axtex</dt>
+      <dd>size of the axis text</dd>
+      <dt>size.title</dt>
+      <dd>size of axis title</dd>
+      <dt>size.leg</dt>
+      <dd>size of legend text</dd>
+      <dt>size.pt</dt>
+      <dd>size of the points on the plots</dd>
+      <dt>inc.pts</dt>
+      <dd>Include points on the plots?</dd>
+    </dl>
+    
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p></p>
-    <p><dl class='dl-horizontal'>
-<dt><code>SPR</code></dt><dd>The Spawning Potential Ratio</dd></p>
-    <p><dt><code>Yield</code></dt><dd>Relative yield</dd></p>
-    <p><dt><code>YPR</code></dt><dd>Yield per recruit</dd></p>
-    <p><dt><code>SSB</code></dt><dd>Spawning stock biomass (relative only)</dd></p>
-    <p><dt><code>LMids</code></dt><dd>A numeric vector containing the mid-points of the length bins</dd></p>
-    <p><dt><code>pLCatch</code></dt><dd>A numeric vector containg expected proportion for each length class in the catch</dd></p>
-    <p><dt><code>pLPop</code></dt><dd>A numeric vector containg expected proportion for each length class in the population</dd></p>
-    <p><dt><code>RelRec</code></dt><dd>Relative recruitment</dd></p>
-    <p><dt><code>Ests</code></dt><dd>A matrix of estimated values</dd></p>
-    <p><dt><code>Vars</code></dt><dd>A vector of estimated variance for SL50, SL95, F/M and SPR</dd></p>
-    <p><dt><code>NLL</code></dt><dd>A numeric NLL values</dd></p>
-    <p><dt><code>maxFM</code></dt><dd>A numeric of maximum estimated F/M value (note this is apical F)</dd></p>
-    <p><dt><code>fitLog</code></dt><dd>A vector of error logs for each fit. 0 means everything is okay.</dd>
-</dl></p>
+    <p>a ggplot object</p>
     
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
+      <li><a href="#arguments">Arguments</a></li>
       
-      <li><a href="#slots">Slots</a></li>
+      <li><a href="#value">Value</a></li>
           </ul>
+
+    <h2>Author</h2>
+    
+A. Hordyk
 
   </div>
 </div>

@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Plot simulated size composition — plotSim â€¢ LBSPR</title>
+<title>General plotting function for simulated data — plotSim â€¢ LBSPR</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -77,18 +77,20 @@
       <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Plot simulated size composition</h1>
+    <h1>General plotting function for simulated data</h1>
     </div>
 
     
-    <p>A function that plots the expected size composition in the fished and unfished state</p>
+    <p>A general function that plots the simulation object. Includes four different plots: 
+equilbrium size structure, maturity and selectivity curves, growth curves, and relative Yield, YPR, SPR, SSB, and Recruitment curves.</p>
     
 
     <pre><span class='fu'>plotSim</span>(<span class='kw'>LB_obj</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>type</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"all"</span>, <span class='st'>"len.freq"</span>, <span class='st'>"growth"</span>,
   <span class='st'>"maturity.select"</span>, <span class='st'>"yield.curve"</span>), <span class='kw'>lf.type</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"catch"</span>, <span class='st'>"pop"</span>),
-  <span class='kw'>growth.type</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"LAA"</span>, <span class='st'>"WAA"</span>), <span class='kw'>perRec</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>incSPR</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
+  <span class='kw'>growth.type</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"LAA"</span>, <span class='st'>"WAA"</span>), <span class='kw'>y.type</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"SPR"</span>, <span class='st'>"SSB"</span>, <span class='st'>"Yield"</span>, <span class='st'>"YPR"</span>),
+  <span class='kw'>x.type</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"FM"</span>, <span class='st'>"SSB"</span>, <span class='st'>"SPR"</span>), <span class='kw'>perRec</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>inc.SPR</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
   <span class='kw'>Cols</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>size.axtex</span> <span class='kw'>=</span> <span class='fl'>12</span>, <span class='kw'>size.title</span> <span class='kw'>=</span> <span class='fl'>14</span>, <span class='kw'>size.SPR</span> <span class='kw'>=</span> <span class='fl'>4</span>,
-  <span class='kw'>size.pt</span> <span class='kw'>=</span> <span class='fl'>4</span>)</pre>
+  <span class='kw'>size.leg</span> <span class='kw'>=</span> <span class='fl'>12</span>, <span class='kw'>inc.pts</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>size.pt</span> <span class='kw'>=</span> <span class='fl'>4</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <dl class="dl-horizontal">
@@ -100,9 +102,13 @@
       <dd>a character value indicating if the <code>catch</code> or <code>pop</code> (population) should be plotted for the length frequency</dd>
       <dt>growth.type</dt>
       <dd>should growth be plotted as length-at-age (<code>&quot;LAA&quot;</code>) or weight-at-age (<code>&quot;WAA&quot;</code>)</dd>
+      <dt>y.type</dt>
+      <dd>what curves should be plotted on y-axis? <code>&quot;SPR&quot;</code>, <code>&quot;SSB&quot;</code>, <code>&quot;Yield&quot;</code>, <code>&quot;YPR&quot;</code></dd>
+      <dt>x.type</dt>
+      <dd>what curves should be plotted on x-axis? <code>&quot;FM&quot;</code>, <code>&quot;SSB&quot;</code>, <code>&quot;SPR&quot;</code></dd>
       <dt>perRec</dt>
       <dd>a logical to indicate if plot should be per-recruit (ignore steepness) or not (zero recruitment if SPR below replacement level)</dd>
-      <dt>incSPR</dt>
+      <dt>inc.SPR</dt>
       <dd>a logical to indicate if SPR value should be printed in top right corner of plot</dd>
       <dt>Cols</dt>
       <dd>optional character vector of colours for the plot</dd>
@@ -112,6 +118,10 @@
       <dd>size of axis title</dd>
       <dt>size.SPR</dt>
       <dd>size of SPR text</dd>
+      <dt>size.leg</dt>
+      <dd>size of legend text</dd>
+      <dt>inc.pts</dt>
+      <dd>Include points on the plots?</dd>
       <dt>size.pt</dt>
       <dd>size of the points on the plots</dd>
     </dl>
