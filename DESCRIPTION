@@ -1,6 +1,6 @@
 Package: LBSPR
 Title: Length-Based Spawning Potential Ratio
-Version: 0.1.9002
+Version: 0.1.9003
 Authors@R: person("Adrian", "Hordyk", email = "ar.hordyk@gmail.com", role = c("aut", "cre"))
 Description: Simulate expected equilibrium length composition, YPR, and
     SPR using the LBSPR model. Fit the LBSPR model to length data to estimate
@@ -14,18 +14,18 @@ License: GPL-3
 LazyData: true
 Imports:
   colorspace,
-  scales,
+  dplyr,  
   ggplot2,
-  gridExtra,
-  tidyr,
-  RColorBrewer,
-  plotrix,
-  dplyr,
   graphics,
-  methods,
+  gridExtra,
+  methods,  
+  plotrix,
+  Rcpp,
+  RColorBrewer,
+  scales,
   shiny,
   shinyBS,
-  Rcpp
+  tidyr
 RoxygenNote: 5.0.1
 LinkingTo: Rcpp
 Suggests: knitr,

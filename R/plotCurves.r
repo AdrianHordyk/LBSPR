@@ -98,7 +98,7 @@ plotCurves <- function(LB_obj, X=c("FM", "SSB", "SPR"),
      theme(axis.text=element_text(size=size.axtex),
           axis.title=element_text(size=size.title,face="bold"), 
 		  legend.position="top", legend.text=element_text(size=size.leg)) +
-     xlab(XLab) + ylab("Proportion") + ylim(0, 1) + xlim(xmin, xmax)
+     xlab(XLab) + ylab("Proportion") + ggplot2::ylim(0, 1) + ggplot2::xlim(xmin, xmax)
   if (inc.pts & X == "FM") Pout <- Pout + geom_point(data=pointdat, aes(x=get(X), 
     y=Y, color=Type), size=size.pt)
   if (inc.pts & X == "SSB" & "Rec" %in% Y) Pout <- Pout + geom_point(data=pointdat2, aes(x=X, 

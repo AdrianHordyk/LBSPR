@@ -104,7 +104,7 @@ The minimum parameters that are needed for the simulation model are:
 **Exploitation**
  - Length at 50% selectivity (`SL50`)
  - Length at 95% selectivity (`SL95`)
- - F/M ratio (`FM`) **or** SPR (`SPR`). If you specify both, the F/M value will be ignored.
+ - F/M ratio (`FM`) **or** SPR (`SPR`). If you specify both, the F/M value will be ignored. 
  
 **Size Classes**
  - Width of the length classes (`BinWidth`)
@@ -163,9 +163,9 @@ What is the ratio of fishing mortality to natural mortality in this scenario?
 MySim@FM 
 ```
 
-It is important to note that the F/M ratio reported in the LBSPR model refers to the *apical F* over the adult natural mortality rate. That is, the value for fishing mortality refers to the highest level of *F* experienced by any single size class. 
+> It is important to note that the F/M ratio reported in the LBSPR model refers to the *apical F* over the adult natural mortality rate. That is, the value for fishing mortality refers to the highest level of *F* experienced by any single size class. 
 
-If the selectivity pattern excludes all but the largest individuals from being exploited, it is possible to have a **very** high F/M ratio in a sustainable fishery (high SPR).
+> If the selectivity pattern excludes all but the largest individuals from being exploited, it is possible to have a **very** high F/M ratio in a sustainable fishery (high SPR).
 
 A couple of more simulations with alternative values:
 
@@ -174,22 +174,22 @@ Specify F/M instead of SPR:
 MyPars@SPR <- numeric() # remove value for SPR 
 MyPars@FM <- 1 # set value for FM
 MySim <- LBSPRsim(MyPars)
-MySim@SPR # SPR at F/M = 1 
+round(MySim@SPR, 2) # SPR at F/M = 1 
 ```
 
 Change the life history parameters:
 ```{r}
 MyPars@MK <- 2.0 
 MySim <- LBSPRsim(MyPars)
-MySim@SPR # SPR 
+round(MySim@SPR, 2) # SPR 
 
 MyPars@MK <- 0.5
 MySim <- LBSPRsim(MyPars)
-MySim@SPR # SPR 
+round(MySim@SPR, 2) # SPR 
 
 MyPars@Linf <- 120
 MySim <- LBSPRsim(MyPars)
-MySim@SPR # SPR 
+round(MySim@SPR, 2) # SPR 
 ```
 
 Change selectivity parameters:
@@ -199,12 +199,12 @@ MyPars@SL50 <- 10
 MyPars@SL95 <- 15 
 MyPars@FM <- 1 
 MySim <- LBSPRsim(MyPars)
-MySim@SPR # SPR 
+round(MySim@SPR, 2) # SPR 
 
 MyPars@SL50 <- 80
 MyPars@SL95 <- 85 
 MySim <- LBSPRsim(MyPars)
-MySim@SPR # SPR 
+round(MySim@SPR, 2) # SPR 
 ```
 
 ### Control Options
@@ -233,7 +233,7 @@ The `plotSim` function can be used to plot `MySim`:
 plotSim(MySim) 
 ```
  
-By default the function plots: a) the expected size structure of the catch and the expected unfished size structure of the vulnerable population, b) the maturity and selectivity-at-length curves, c) the growth curve, and d) the SPR and relative yield curves as a function of relative fishing mortality.
+By default the function plots: a) the expected (equilibrium) size structure of the catch and the expected unfished size structure of the vulnerable population, b) the maturity and selectivity-at-length curves, c) the von Bertalanffy growth curve with relative age, and d) the SPR and relative yield curves as a function of relative fishing mortality (see note above on the *F/M* ratio).
 
 The `plotSim` function can be controlled in a number of ways.  For example, you can plot the expected unfished and fished size structure of the population by changing the `lf.type` argument:
 ```{r, fig.width = 6, fig.height=6}
@@ -412,6 +412,22 @@ MyPars@SL95 <- Mod@SL95[yr]
 plotTarg(MyPars, LenDat, yr=yr)
 ```
 
+# Shiny Applications
+The [Shiny](http://shiny.rstudio.com/) package has made it possible to create user-friendly applications that use the computational power of R together with the interactivity of modern web browsers. A major advantage of this approach is that it allows a simple, user-friendly interface for using models built in R without having to interact directly with the R software.
+
+Several of the functions in the `LBSPR` package have been developed into interactive applications, which are included in the latest version of the package. 
+
+The Shiny applications can be launched using the `Shiny` function. The LBSPR estimation application:
+```{r, eval=FALSE}
+Shiny("LBSPR")
+```
+
+Simulation model calculating SPR, yield-per-recruit, expected size composition, etc:
+```{r, eval=FALSE}
+Shiny("Sim")
+```
+
+The LBSPR Shiny applications, and several others, are also available at [The Barefoot Ecologist's Toolbox](http://barefootecologist.com.au/).
 
 # References
 
