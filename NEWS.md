@@ -10,6 +10,8 @@ Current development version
 
 ## Bug Fixes
 - added packages required by the Shiny applications as dependencies
+- fixed minor bug in standard error calculation
+- fixed bug in plotEsts when F/M estimates are high
 
 # LBSPR 0.1.0 
 The LBSPR package has now been released on CRAN!

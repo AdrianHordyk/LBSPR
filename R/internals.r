@@ -34,7 +34,7 @@ dSPR <- function(x, LB_pars, var=c("lSL50", "ldL", "lFM"), Control=NULL) {
 }
 
 # From http://blog.quantitations.com/tutorial/2013/02/12/numerical-derivatives-in-r/
-derivative <- function(f, x, ..., order = 1, delta = 0.01, sig = 6) {
+derivative <- function(f, x, ..., order = 1, delta = 0.0001, sig = 6) {
     # Numerically computes the specified order derivative of f at x
     vals <- matrix(NA, nrow = order + 1, ncol = order + 1)
     grid <- seq(x - delta/2, x + delta/2, length.out = order + 1)

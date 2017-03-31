@@ -68,7 +68,7 @@ plotSize <- function(LB_obj=NULL, size.axtex=12, size.title=14, Title=NULL) {
 	  # Didn't converge
 	  yrs <- unique(longDat$Year)[which(fitLog == 1)]
 	  if (length(yrs) > 0) {
-	    text_dat <- data.frame(Year=factor(yrs), levels=levels(longDat$Year),
+	    text_dat <- data.frame(Year=factor(yrs, levels=levels(longDat$Year)),
 	      LMids=longDat$LMids[0.5*length(longDat$LMids)],
 		  LBSPR_len=0.99 * max(longDat$LBSPR_len), lab="Model didn't converge")
         bplot <- bplot + geom_text(data=text_dat, aes(label=lab), size=6)
@@ -76,7 +76,7 @@ plotSize <- function(LB_obj=NULL, size.axtex=12, size.title=14, Title=NULL) {
 	  # High Selectivity
 	  yrs <- unique(longDat$Year)[which(fitLog == 2)]
 	  if (length(yrs) > 0) {
-	    text_dat <- data.frame(Year=factor(yrs), levels=levels(longDat$Year),
+	    text_dat <- data.frame(Year=factor(yrs, levels=levels(longDat$Year)),
 	      LMids=longDat$LMids[0.5*length(longDat$LMids)],
 		  LBSPR_len=0.99 * max(longDat$LBSPR_len),
 		  lab="Estimated selectivity\n may be unrealistically high")
@@ -85,7 +85,7 @@ plotSize <- function(LB_obj=NULL, size.axtex=12, size.title=14, Title=NULL) {
 	  # High F/M
 	  yrs <- unique(longDat$Year)[which(fitLog == 3)]
 	  if (length(yrs) > 0) {
-	    text_dat <- data.frame(Year=factor(yrs), levels=levels(longDat$Year),
+	    text_dat <- data.frame(Year=factor(yrs, levels=levels(longDat$Year)),
 	      LMids=longDat$LMids[0.5*length(longDat$LMids)],
 		  LBSPR_len=0.99 * max(longDat$LBSPR_len),
 		  lab="Estimated F/M appears\n be unrealistically high")
@@ -94,7 +94,7 @@ plotSize <- function(LB_obj=NULL, size.axtex=12, size.title=14, Title=NULL) {
 	  # High F/M & Selectivity
 	  yrs <- unique(longDat$Year)[which(fitLog == 4)]
 	  if (length(yrs) > 0) {
-	    text_dat <- data.frame(Year=factor(yrs), levels=levels(longDat$Year),
+	    text_dat <- data.frame(Year=factor(yrs, levels=levels(longDat$Year)),
 	      LMids=longDat$LMids[0.5*length(longDat$LMids)],
 		  LBSPR_len=0.99 * max(longDat$LBSPR_len),
 		  lab="Estimated selectivity\n and F/M may be unrealistically high")
