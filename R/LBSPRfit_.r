@@ -75,7 +75,7 @@ LBSPRfit_ <- function(yr=1, LB_pars=NULL, LB_lengths=NULL, Control=list(),
 	  LBins <- c(fstBins, LBins)
 	  LDat <- c(ZeroDat, LDat)
 	}
-    SDLinf <- LB_pars@CVLinf * LB_pars@Linf
+  SDLinf <- LB_pars@CVLinf * LB_pars@Linf
 	gtgLinfs <- seq(from= LB_pars@Linf-maxsd*SDLinf, to= LB_pars@Linf+maxsd*SDLinf, length=ngtg)
 	MKMat <- matrix(LB_pars@MK, nrow=length(LBins), ncol=ngtg)
 	recP <- dnorm(gtgLinfs, LB_pars@Linf, sd=SDLinf) / sum(dnorm(gtgLinfs, LB_pars@Linf, sd=SDLinf))
@@ -87,8 +87,7 @@ LBSPRfit_ <- function(yr=1, LB_pars=NULL, LB_lengths=NULL, Control=list(),
 	  silent=TRUE)
 	varcov <- try(solve(opt$hessian), silent=TRUE)
 	if (class(varcov) == "try-error") class(opt) <- "try-error"
-	if (class(varcov) != "try-error" && any(diag(varcov) < 0))
-	  class(opt) <- "try-error"
+	if (class(varcov) != "try-error" && any(diag(varcov) < 0)) class(opt) <- "try-error"
 	count <- 0
 	countmax <- 10
 	quants <- seq(from=0, to=0.95, length.out=countmax)

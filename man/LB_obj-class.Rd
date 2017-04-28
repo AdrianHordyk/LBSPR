@@ -18,6 +18,10 @@ An S4 class containing all parameters for the LBSPR model
 
 \item{\code{SSB}}{Spawning stock biomass (relative only)}
 
+\item{\code{SSB0}}{Unfished spawning stock biomass}
+
+\item{\code{B0}}{Unfished biomass}
+
 \item{\code{LMids}}{A numeric vector containing the mid-points of the length bins}
 
 \item{\code{pLCatch}}{A numeric vector containg expected proportion for each length class in the catch}

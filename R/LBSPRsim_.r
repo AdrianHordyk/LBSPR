@@ -75,17 +75,17 @@ LBSPRsim_ <- function(LB_pars=NULL, Control=list(), verbose=TRUE, doCheck=TRUE) 
   MaxL <- LB_pars@BinMax
   if (is.null(MaxL) | length(MaxL) < 1) {
     if (verbose) message("BinMax not set. Using default of 1.3 Linf")
-	MaxL <- LB_pars@BinMax <- 1.3 * Linf
+	  MaxL <- LB_pars@BinMax <- 1.3 * Linf
   }
   MinL <- LB_pars@BinMin
   if (is.null(MinL) | length(MinL) < 1) {
     if (verbose) message("BinMin not set. Using default value of 0")
-	MinL <- LB_pars@BinMin <- 0
+	  MinL <- LB_pars@BinMin <- 0
   }
   BinWidth <- LB_pars@BinWidth
   if (is.null(BinWidth) | length(BinWidth) < 1) {
     if (verbose) message("BinWidth not set. Using default value of 1/20 Linf")
-	BinWidth <- LB_pars@BinWidth <- 1/20 * Linf
+  	BinWidth <- LB_pars@BinWidth <- 1/20 * Linf
   }
 
   LBins <- seq(from=MinL, by=BinWidth, to=MaxL)
@@ -123,7 +123,7 @@ LBSPRsim_ <- function(LB_pars=NULL, Control=list(), verbose=TRUE, doCheck=TRUE) 
     if(verbose) message("ngtg increased to ", newngtg, " because of small bin size")
 	ngtg <- newngtg
   }
-
+  B0 <- SSB0 <- NA # hack
   if (modType == "GTG") {
     # Linfs of the GTGs
     gtgLinfs <- seq(from=Linf-maxsd*SDLinf, to=Linf+maxsd*SDLinf, length=ngtg)
@@ -138,7 +138,7 @@ LBSPRsim_ <- function(LB_pars=NULL, Control=list(), verbose=TRUE, doCheck=TRUE) 
     L95GTG <- L95/Linf * gtgLinfs # Assumes maturity age-dependant
     DeltaGTG <- L95GTG - L50GTG
     MatLengtg <- sapply(seq_along(gtgLinfs), function (X)
-	  1.0/(1+exp(-log(19)*(LMids-L50GTG[X])/DeltaGTG[X])))
+	    1.0/(1+exp(-log(19)*(LMids-L50GTG[X])/DeltaGTG[X])))
     FecLengtg <- MatLengtg * LMids^FecB # Fecundity across GTGs
 
     # Selectivity - asymptotic only at this stage - by careful with knife-edge
@@ -150,6 +150,14 @@ LBSPRsim_ <- function(LB_pars=NULL, Control=list(), verbose=TRUE, doCheck=TRUE) 
     MKMat <- matrix(rep(MKL, ngtg), nrow=length(MKL), byrow=FALSE)
     FK <- FM * MK # F/K ratio
     FKL <- FK * SelLen # F/K ratio for each length class
+
+    # Minimum legal length
+    plegal2 <- rep(1, length(LMids))
+    if (length(LB_pars@MLL)>0) {
+      plegal <- 1/(1+exp(-(LBins-LB_pars@MLL)/LB_pars@sdLegal))
+      plegal2 <- 1/(1+exp(-(LMids-LB_pars@MLL)/LB_pars@sdLegal))
+      FKL <- FKL * (plegal + (1-plegal) * LB_pars@fDisc)
+    }
     ZKLMat <- MKMat + FKL # Z/K ratio (total mortality) for each GTG
 
     # Set Up Empty Matrices
@@ -191,6 +199,8 @@ LBSPRsim_ <- function(LB_pars=NULL, Control=list(), verbose=TRUE, doCheck=TRUE) 
     PopF <- apply(NatLF, 1, sum)/sum(apply(NatLF, 1, sum))
 
     # Calc SPR
+    B0 <- sum(NatLUF * Weight)
+    SSB0 <- sum(NatLUF * Weight * MatLengtg)
     EPR0 <- sum(NatLUF * FecLengtg) # Eggs-per-recruit Unfished
     EPRf <- sum(NatLF * FecLengtg) # Eggs-per-recruit Fished
     SPR <- EPRf/EPR0
@@ -202,11 +212,13 @@ LBSPRsim_ <- function(LB_pars=NULL, Control=list(), verbose=TRUE, doCheck=TRUE) 
     RelRec <- max(0, (reca * EPRf-1)/(recb*EPRf))
     if (!is.finite(RelRec)) RelRec <- 0
     # RelRec/R0 - relative recruitment
-    YPR <- sum(NatLC  * Weight * SelLen2) * FM
+    YPR <- sum(NatLC  * Weight * SelLen2 * plegal2) * FM
+
+
     Yield <- YPR * RelRec
-	
-	# Spawning Stock Biomass 
-	SSB <- sum(NatLF  * RelRec * Weight * MatLengtg) 
+
+	  # Spawning Stock Biomass
+	  SSB <- sum(NatLF  * RelRec * Weight * MatLengtg)
 
     # Calc Unfished Fitness - not used here
     Fit <- apply(FecGTG, 2, sum, na.rm=TRUE) # Total Fecundity per Group
@@ -275,7 +287,7 @@ LBSPRsim_ <- function(LB_pars=NULL, Control=list(), verbose=TRUE, doCheck=TRUE) 
     recb <- (reca * EPR0 - 1)/(R0*EPR0)
     RelRec <- max(0, (reca * EPRf-1)/(recb*EPRf))
     if (!is.finite(RelRec)) RelRec <- 0
-	SSB <- sum(Ns * RelRec * rLens^Wbeta * Ma) 
+	SSB <- sum(Ns * RelRec * rLens^Wbeta * Ma)
 
     # RelRec/R0 - relative recruitment
     YPR <- sum(Nc  * LMids^FecB ) * FM
@@ -299,6 +311,8 @@ LBSPRsim_ <- function(LB_pars=NULL, Control=list(), verbose=TRUE, doCheck=TRUE) 
   LBobj@Yield <- Yield
   LBobj@YPR <- YPR
   LBobj@SSB <- SSB
+  LBobj@SSB0 <- SSB0
+  LBobj@B0 <- B0
   LBobj@LMids <- LenOut[,1]
   LBobj@pLCatch <- matrix(LenOut[,2])
   LBobj@RelRec <- RelRec

@@ -84,6 +84,9 @@ check_LB_pars <- function(object) {
 #' @slot R0 A length-one numeric vector for initial number of recruits (1 for per-recruit)
 #' @slot SL50 A length-one numeric vector for length at 50\% selectivity
 #' @slot SL95 A length-one numeric vector for length at 95\% selectivity
+#' @slot MLL Minimum legal length (inflection point)
+#' @slot sdLegal Standard deviation of MLL curve
+#' @slot fDisc Fraction discarded that die
 #' @slot FM A length-one numeric vector for F/M ratio (note this is apical F)
 #' @slot SPR A length-one numeric vector for SPR
 #' @slot BinMin A length-one numeric vector for minimum length bin
@@ -108,6 +111,9 @@ setClass("LB_pars", representation(
   R0 = "numeric",
   SL50 = "numeric",
   SL95 = "numeric",
+  MLL = "numeric",
+  sdLegal = "numeric",
+  fDisc = "numeric",
   FM = "numeric",
   SPR = "vector",
   BinMin = "numeric",
@@ -201,9 +207,9 @@ setMethod("initialize", "LB_lengths", function(.Object, file="none", LB_pars=NUL
       dat <- read.csv(file, header=header, stringsAsFactors=FALSE,check.names=FALSE, ...)
 	  if (any(apply(dat, 1, class) == "character")) stop("Text in data file. Do you have header?", call. = FALSE)
 	  # dat <- as.data.frame(dat)
-	  # remove NAs 
+	  # remove NAs
 	  if (class(dat) == "data.frame" | class(dat) == "matrix") {
-	    if (ncol(dat) > 1) { 
+	    if (ncol(dat) > 1) {
 		  chkNAs <- apply(dat, 2, is.na) # check NAs
 		  dat <- dat[!apply(chkNAs, 1, prod),, drop=FALSE]
 		  dat <- dat[,!apply(chkNAs, 2, prod), drop=FALSE]
@@ -236,7 +242,7 @@ setMethod("initialize", "LB_lengths", function(.Object, file="none", LB_pars=NUL
 		.Object@Years <-  gsub("V", "", .Object@Years)
 	    .Object@Years <- as.numeric(.Object@Years)
 		if (.Object@Years[1] == 2) .Object@Years <- 1:length(.Object@Years)
-	    options(warn=1)		
+	    options(warn=1)
         .Object@NYears <- ncol(dat)
     	if (length(LB_pars@BinMax) < 1) {
           if (verbose) message("Length bin parameters (BinMax) must be set for raw data. Using defaults")
@@ -361,6 +367,8 @@ setMethod("initialize", "LB_lengths", function(.Object, file="none", LB_pars=NUL
 #' @slot Yield Relative yield
 #' @slot YPR Yield per recruit
 #' @slot SSB Spawning stock biomass (relative only)
+#' @slot SSB0 Unfished spawning stock biomass
+#' @slot B0 Unfished biomass
 #' @slot LMids A numeric vector containing the mid-points of the length bins
 #' @slot pLCatch A numeric vector containg expected proportion for each length class in the catch
 #' @slot pLPop A numeric vector containg expected proportion for each length class in the population
@@ -376,6 +384,8 @@ setClass("LB_obj", representation(
   Yield = "vector",
   YPR = "vector",
   SSB = "vector",
+  SSB0 = "vector",
+  B0 = "vector",
   LMids = "vector",
   pLCatch = "matrix",
   pLPop = "array",

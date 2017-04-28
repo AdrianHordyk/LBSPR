@@ -44,6 +44,12 @@ An S4 class containing life history and other parameters
 
 \item{\code{SL95}}{A length-one numeric vector for length at 95\% selectivity}
 
+\item{\code{MLL}}{Minimum legal length (inflection point)}
+
+\item{\code{sdLegal}}{Standard deviation of MLL curve}
+
+\item{\code{fDisc}}{Fraction discarded that die}
+
 \item{\code{FM}}{A length-one numeric vector for F/M ratio (note this is apical F)}
 
 \item{\code{SPR}}{A length-one numeric vector for SPR}
