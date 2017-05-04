@@ -1,26 +1,36 @@
 #' Internal LBSPR Simulation Model
 #'
-#' A internal function that generates the expected equilbrium size composition given biological parameters, and fishing mortality and selectivity pattern.  Typically only used by other functions in the package.
+#' A internal function that generates the expected equilbrium size composition given
+#' biological parameters, and fishing mortality and selectivity pattern.  Typically only
+#' used by other functions in the package.
 #'
-#' @param LB_pars an object of class \code{'LB_pars'} that contains the life history information
+#' @param LB_pars an object of class \code{'LB_pars'} that contains the life history
+#' information
 #' @param Control a list of control options for the LBSPR model.
 #' @param verbose display messages?
-#' @param doCheck check if the LB_pars object is valid? Switch off when calling function from a optimization routine.
+#' @param doCheck check if the LB_pars object is valid? Switch off when calling function
+#' from a optimization routine.
 #' @details The Control options are:
 #' \describe{
-#'  \item{\code{modtype}}{Model Type: either Growth-Type-Group Model (default: "GTG") or Age-Structured ("absel")}
-#'  \item{\code{maxsd}}{Maximum number of standard deviations for length-at-age distribution (default is 2)}
+#'  \item{\code{modtype}}{Model Type: either Growth-Type-Group Model (default: "GTG") or
+#'  Age-Structured ("absel")}
+#'  \item{\code{maxsd}}{Maximum number of standard deviations for length-at-age distribution
+#'  (default is 2)}
 #'  \item{\code{ngtg}}{Number of groups for the GTG model. Default is 13}
-#'  \item{\code{P}}{Proportion of survival of initial cohort for maximum age for Age-Structured model. Default is 0.01}
-#'  \item{\code{Nage}}{Number of pseudo-age classes in the Age Structured model. Default is 101}
-#'  \item{\code{maxFM}}{Maximum value for F/M. Estimated values higher than this are trunctated to \code{maxFM}. Default is 4}
+#'  \item{\code{P}}{Proportion of survival of initial cohort for maximum age for
+#'  Age-Structured model. Default is 0.01}
+#'  \item{\code{Nage}}{Number of pseudo-age classes in the Age Structured model.
+#'  Default is 101}
+#'  \item{\code{maxFM}}{Maximum value for F/M. Estimated values higher than this
+#'  are trunctated to \code{maxFM}. Default is 4}
 #' }
 #' @return a object of class \code{'LB_obj'}
 #' @author A. Hordyk
 #'
 #' @export
 LBSPRsim_ <- function(LB_pars=NULL, Control=list(), verbose=TRUE, doCheck=TRUE) {
-  # if (class(LB_pars) != "LB_pars") stop("LB_pars must be of class 'LB_pars'. Use: new('LB_pars')")
+  # if (class(LB_pars) != "LB_pars") stop("LB_pars must be of class 'LB_pars'.
+  #   Use: new('LB_pars')")
 
   # Error Checks
   # if (length(LB_pars@Species) < 1) {
@@ -41,25 +51,31 @@ LBSPRsim_ <- function(LB_pars=NULL, Control=list(), verbose=TRUE, doCheck=TRUE) 
   L95 <- LB_pars@L95
   Walpha <- LB_pars@Walpha
   if (is.null(Walpha) | length(Walpha) < 1) {
-    if (verbose) message("Walpha not set. Model not sensitive to this parameter - using default")
+    if (verbose)
+      message("Walpha not set. Model not sensitive to this parameter - using default")
 	LB_pars@Walpha <- Walpha <- 0.001
   }
   Wbeta <- LB_pars@Wbeta
   if (is.null(Wbeta) | length(Wbeta) < 1) {
-    if (verbose) message("Wbeta not set. Model not sensitive to this parameter - using default")
+    if (verbose)
+      message("Wbeta not set. Model not sensitive to this parameter - using default")
 	LB_pars@Wbeta <- Wbeta <- 3
   }
   FecB <- LB_pars@FecB
   if (is.null(FecB) | length(FecB) < 1) {
-    if (verbose) message("FecB (Fecundity-at-length allometric parameter) not set. Using default - check value")
+    if (verbose)
+      message("FecB (Fecundity-at-length allometric parameter) not set. Using default - check value")
 	LB_pars@FecB <- FecB <- 3
   }
   Steepness <- LB_pars@Steepness
   if (is.null(Steepness) | length(Steepness) < 1) {
-      if (verbose) message("Steepness not set. Only used for yield analysis. Not sensitive if per-recruit. Using default of 1 (per-recruit model)")
+      if (verbose)
+        message("Steepness not set. Only used for yield analysis. Not sensitive if per-recruit.
+                Using default of 1 (per-recruit model)")
 	LB_pars@Steepness <- Steepness <- 0.99
   }
-  if (Steepness <= 0.2 | Steepness >= 1) stop("Steepness must be greater than 0.2 and less than 1.0", call. = FALSE)
+  if (Steepness <= 0.2 | Steepness >= 1)
+    stop("Steepness must be greater than 0.2 and less than 1.0", call. = FALSE)
 
   Mpow <- LB_pars@Mpow
   if (is.null(Mpow) | length(Mpow) < 1) Mpow <- 0
@@ -97,23 +113,30 @@ LBSPRsim_ <- function(LB_pars=NULL, Control=list(), verbose=TRUE, doCheck=TRUE) 
 	  LBins <- c(fstBins, LBins)
 	  LMids <- seq(from=LBins[1] + 0.5*BinWidth, by=BinWidth, length.out=length(LBins)-1)
   }
-  if (MaxL < Linf) stop(paste0("Maximum length bin (", MaxL, ") can't be smaller than asymptotic size (", Linf ,"). Increase size of maximum length class ['maxL']"), call. = FALSE)
+  if (MaxL < Linf)
+    stop(paste0("Maximum length bin (", MaxL, ") can't be smaller than asymptotic size
+                (", Linf ,"). Increase size of maximum length class ['maxL']"), call. = FALSE)
   # Control Parameters
   con <- list(maxsd=2, modtype=c("GTG","absel"), ngtg=13, P=0.01, Nage=101,
     maxFM=4, method="BFGS")
   nmsC <- names(con)
   con[(namc <- names(Control))] <- Control
   if (length(noNms <- namc[!namc %in% nmsC]))
-        warning("unknown names in Control: ", paste(noNms, collapse = ", "), call. = FALSE)
-  maxsd <- con$maxsd # maximum number of standard deviations from the mean for length-at-age distributions
-  if (maxsd < 1) warning("maximum standard deviation is too small. See the help documentation", call. = FALSE)
+        warning("unknown names in Control: ", paste(noNms, collapse = ", "),
+                call. = FALSE)
+  maxsd <- con$maxsd # maximum number of standard deviations from the mean for
+                     # length-at-age distributions
+  if (maxsd < 1) warning("maximum standard deviation is too small. See the help
+                         documentation", call. = FALSE)
   modType <- match.arg(arg=con$modtype, choices=c("GTG", "absel"))
 
   # Model control parameters
   P <- con$P
-  if (P > 0.1 | P < 0.0001) warning("P parameter may be set to high or too low. See the help documentation", call. = FALSE)
+  if (P > 0.1 | P < 0.0001) warning("P parameter may be set to high or too low.
+                                    See the help documentation", call. = FALSE)
   Nage <- con$Nage
-  if (Nage < 90) warning("Nage should be higher. See the help documentation", call. = FALSE)
+  if (Nage < 90) warning("Nage should be higher. See the help documentation",
+                         call. = FALSE)
   maxFM <- con$maxFM
   ngtg <- con$ngtg
   Yield <- vector()
@@ -154,6 +177,8 @@ LBSPRsim_ <- function(LB_pars=NULL, Control=list(), verbose=TRUE, doCheck=TRUE) 
     # Minimum legal length
     plegal2 <- rep(1, length(LMids))
     if (length(LB_pars@MLL)>0) {
+      if (!is.finite((LB_pars@MLL))) stop("MLL slot is not finite", call.=FALSE)
+      if (!is.finite((LB_pars@sdLegal))) stop("sdLegal slot is not finite", call.=FALSE)
       plegal <- 1/(1+exp(-(LBins-LB_pars@MLL)/LB_pars@sdLegal))
       plegal2 <- 1/(1+exp(-(LMids-LB_pars@MLL)/LB_pars@sdLegal))
       FKL <- FKL * (plegal + (1-plegal) * LB_pars@fDisc)
@@ -170,8 +195,10 @@ LBSPRsim_ <- function(LB_pars=NULL, Control=list(), verbose=TRUE, doCheck=TRUE) 
     # Distribute Recruits into first length class
     NPRFished[1, ] <- NPRUnfished[1, ] <- recP * R0
     for (L in 2:length(LBins)) { # Calc number at each size class
-      NPRUnfished[L, ] <- NPRUnfished[L-1, ] * ((gtgLinfs-LBins[L])/(gtgLinfs-LBins[L-1]))^MKMat[L-1, ]
-      NPRFished[L, ] <- NPRFished[L-1, ] * ((gtgLinfs-LBins[L])/(gtgLinfs-LBins[L-1]))^ZKLMat[L-1, ]
+      NPRUnfished[L, ] <- NPRUnfished[L-1, ] *
+        ((gtgLinfs-LBins[L])/(gtgLinfs-LBins[L-1]))^MKMat[L-1, ]
+      NPRFished[L, ] <- NPRFished[L-1, ] *
+        ((gtgLinfs-LBins[L])/(gtgLinfs-LBins[L-1]))^ZKLMat[L-1, ]
 	  ind <- gtgLinfs  < LBins[L]
 	  NPRFished[L, ind] <- 0
 	  NPRUnfished[L, ind] <- 0
@@ -257,7 +284,7 @@ LBSPRsim_ <- function(LB_pars=NULL, Control=list(), verbose=TRUE, doCheck=TRUE) 
       mat[X,ind] <- 0
     }
 
-	Prob <- Prob * mat
+	  Prob <- Prob * mat
 
     SL <- 1/(1+exp(-log(19)*(LMids-SL50)/(SL95-SL50))) # Selectivity at length
     Sx <- apply(t(Prob) * SL, 2, sum) # Selectivity at relative age
@@ -267,27 +294,27 @@ LBSPRsim_ <- function(LB_pars=NULL, Control=list(), verbose=TRUE, doCheck=TRUE) 
     Cx <- t(t(Prob) * SL) # Conditional catch length-at-age probablilities
     Nc <- apply(Ns * Cx, 2, sum) #
 
-	PopF <- apply(Ns * Prob, 2, sum)
-	PopF <- PopF/sum(PopF)
+	  PopF <- apply(Ns * Prob, 2, sum)
+	  PopF <- PopF/sum(PopF)
 
     Ml <- 1/(1+exp(-log(19)*(LMids-L50)/(L95-L50))) # Maturity at length
     Ma <-  apply(t(Prob) * Ml, 2, sum) # Maturity at relative age
 
     N0 <- (1-rLens)^MK # Unfished numbers-at-age
     PopUF <- apply(N0 * Prob, 2, sum)
-	PopUF <- PopUF/sum(PopUF)
+	  PopUF <- PopUF/sum(PopUF)
     VulnUF	<- apply(N0 * Cx, 2, sum) #
-	VulnUF <- VulnUF/sum(VulnUF)
+	  VulnUF <- VulnUF/sum(VulnUF)
     SPR <- sum(Ma * Ns * rLens^FecB)/sum(Ma * N0 * rLens^FecB)
-	# Equilibrium Relative Recruitment
-	EPR0 <- sum(Ma * N0 * rLens^FecB)
-	EPRf <- sum(Ma * Ns * rLens^FecB)
+	  # Equilibrium Relative Recruitment
+	  EPR0 <- sum(Ma * N0 * rLens^FecB)
+	  EPRf <- sum(Ma * Ns * rLens^FecB)
     recK <- (4*Steepness)/(1-Steepness) # Goodyear compensation ratio
     reca <- recK/EPR0
     recb <- (reca * EPR0 - 1)/(R0*EPR0)
     RelRec <- max(0, (reca * EPRf-1)/(recb*EPRf))
     if (!is.finite(RelRec)) RelRec <- 0
-	SSB <- sum(Ns * RelRec * rLens^Wbeta * Ma)
+	  SSB <- sum(Ns * RelRec * rLens^Wbeta * Ma)
 
     # RelRec/R0 - relative recruitment
     YPR <- sum(Nc  * LMids^FecB ) * FM
@@ -317,8 +344,9 @@ LBSPRsim_ <- function(LB_pars=NULL, Control=list(), verbose=TRUE, doCheck=TRUE) 
   LBobj@pLCatch <- matrix(LenOut[,2])
   LBobj@RelRec <- RelRec
   LBobj@pLPop <- round(array(c(LMids, PopUF, PopF, VulnUF, Nc),
-    dim=c(length(PopUF), 5), dimnames=list(NULL, c("LMids", "PopUF", "PopF", "VulnUF", "VulnF")))
-	, 6)
+    dim=c(length(PopUF), 5), dimnames=list(NULL,
+                                           c("LMids", "PopUF", "PopF", "VulnUF",
+                                             "VulnF"))), 6)
   LBobj@maxFM <- maxFM
   LBobj
 }
