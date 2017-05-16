@@ -377,6 +377,7 @@ setMethod("initialize", "LB_lengths", function(.Object, file="none", LB_pars=NUL
 #' @slot Vars A vector of estimated variance for SL50, SL95, F/M and SPR
 #' @slot NLL A numeric NLL values
 #' @slot maxFM A numeric of maximum estimated F/M value (note this is apical F)
+#' @slot SPRatsize A vector of cumulative SPR at length (currently only works for GTG model)
 #' @slot fitLog A vector of error logs for each fit. 0 means everything is okay.
 #' @export
 setClass("LB_obj", representation(
@@ -394,6 +395,7 @@ setClass("LB_obj", representation(
   Vars = "matrix",
   NLL = "vector",
   maxFM = "numeric",
+  SPRatsize = "vector",
   fitLog = "vector"
   ), contains=c("LB_pars", "LB_lengths"))
 
