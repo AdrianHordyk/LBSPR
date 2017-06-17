@@ -77,10 +77,12 @@ double LBSPR_NLLgtg(NumericVector starts, NumericVector LMids, NumericVector LBi
 	PLen(i)=total;
   }
   PLen=PLen/sum(PLen);
-  for(i=0;i<nmid;i++){
-    tempVec(i) =LDat(i) * log(PLen(i)+0.000001)-log(LDat(i)+0.000001);
-  }
-  NLL=-sum(tempVec);
+  NumericVector lenprob = LDat/sum(LDat);
+  // for(i=0;i<nmid;i++){
+  //   tempVec(i) =LDat(i) * log(PLen(i)+0.000001)-log(LDat(i)+0.000001);
+  // }
+  // NLL=-sum(tempVec);
+  NLL = -sum(LDat * log((PLen+0.000001)/(lenprob+0.000001)));
 
   Pen=0;
   if (usePen==1) {

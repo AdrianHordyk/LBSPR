@@ -43,4 +43,3 @@ target and limit reference points
 \author{
 A. Hordyk
 }
-

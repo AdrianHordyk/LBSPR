@@ -32,4 +32,3 @@ Function
 \author{
 A. Hordyk
 }
-

@@ -24,4 +24,3 @@ A function that plots size data and the fitted LBSPR model
 \author{
 A. Hordyk
 }
-

@@ -11,7 +11,7 @@
 \arguments{
 \item{.Object}{class of object to be created}
 
-\item{file}{file path and name to CSV containing parameters}
+\item{file}{use 'example' to create example LB_pars object. File path and name to CSV containing parameters. Import CSV currently not working}
 
 \item{defaults}{use defaults for some parameters?}
 
@@ -26,4 +26,3 @@ Function
 \author{
 A. Hordyk
 }
-

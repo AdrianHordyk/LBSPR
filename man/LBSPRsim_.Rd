@@ -8,32 +8,40 @@ LBSPRsim_(LB_pars = NULL, Control = list(), verbose = TRUE,
   doCheck = TRUE)
 }
 \arguments{
-\item{LB_pars}{an object of class \code{'LB_pars'} that contains the life history information}
+\item{LB_pars}{an object of class \code{'LB_pars'} that contains the life history
+information}
 
 \item{Control}{a list of control options for the LBSPR model.}
 
 \item{verbose}{display messages?}
 
-\item{doCheck}{check if the LB_pars object is valid? Switch off when calling function from a optimization routine.}
+\item{doCheck}{check if the LB_pars object is valid? Switch off when calling function
+from a optimization routine.}
 }
 \value{
 a object of class \code{'LB_obj'}
 }
 \description{
-A internal function that generates the expected equilbrium size composition given biological parameters, and fishing mortality and selectivity pattern.  Typically only used by other functions in the package.
+A internal function that generates the expected equilbrium size composition given
+biological parameters, and fishing mortality and selectivity pattern.  Typically only
+used by other functions in the package.
 }
 \details{
 The Control options are:
 \describe{
- \item{\code{modtype}}{Model Type: either Growth-Type-Group Model (default: "GTG") or Age-Structured ("absel")}
- \item{\code{maxsd}}{Maximum number of standard deviations for length-at-age distribution (default is 2)}
+ \item{\code{modtype}}{Model Type: either Growth-Type-Group Model (default: "GTG") or
+ Age-Structured ("absel")}
+ \item{\code{maxsd}}{Maximum number of standard deviations for length-at-age distribution
+ (default is 2)}
  \item{\code{ngtg}}{Number of groups for the GTG model. Default is 13}
- \item{\code{P}}{Proportion of survival of initial cohort for maximum age for Age-Structured model. Default is 0.01}
- \item{\code{Nage}}{Number of pseudo-age classes in the Age Structured model. Default is 101}
- \item{\code{maxFM}}{Maximum value for F/M. Estimated values higher than this are trunctated to \code{maxFM}. Default is 4}
+ \item{\code{P}}{Proportion of survival of initial cohort for maximum age for
+ Age-Structured model. Default is 0.01}
+ \item{\code{Nage}}{Number of pseudo-age classes in the Age Structured model.
+ Default is 101}
+ \item{\code{maxFM}}{Maximum value for F/M. Estimated values higher than this
+ are trunctated to \code{maxFM}. Default is 4}
 }
 }
 \author{
 A. Hordyk
 }
-

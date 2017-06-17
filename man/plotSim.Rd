@@ -52,4 +52,3 @@ equilbrium size structure, maturity and selectivity curves, growth curves, and r
 \author{
 A. Hordyk
 }
-

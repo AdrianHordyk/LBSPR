@@ -40,4 +40,3 @@ The Control options are:
 \author{
 A. Hordyk
 }
-

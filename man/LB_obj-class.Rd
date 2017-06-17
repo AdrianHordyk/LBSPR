@@ -38,6 +38,8 @@ An S4 class containing all parameters for the LBSPR model
 
 \item{\code{maxFM}}{A numeric of maximum estimated F/M value (note this is apical F)}
 
+\item{\code{SPRatsize}}{A vector of cumulative SPR at length (currently only works for GTG model)}
+
 \item{\code{fitLog}}{A vector of error logs for each fit. 0 means everything is okay.}
 }}
 

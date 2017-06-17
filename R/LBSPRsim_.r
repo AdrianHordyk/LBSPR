@@ -262,7 +262,7 @@ LBSPRsim_ <- function(LB_pars=NULL, Control=list(), verbose=TRUE, doCheck=TRUE) 
     LenOut[,2] <- LenOut[,2]/sum(LenOut[,2])
   }
   if (modType == "absel") {
-    SPRatsize <- NULL #
+
     # LBSPR model with pseudo-age classes
     x <- seq(from=0, to=1, length.out=Nage) # relative age vector
     EL <- (1-P^(x/MK)) * Linf # length at relative age
@@ -288,6 +288,8 @@ LBSPRsim_ <- function(LB_pars=NULL, Control=list(), verbose=TRUE, doCheck=TRUE) 
 	  Prob <- Prob * mat
 
     SL <- 1/(1+exp(-log(19)*(LMids-SL50)/(SL95-SL50))) # Selectivity at length
+    # print(SL)
+
     Sx <- apply(t(Prob) * SL, 2, sum) # Selectivity at relative age
     MSX <- cumsum(Sx) / seq_along(Sx) # Mean cumulative selectivity for each age
     Ns <- (1-rLens)^(MK+(MK*FM)*MSX) # number at relative age in population
@@ -325,6 +327,11 @@ LBSPRsim_ <- function(LB_pars=NULL, Control=list(), verbose=TRUE, doCheck=TRUE) 
     LenOut <- cbind(mids=LMids, n=Nc)
     LenOut <- LenOut[LenOut[,1] >= MinL,]
     LenOut[,2] <- LenOut[,2]/sum(LenOut[,2])
+
+    # Calculate spawning-per-recruit at each size class
+    SPRatsize <- cumsum(Ma * N0 * rLens^FecB)
+    SPRatsize <- SPRatsize/max(SPRatsize)
+
   }
 
   # if (FM > maxFM) {

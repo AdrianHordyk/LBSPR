@@ -44,9 +44,9 @@ The LBSPR package is now available on CRAN:
 ```{r, eval=FALSE}
 install.packages("LBSPR")
 ```
-You can install the latest development version of the package from GitHub using the `devtools` package:
+You can install the development version of the package from GitHub using the `devtools` package:
 ```{r, eval=FALSE}
-# installed.packages("devtools")
+install.packages("devtools")
 devtools::install_github("AdrianHordyk/LBSPR")
 ```
 
@@ -163,9 +163,9 @@ What is the ratio of fishing mortality to natural mortality in this scenario?
 MySim@FM 
 ```
 
-> It is important to note that the F/M ratio reported in the LBSPR model refers to the *apical F* over the adult natural mortality rate. That is, the value for fishing mortality refers to the highest level of *F* experienced by any single size class. 
+It is important to note that the F/M ratio reported in the LBSPR model refers to the *apical F* over the adult natural mortality rate. That is, the value for fishing mortality refers to the highest level of *F* experienced by any single size class. 
 
-> If the selectivity pattern excludes all but the largest individuals from being exploited, it is possible to have a **very** high F/M ratio in a sustainable fishery (high SPR).
+If the selectivity pattern excludes all but the largest individuals from being exploited, it is possible to have a **very** high F/M ratio in a sustainable fishery (high SPR).
 
 A couple of more simulations with alternative values:
 

@@ -19,4 +19,3 @@ for relative Yield, YPR, SPR, SSB, and Recruitment at different values of F/M
 \author{
 A. Hordyk
 }
-

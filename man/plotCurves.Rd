@@ -34,4 +34,3 @@ A function that plots the Relative Yield, YPR, SPR, SSB, and Recruitment curves
 \author{
 A. Hordyk
 }
-

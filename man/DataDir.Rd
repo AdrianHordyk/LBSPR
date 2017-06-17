@@ -12,4 +12,3 @@ A function that returns the location of the example CSV files
 \author{
 A. Hordyk modified (i.e., stolen) from T. Carruthers' code (DLMtool package)
 }
-

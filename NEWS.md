@@ -1,7 +1,7 @@
-# LBSPR 0.1.9003 
-Current development version
+# LBSPR 0.1.1
 
 ## Minor Changes
+- 'absel' fitting routine has been coded in cpp with major improvement in speed
 - Shiny applications have now been added to the package. Launch the applications using the `Shiny` function: e.g., `Shiny("LBSPR")` or `Shiny("Sim")`
 - the relative spawning stock biomass (SSB) is now calculated and reported in the simulation model
 - modified the plotSim function so that it now produces several plots including SSB/SSB0 to yield and spr plot 
@@ -16,5 +16,5 @@ Current development version
 # LBSPR 0.1.0 
 The LBSPR package has now been released on CRAN!
 
-See http://adrianhordyk.com/LBSPR/articles/LBSPR.html for information and examples that describe the package.
+See http://adrianhordyk.github.io/LBSPR for information and examples that describe the package.
 

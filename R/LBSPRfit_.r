@@ -26,7 +26,6 @@
 LBSPRfit_ <- function(yr=1, LB_pars=NULL, LB_lengths=NULL, Control=list(),
   pen=TRUE, useCPP=TRUE, verbose=TRUE) {
   if (verbose) message(yr)
-  flush.console()
 
   if (class(LB_pars) != "LB_pars") stop("LB_pars must be of class 'LB_pars'. Use: new('LB_pars')", call. = FALSE)
   if (class(LB_lengths) != "LB_lengths") stop("LB_lengths must be of class 'LB_lengths'. Use: new('LB_lengths')", call. = FALSE)
@@ -62,67 +61,111 @@ LBSPRfit_ <- function(yr=1, LB_pars=NULL, LB_lengths=NULL, Control=list(),
   sFM <- 0.5
   Start <- log(c(sSL50, sDel, sFM))
 
-  if (useCPP & modType=="GTG") { # use cpp code
+  if (useCPP) { # use cpp code
     By <- SingYear@LMids[2] - SingYear@LMids[1]
-	LMids <- SingYear@LMids
+	  LMids <- SingYear@LMids
     LBins <- seq(from=LMids[1]-0.5*By, by=By, length.out=length(SingYear@LMids)+1)
-	LDat <- SingYear@LData
-	if (LBins[1] !=0 & (LBins[1] -By) > 0) {
-	  fstBins <- seq(from=0, by=By, to=LBins[1]-By)
-	  fstMids <- seq(from=0.5*By, by=By, to=LMids[1]-By)
-	  ZeroDat <- rep(0, length(fstMids))
-	  LMids <- c(fstMids, LMids)
-	  LBins <- c(fstBins, LBins)
-	  LDat <- c(ZeroDat, LDat)
-	}
-  SDLinf <- LB_pars@CVLinf * LB_pars@Linf
-	gtgLinfs <- seq(from= LB_pars@Linf-maxsd*SDLinf, to= LB_pars@Linf+maxsd*SDLinf, length=ngtg)
-	MKMat <- matrix(LB_pars@MK, nrow=length(LBins), ncol=ngtg)
-	recP <- dnorm(gtgLinfs, LB_pars@Linf, sd=SDLinf) / sum(dnorm(gtgLinfs, LB_pars@Linf, sd=SDLinf))
-    usePen <- 1
-	if (!pen) usePen <- 0
-	opt <- try(optim(Start, LBSPR_NLLgtg, LMids=LMids, LBins=LBins, LDat=LDat,
-	  gtgLinfs=gtgLinfs, MKMat=MKMat,  MK=LB_pars@MK, Linf=LB_pars@Linf,
-	  ngtg=ngtg, recP=recP,usePen=usePen, hessian=TRUE, method=Control$method),
-	  silent=TRUE)
-	varcov <- try(solve(opt$hessian), silent=TRUE)
-	if (class(varcov) == "try-error") class(opt) <- "try-error"
-	if (class(varcov) != "try-error" && any(diag(varcov) < 0)) class(opt) <- "try-error"
-	count <- 0
-	countmax <- 10
-	quants <- seq(from=0, to=0.95, length.out=countmax)
-	while (class(opt) == "try-error" & count < countmax) { # optim crashed - try different starts
-      count <- count + 1
-	  sSL50 <- quantile(c(LMids[min(which(ldat>0))]/LB_pars@Linf,
-	    LMids[which.max(ldat)]/LB_pars@Linf), probs=quants)[count]
-	  sSL50 <- as.numeric(sSL50)
-	  Start <- log(c(sSL50, sDel, sFM))
-      opt <- try(optim(Start, LBSPR_NLLgtg, LMids=LMids, LBins=LBins, LDat=LDat,
-	    gtgLinfs=gtgLinfs, MKMat=MKMat,  MK=LB_pars@MK, Linf=LB_pars@Linf,
-	    ngtg=ngtg, recP=recP,usePen=usePen, hessian=TRUE, method=Control$method),
-		silent=TRUE)
-	  varcov <- try(solve(opt$hessian), silent=TRUE)
-	  if (class(varcov) == "try-error") class(opt) <- "try-error"
-	  if (class(varcov) != "try-error" && any(diag(varcov) < 0))
-	    class(opt) <- "try-error"
-	}
+	  LDat <- SingYear@LData
+	  if (LBins[1] !=0 & (LBins[1] -By) > 0) {
+	    fstBins <- seq(from=0, by=By, to=LBins[1]-By)
+	    fstMids <- seq(from=0.5*By, by=By, to=LMids[1]-By)
+	    ZeroDat <- rep(0, length(fstMids))
+	    LMids <- c(fstMids, LMids)
+	    LBins <- c(fstBins, LBins)
+	    LDat <- c(ZeroDat, LDat)
+	  }
+	  if (modType=="GTG") {
+	    SDLinf <- LB_pars@CVLinf * LB_pars@Linf
+	    gtgLinfs <- seq(from= LB_pars@Linf-maxsd*SDLinf, to= LB_pars@Linf+maxsd*SDLinf, length=ngtg)
+	    MKMat <- matrix(LB_pars@MK, nrow=length(LBins), ncol=ngtg)
+	    recP <- dnorm(gtgLinfs, LB_pars@Linf, sd=SDLinf) / sum(dnorm(gtgLinfs, LB_pars@Linf, sd=SDLinf))
+	    usePen <- 1
+	    if (!pen) usePen <- 0
+	    opt <- try(optim(Start, LBSPR_NLLgtg, LMids=LMids, LBins=LBins, LDat=LDat,
+	                     gtgLinfs=gtgLinfs, MKMat=MKMat,  MK=LB_pars@MK, Linf=LB_pars@Linf,
+	                     ngtg=ngtg, recP=recP,usePen=usePen, hessian=TRUE, method=Control$method),
+	               silent=TRUE)
+	    varcov <- try(solve(opt$hessian), silent=TRUE)
+	    if (class(varcov) == "try-error") class(opt) <- "try-error"
+	    if (class(varcov) != "try-error" && any(diag(varcov) < 0)) class(opt) <- "try-error"
+	    count <- 0
+	    countmax <- 10
+	    quants <- seq(from=0, to=0.95, length.out=countmax)
+	    while (class(opt) == "try-error" & count < countmax) { # optim crashed - try different starts
+	      count <- count + 1
+	      sSL50 <- quantile(c(LMids[min(which(ldat>0))]/LB_pars@Linf,
+	                          LMids[which.max(ldat)]/LB_pars@Linf), probs=quants)[count]
+	      sSL50 <- as.numeric(sSL50)
+	      Start <- log(c(sSL50, sDel, sFM))
+	      opt <- try(optim(Start, LBSPR_NLLgtg, LMids=LMids, LBins=LBins, LDat=LDat,
+	                       gtgLinfs=gtgLinfs, MKMat=MKMat,  MK=LB_pars@MK, Linf=LB_pars@Linf,
+	                       ngtg=ngtg, recP=recP,usePen=usePen, hessian=TRUE, method=Control$method),
+	                 silent=TRUE)
+	      varcov <- try(solve(opt$hessian), silent=TRUE)
+	      if (class(varcov) == "try-error") class(opt) <- "try-error"
+	      if (class(varcov) != "try-error" && any(diag(varcov) < 0))
+	        class(opt) <- "try-error"
+	    }
 
-	if (class(opt) == "try-error") { # optim crashed - try without hessian
-      opt <- try(optim(Start, LBSPR_NLLgtg, LMids=LMids, LBins=LBins, LDat=LDat,
-	    gtgLinfs=gtgLinfs, MKMat=MKMat,  MK=LB_pars@MK, Linf=LB_pars@Linf,
-	    ngtg=ngtg, recP=recP,usePen=usePen, hessian=FALSE, method=Control$method))
-	  varcov <- matrix(NA, 3,3)
-	}
-	NLL <- opt$value
+	    if (class(opt) == "try-error") { # optim crashed - try without hessian
+	      opt <- try(optim(Start, LBSPR_NLLgtg, LMids=LMids, LBins=LBins, LDat=LDat,
+	                       gtgLinfs=gtgLinfs, MKMat=MKMat,  MK=LB_pars@MK, Linf=LB_pars@Linf,
+	                       ngtg=ngtg, recP=recP,usePen=usePen, hessian=FALSE, method=Control$method))
+	      varcov <- matrix(NA, 3,3)
+	    }
+	    NLL <- opt$value
+
+	  } else {
+	    usePen <- 1
+	    if (!pen) usePen <- 0
+
+	    P <- con$P
+	    Nage <- con$Nage
+	    x <- seq(from=0, to=1, length.out=Nage) # relative age vector
+	    opt <- try(optim(Start, LBSPR_NLLabsel, x=x, P=P, LMids=LMids, LBins=LBins, LDat=LDat, MK=LB_pars@MK,
+	                     Linf=LB_pars@Linf, FecB=LB_pars@FecB, L50=LB_pars@L50, L95=LB_pars@L95, maxsd=maxsd,
+	                     CVLinf=LB_pars@CVLinf, Nage=Nage,
+	                     usePen=TRUE, hessian=TRUE, method=Control$method), silent=TRUE)
+
+	    varcov <- try(solve(opt$hessian), silent=TRUE)
+	    if (class(varcov) == "try-error") class(opt) <- "try-error"
+	    if (class(varcov) != "try-error" && any(diag(varcov) < 0)) class(opt) <- "try-error"
+	    count <- 0
+	    countmax <- 10
+	    quants <- seq(from=0, to=0.95, length.out=countmax)
+	    while (class(opt) == "try-error" & count < countmax) { # optim crashed - try different starts
+	      count <- count + 1
+	      sSL50 <- quantile(c(LMids[min(which(ldat>0))]/LB_pars@Linf,
+	                          LMids[which.max(ldat)]/LB_pars@Linf), probs=quants)[count]
+	      sSL50 <- as.numeric(sSL50)
+	      Start <- log(c(sSL50, sDel, sFM))
+	      opt <- try(optim(Start, LBSPR_NLLabsel, x=x, P=P, LMids=LMids, LBins=LBins, LDat=LDat, MK=LB_pars@MK,
+	                       Linf=LB_pars@Linf, FecB=LB_pars@FecB, L50=LB_pars@L50, L95=LB_pars@L95, maxsd=maxsd,
+	                       CVLinf=LB_pars@CVLinf, Nage=Nage,
+	                       usePen=TRUE, hessian=TRUE, method=Control$method),
+	                 silent=TRUE)
+	      varcov <- try(solve(opt$hessian), silent=TRUE)
+	      if (class(varcov) == "try-error") class(opt) <- "try-error"
+	      if (class(varcov) != "try-error" && any(diag(varcov) < 0))
+	        class(opt) <- "try-error"
+	    }
+
+	    if (class(opt) == "try-error") { # optim crashed - try without hessian
+	      opt <- try(optim(Start, LBSPR_NLLabsel, x=x, P=P, LMids=LMids, LBins=LBins, LDat=LDat, MK=LB_pars@MK,
+	                       Linf=LB_pars@Linf, FecB=LB_pars@FecB, L50=LB_pars@L50, L95=LB_pars@L95, maxsd=maxsd,
+	                       CVLinf=LB_pars@CVLinf, Nage=Nage,
+	                       usePen=TRUE, hessian=FALSE, method=Control$method), silent=TRUE)
+	      varcov <- matrix(NA, 3,3)
+	    }
+	    NLL <- opt$value
+
+	  }
+
   } else {
-    # opt <- nlminb(Start, LBSPRopt, LB_pars=LB_pars, LB_lengths=SingYear,
-	# Control=Control, pen=pen, control=list(iter.max=300, eval.max=400,
-	# abs.tol=1E-20))
-	# NLL <- opt$objective
-	opt <- optim(Start, LBSPRopt, LB_pars=LB_pars, LB_lengths=SingYear,
-	Control=Control, pen=pen, hessian=TRUE, method=Control$method)
-	varcov <- solve(opt$hessian)
-	NLL <- opt$value
+	  opt <- optim(Start, LBSPRopt, LB_pars=LB_pars, LB_lengths=SingYear,
+	             Control=Control, pen=pen, hessian=TRUE, method=Control$method)
+	  varcov <- solve(opt$hessian)
+	  NLL <- opt$value
   }
   LB_pars@SL50 <- exp(opt$par)[1] * LB_pars@Linf
   LB_pars@SL95 <- LB_pars@SL50 + (exp(opt$par)[2] * LB_pars@Linf)

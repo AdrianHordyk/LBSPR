@@ -21,4 +21,3 @@ a vector of smoothed values
 \description{
 A function that applies a filter and smoother to estimates
 }
-

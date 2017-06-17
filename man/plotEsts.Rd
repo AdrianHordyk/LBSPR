@@ -35,4 +35,3 @@ A function that plots the estimates of the LBSPR with a smoother line
 \author{
 A. Hordyk
 }
-

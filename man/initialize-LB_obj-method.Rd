@@ -23,4 +23,3 @@ Function
 \author{
 A. Hordyk
 }
-

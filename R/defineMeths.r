@@ -64,7 +64,7 @@ check_LB_pars <- function(object) {
 }
 
 
-
+# --- LB_pars object ----
 #' An S4 class containing life history and other parameters
 #'
 #' @slot Species Character vector of species name
@@ -126,7 +126,7 @@ setClass("LB_pars", representation(
 #' Function
 #'
 #' @param .Object class of object to be created
-#' @param file file path and name to CSV containing parameters
+#' @param file use 'example' to create example LB_pars object. File path and name to CSV containing parameters. Import CSV currently not working
 #' @param defaults use defaults for some parameters?
 #' @param verbose display a message?
 #' @return a object of class \code{'LB_pars'}
@@ -140,7 +140,26 @@ setMethod("initialize", "LB_pars", function(.Object, file="none", defaults=TRUE,
    return(.Object)
  }
  if (file == "none" & verbose)  message("A blank LB_pars object created")
- if (file != "none" & !(file.exists(file)) & verbose)  message("Couldn't file specified CSV file: ", file, ".  A blank LB_pars object created")
+ if (file == "example" & verbose)  {
+    message("An example LB_pars object created")
+    .Object@MK <- 1.5
+    .Object@Linf <- 100
+    .Object@L50 <- 66
+    .Object@L95 <- 70
+    .Object@SL50 <- 60
+    .Object@SL95 <- 65
+    .Object@FM <- 1
+    .Object@CVLinf <- 0.1
+    .Object@Walpha <- 0.0001
+    .Object@Wbeta <- 3
+    .Object@FecB <- 3
+    .Object@Steepness <- 0.7
+    .Object@Mpow <- 0
+    .Object@R0 <- 10000
+    return(.Object)
+  }
+
+ if (file != "none" && file != "example" & !(file.exists(file)) & verbose)  message("Couldn't file specified CSV file: ", file, ".  A blank LB_pars object created")
  if (!defaults)  return(.Object)
  if (defaults) {
    if (verbose) message("Default values have been set for some parameters")
@@ -155,6 +174,7 @@ setMethod("initialize", "LB_pars", function(.Object, file="none", defaults=TRUE,
  .Object
 })
 
+# --- LB_lengths object ----
 #' An S4 class containing length data
 #'
 #' @slot LMids A numeric vector containing the mid-points of the length bins
@@ -197,7 +217,7 @@ setMethod("initialize", "LB_lengths", function(.Object, file="none", LB_pars=NUL
       return(.Object)
     }
 
-    if (class(LB_pars) != "LB_pars") stop("Must use a valid LB_pars object", call. = FALSE)
+  if (class(LB_pars) != "LB_pars") stop("Must use a valid LB_pars object", call. = FALSE)
 	if (length(LB_pars@SL50) == 0) LB_pars@SL50 <- 1
 	if (length(LB_pars@SL95) == 0) LB_pars@SL95 <- 2
 	if (length(LB_pars@FM) == 0) LB_pars@FM <- 1
@@ -361,7 +381,7 @@ setMethod("initialize", "LB_lengths", function(.Object, file="none", LB_pars=NUL
 })
 
 
-
+# -- LB_obj object ----
 #' An S4 class containing all parameters for the LBSPR model
 #' @slot SPR The Spawning Potential Ratio
 #' @slot Yield Relative yield

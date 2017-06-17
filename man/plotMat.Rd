@@ -29,4 +29,3 @@ A function that plots the maturity-at-length and selectivity-at-length curves
 \author{
 A. Hordyk
 }
-

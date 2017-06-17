@@ -15,4 +15,3 @@ Shiny(app)
 \references{
 Modified from Deal Attali's code: \url{http://deanattali.com/2015/04/21/r-package-shiny-app/}
 }
-

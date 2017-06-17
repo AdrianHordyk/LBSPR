@@ -33,9 +33,11 @@ LBSPRopt <- function(trypars, yr=1, LB_pars=NULL, LB_lengths=NULL,  Control=list
 
   ldat <- LB_lengths@LData[,yr] + 1E-15 # add tiny constant for zero catches
   LenProb <- ldat/sum(ldat)
-  predProb <- runMod@pLCatch
-  predProb <- predProb + 1E-15 # add tiny constant for zero catches
+  # print(runMod@pLCatch)
+
+  predProb <- runMod@pLCatch + 1E-15 # add tiny constant for zero catches
   NLL <- -sum(ldat * log(predProb/LenProb))
+
   # add penalty for SL50
   trySL50 <- exp(trypars[1])
   PenVal <- NLL
@@ -43,6 +45,8 @@ LBSPRopt <- function(trypars, yr=1, LB_pars=NULL, LB_lengths=NULL,  Control=list
   if(!is.finite(NLL)) return(1E9 + runif(1, 1E4, 1E5))
   if (Pen == 0) Pen <- PenVal * trySL50
   if (!pen) Pen <- 0
+
   NLL <- NLL+Pen
+
   NLL
 }
