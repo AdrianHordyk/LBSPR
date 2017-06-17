@@ -20,7 +20,7 @@ devtools::install_github("adrianhordyk/LBSPR")
 ```
 
 ## LBSPR Documentation
-Documentation for the LBSPR package can be found [here](http://adrianhordyk.com/LBSPR/).
+Documentation for the LBSPR package can be found [here](http://adrianhordyk.github.io/LBSPR).
 
 ## Shiny Applications
 Many of the functions in the LBSPR package are available as online applications at http://barefootecologist.com.au/
