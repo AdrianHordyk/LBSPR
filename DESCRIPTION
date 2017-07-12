@@ -13,7 +13,6 @@ Depends:
 License: GPL-3
 LazyData: true
 Imports:
-  colorspace,
   dplyr,  
   ggplot2,
   graphics,
@@ -22,12 +21,13 @@ Imports:
   plotrix,
   Rcpp,
   RColorBrewer,
-  scales,
   shiny,
-  shinyBS,
   tidyr
 RoxygenNote: 6.0.1
 LinkingTo: Rcpp
-Suggests: knitr,
-    rmarkdown
+Suggests: colorspace,
+  knitr,
+  scales,
+  shinyBS,
+  rmarkdown
 VignetteBuilder: knitr

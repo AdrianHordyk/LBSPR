@@ -244,8 +244,8 @@ LBSPRsim_ <- function(LB_pars=NULL, Control=list(), verbose=TRUE, doCheck=TRUE) 
 
     Yield <- YPR * RelRec
 
-	  # Spawning Stock Biomass
-	  SSB <- sum(NatLF  * RelRec * Weight * MatLengtg)
+	# Spawning Stock Biomass
+	SSB <- sum(NatLF  * RelRec * Weight * MatLengtg)
 
     # Calc Unfished Fitness - not used here
     Fit <- apply(FecGTG, 2, sum, na.rm=TRUE) # Total Fecundity per Group

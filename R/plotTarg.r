@@ -6,6 +6,7 @@
 #' @param LB_lengths an object of class \code{'LB_lengths'} that contains the observed size data
 #' @param yr index for sampled length data (defaults to 1)
 #' @param Cols optional character vector of colours for the plot
+#' @param targtext logical - should the SPR target text be displayed?
 #' @param size.axtex size of the axis text
 #' @param size.title size of axis title
 #' @return a ggplot object
@@ -13,7 +14,8 @@
 #' @importFrom ggplot2 ggplot aes geom_line geom_bar scale_color_manual guides guide_legend xlab ylab theme theme_bw element_text scale_fill_manual scale_fill_discrete ggtitle scale_alpha_manual annotate
 #' @importFrom stats optimize quantile
 #' @export
-plotTarg <- function(LB_pars=NULL, LB_lengths=NULL, yr=1, Cols=NULL, size.axtex=12, size.title=14) {
+plotTarg <- function(LB_pars=NULL, LB_lengths=NULL, yr=1, Cols=NULL, targtext=TRUE,
+                     size.axtex=12, size.title=14) {
   if (class(LB_pars) != "LB_pars") stop("LB_pars must be of class 'LB_pars' Use: new('LB_lengths')", call. = FALSE)
   if (class(LB_lengths) != "LB_lengths") stop("LB_lengths must be of class 'LB_lengths'. Use: new('LB_lengths')", call. = FALSE)
 
@@ -38,7 +40,7 @@ plotTarg <- function(LB_pars=NULL, LB_lengths=NULL, yr=1, Cols=NULL, size.axtex=
 	sum((((PredCatch[1:ind] * Scale) -  Sample[1:ind]) * wght)^2)
   }
 
-  Scale <- optimize(ScaleCatch, interval=c(1, 5000), Sample=pLSample, PredCatch=pLCatch)$minimum
+  Scale <- optimize(ScaleCatch, interval=c(1, 1E10), Sample=pLSample, PredCatch=pLCatch)$minimum
 
   pLCatch <- pLCatch * Scale
 
@@ -49,7 +51,7 @@ plotTarg <- function(LB_pars=NULL, LB_lengths=NULL, yr=1, Cols=NULL, size.axtex=
   longDat$alphayr <- c(rep(1, length(pLCatch)), rep(0.6, length(pLCatch)))
 
   SPRtarg <- LB_pars@SPR
-  if (SPRtarg < 1) SPRtarg <- SPRtarg * 100
+  if (SPRtarg <= 1) SPRtarg <- SPRtarg * 100
 
   targ <- paste0("SPR Target: ", SPRtarg, "%")
   x <- quantile(LMids, 0.8)
@@ -66,11 +68,11 @@ plotTarg <- function(LB_pars=NULL, LB_lengths=NULL, yr=1, Cols=NULL, size.axtex=
 	scale_alpha_manual(values = c("0.6"=0.6, "1"=1), guide='none') +
 	theme_bw() +
 	theme(axis.text=element_text(size=size.axtex),
-        axis.title=element_text(size=size.title,face="bold"))	
+        axis.title=element_text(size=size.title,face="bold"))
   if (all(is.null(Cols))) Plot <- Plot + scale_fill_discrete(Title, labels = Leg)
   if (!all(is.null(Cols))) Plot <- Plot + scale_fill_manual(Title, labels = Leg,
     values=Cols)
-  Plot <- Plot + annotate("text", x=x, y=y, label=targ)
+  if (targtext) Plot <- Plot + annotate("text", x=x, y=y, label=targ)
 
   Plot
 }
