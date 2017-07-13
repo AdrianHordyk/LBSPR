@@ -5,7 +5,8 @@
 \title{Plot sampled length structure against target simulated size composition}
 \usage{
 plotTarg(LB_pars = NULL, LB_lengths = NULL, yr = 1, Cols = NULL,
-  size.axtex = 12, size.title = 14)
+  title = NULL, targtext = TRUE, size.axtex = 12, size.title = 14,
+  scales = c("fixed", "free_x", "free_y", "free"))
 }
 \arguments{
 \item{LB_pars}{an object of class \code{'LB_pars'} that contains the life history and fishing information}
@@ -16,9 +17,17 @@ plotTarg(LB_pars = NULL, LB_lengths = NULL, yr = 1, Cols = NULL,
 
 \item{Cols}{optional character vector of colours for the plot}
 
+\item{title}{character - optional title for plot}
+
+\item{targtext}{logical - should the SPR target text be displayed as a subtitle?}
+
 \item{size.axtex}{size of the axis text}
 
 \item{size.title}{size of axis title}
+
+\item{scales}{argument to ggplot2 function. Are scales shared across all facets
+(the default, "fixed"), or do they vary across rows ("free_x"), columns ("free_y"),
+or both rows and columns ("free")}
 }
 \value{
 a ggplot object

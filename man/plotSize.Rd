@@ -4,7 +4,8 @@
 \alias{plotSize}
 \title{Plot the size data and model fits}
 \usage{
-plotSize(LB_obj = NULL, size.axtex = 12, size.title = 14, Title = NULL)
+plotSize(LB_obj = NULL, size.axtex = 12, size.title = 14, Title = NULL,
+  scales = c("fixed", "free_x", "free_y", "free"))
 }
 \arguments{
 \item{LB_obj}{an object of class \code{'LB_obj'} that contains the life history and fishing information}
@@ -14,6 +15,10 @@ plotSize(LB_obj = NULL, size.axtex = 12, size.title = 14, Title = NULL)
 \item{size.title}{size of axis title}
 
 \item{Title}{optional character string for plot title}
+
+\item{scales}{argument to ggplot2 function. Are scales shared across all facets
+(the default, "fixed"), or do they vary across rows ("free_x"), columns ("free_y"),
+or both rows and columns ("free")}
 }
 \value{
 a ggplot object
