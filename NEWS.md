@@ -1,3 +1,9 @@
+# LBSPR 0.1.2
+## Minor Changes
+- add option to specify scales for axes in plotSize
+- modify plotTarg function and add features
+
+
 # LBSPR 0.1.1
 
 ## Minor Changes
