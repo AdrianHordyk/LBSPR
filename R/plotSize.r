@@ -6,7 +6,7 @@
 #' @param size.axtex size of the axis text
 #' @param size.title size of axis title
 #' @param Title optional character string for plot title
-#' @param sclae argument to ggplot2 function. Are scales shared across all facets
+#' @param scales argument to ggplot2 function. Are scales shared across all facets
 #' (the default, "fixed"), or do they vary across rows ("free_x"), columns ("free_y"),
 #' or both rows and columns ("free")
 #' @return a ggplot object
@@ -17,7 +17,7 @@
 plotSize <- function(LB_obj=NULL, size.axtex=12, size.title=14, Title=NULL,
                      scales=c("fixed", "free_x", "free_y")) {
   if (class(LB_obj) != "LB_obj" & class(LB_obj) != "LB_lengths") stop("Require LB_lengths or LB_obj object", call. = FALSE)
-
+  scales <- match.arg(scales)
   if (class(LB_obj@Years) != "numeric" & class(LB_obj@Years) != "integer") {
     warning("Years must be numeric values", call. = FALSE)
 	message("Attempting to convert to numeric values")

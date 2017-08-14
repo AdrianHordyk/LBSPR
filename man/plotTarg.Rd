@@ -5,7 +5,7 @@
 \title{Plot sampled length structure against target simulated size composition}
 \usage{
 plotTarg(LB_pars = NULL, LB_lengths = NULL, yr = 1, Cols = NULL,
-  size.axtex = 12, size.title = 14)
+  targtext = TRUE, size.axtex = 12, size.title = 14)
 }
 \arguments{
 \item{LB_pars}{an object of class \code{'LB_pars'} that contains the life history and fishing information}
@@ -15,6 +15,8 @@ plotTarg(LB_pars = NULL, LB_lengths = NULL, yr = 1, Cols = NULL,
 \item{yr}{index for sampled length data (defaults to 1)}
 
 \item{Cols}{optional character vector of colours for the plot}
+
+\item{targtext}{logical - should the SPR target text be displayed?}
 
 \item{size.axtex}{size of the axis text}
 
