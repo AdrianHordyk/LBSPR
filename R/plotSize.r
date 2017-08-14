@@ -15,7 +15,9 @@
 #' @importFrom ggplot2 facet_wrap geom_text
 #' @export
 plotSize <- function(LB_obj=NULL, size.axtex=12, size.title=14, Title=NULL,
-                     scales=c("fixed", "free_x", "free_y")) {
+                     scales=c("fixed", "free_x", "free_y", "free")) {
+
+  scales <- match.arg(scales)
   if (class(LB_obj) != "LB_obj" & class(LB_obj) != "LB_lengths") stop("Require LB_lengths or LB_obj object", call. = FALSE)
   scales <- match.arg(scales)
   if (class(LB_obj@Years) != "numeric" & class(LB_obj@Years) != "integer") {
