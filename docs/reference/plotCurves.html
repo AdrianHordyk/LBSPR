@@ -25,12 +25,14 @@
 <script src="../pkgdown.js"></script>
 
 <!-- mathjax -->
-<script src='https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
+<script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
 <!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]-->
+
+
   </head>
 
   <body>
@@ -84,29 +86,46 @@
     <p>A function that plots the Relative Yield, YPR, SPR, SSB, and Recruitment curves</p>
     
 
-    <pre><span class='fu'>plotCurves</span>(<span class='no'>LB_obj</span>, <span class='kw'>X</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"FM"</span>, <span class='st'>"SSB"</span>, <span class='st'>"SPR"</span>), <span class='kw'>Y</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"SPR"</span>, <span class='st'>"SSB"</span>, <span class='st'>"Yield"</span>),
+    <pre class="usage"><span class='fu'>plotCurves</span>(<span class='no'>LB_obj</span>, <span class='kw'>X</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"FM"</span>, <span class='st'>"SSB"</span>, <span class='st'>"SPR"</span>), <span class='kw'>Y</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"SPR"</span>, <span class='st'>"SSB"</span>, <span class='st'>"Yield"</span>),
   <span class='kw'>size.axtex</span> <span class='kw'>=</span> <span class='fl'>12</span>, <span class='kw'>size.title</span> <span class='kw'>=</span> <span class='fl'>14</span>, <span class='kw'>size.leg</span> <span class='kw'>=</span> <span class='fl'>12</span>, <span class='kw'>size.pt</span> <span class='kw'>=</span> <span class='fl'>4</span>,
   <span class='kw'>inc.pts</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
-    <dl class="dl-horizontal">
-      <dt>LB_obj</dt>
-      <dd>An object of class <code>&#39;LB_obj&#39;</code> that contains the life history and fishing information</dd>
-      <dt>X</dt>
-      <dd>a character value indicating what to plot on the x-axis: F/M (<code>&quot;FM&quot;</code>) or SSB (<code>&quot;SSB&quot;</code>)</dd>
-      <dt>Y</dt>
-      <dd>a character value indicating what to plot on the y-axis: <code>SPR</code>, <code>SSB</code>, <code>Yield</code>, <code>YPR</code> or <code>Rec</code>(multiple okay)</dd>
-      <dt>size.axtex</dt>
-      <dd>size of the axis text</dd>
-      <dt>size.title</dt>
-      <dd>size of axis title</dd>
-      <dt>size.leg</dt>
-      <dd>size of legend text</dd>
-      <dt>size.pt</dt>
-      <dd>size of the points on the plots</dd>
-      <dt>inc.pts</dt>
-      <dd>Include points on the plots?</dd>
-    </dl>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>LB_obj</th>
+      <td><p>An object of class <code>'LB_obj'</code> that contains the life history and fishing information</p></td>
+    </tr>
+    <tr>
+      <th>X</th>
+      <td><p>a character value indicating what to plot on the x-axis: F/M (<code>"FM"</code>) or SSB (<code>"SSB"</code>)</p></td>
+    </tr>
+    <tr>
+      <th>Y</th>
+      <td><p>a character value indicating what to plot on the y-axis: <code>SPR</code>, <code>SSB</code>, <code>Yield</code>, <code>YPR</code> or <code>Rec</code>(multiple okay)</p></td>
+    </tr>
+    <tr>
+      <th>size.axtex</th>
+      <td><p>size of the axis text</p></td>
+    </tr>
+    <tr>
+      <th>size.title</th>
+      <td><p>size of axis title</p></td>
+    </tr>
+    <tr>
+      <th>size.leg</th>
+      <td><p>size of legend text</p></td>
+    </tr>
+    <tr>
+      <th>size.pt</th>
+      <td><p>size of the points on the plots</p></td>
+    </tr>
+    <tr>
+      <th>inc.pts</th>
+      <td><p>Include points on the plots?</p></td>
+    </tr>
+    </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 

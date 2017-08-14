@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Optimisation Routine for fitting LBSPR — LBSPRopt â€¢ LBSPR</title>
+<title>LBSPR Optimization function for age-based selectivity model — LBSPR_NLLabsel â€¢ LBSPR</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -79,59 +79,84 @@
       <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Optimisation Routine for fitting LBSPR</h1>
+    <h1>LBSPR Optimization function for age-based selectivity model</h1>
     </div>
 
     
-    <p>A function that calculate the negative log-likelihood of the LBSPR model</p>
+    <p>Internal optimization function</p>
     
 
-    <pre class="usage"><span class='fu'>LBSPRopt</span>(<span class='no'>trypars</span>, <span class='kw'>yr</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>LB_pars</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>LB_lengths</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>Control</span> <span class='kw'>=</span> <span class='fu'>list</span>(), <span class='kw'>pen</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
+    <pre class="usage"><span class='fu'>LBSPR_NLLabsel</span>(<span class='no'>starts</span>, <span class='no'>x</span>, <span class='no'>P</span>, <span class='no'>LMids</span>, <span class='no'>LBins</span>, <span class='no'>LDat</span>, <span class='no'>MK</span>, <span class='no'>Linf</span>, <span class='no'>FecB</span>, <span class='no'>L50</span>, <span class='no'>L95</span>,
+  <span class='no'>maxsd</span>, <span class='no'>CVLinf</span>, <span class='no'>Nage</span>, <span class='no'>usePen</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>trypars</th>
-      <td><p>a vector of exploitation parameters in log space</p></td>
+      <th>starts</th>
+      <td><p>a vector of starting parameters, relative SL50 (SL50/Linf), deltaSL (SL95-SL50)/Linf, and F/M (in log space)</p></td>
     </tr>
     <tr>
-      <th>yr</th>
-      <td><p>index of the year column to fit the model to</p></td>
+      <th>x</th>
+      <td><p>vector of relative ages</p></td>
     </tr>
     <tr>
-      <th>LB_pars</th>
-      <td><p>an object of class <code>'LB_pars'</code> that contains the life history information</p></td>
+      <th>P</th>
+      <td><p>numeric value indicating proportion of cohort remaining at maximum age</p></td>
     </tr>
     <tr>
-      <th>LB_lengths</th>
-      <td><p>an object of class <code>'LB_lengths'</code> that contains the length data</p></td>
+      <th>LMids</th>
+      <td><p>a vector of the midpoints of the length classes</p></td>
     </tr>
     <tr>
-      <th>Control</th>
-      <td><p>a list of control options for the LBSPR model.</p></td>
+      <th>LBins</th>
+      <td><p>a vector of length classes</p></td>
     </tr>
     <tr>
-      <th>pen</th>
-      <td><p>apply a penalty if estimate of selectivity is very high?</p></td>
+      <th>LDat</th>
+      <td><p>a vector of lenght frequencies. Must be same length as LMids</p></td>
+    </tr>
+    <tr>
+      <th>MK</th>
+      <td><p>the M/K value</p></td>
+    </tr>
+    <tr>
+      <th>Linf</th>
+      <td><p>the Linf value for the population as a hole</p></td>
+    </tr>
+    <tr>
+      <th>FecB</th>
+      <td><p>exponent of the length-fecundity relationship</p></td>
+    </tr>
+    <tr>
+      <th>L50</th>
+      <td><p>length at 50 per cent maturity</p></td>
+    </tr>
+    <tr>
+      <th>L95</th>
+      <td><p>length at 95 per cent maturity</p></td>
+    </tr>
+    <tr>
+      <th>maxsd</th>
+      <td><p>numeric value - maximum number of standard deviations of length-at-age dist</p></td>
+    </tr>
+    <tr>
+      <th>CVLinf</th>
+      <td><p>CV of length-at-age</p></td>
+    </tr>
+    <tr>
+      <th>Nage</th>
+      <td><p>number of pseudo age-classes</p></td>
+    </tr>
+    <tr>
+      <th>usePen</th>
+      <td><p>logical to use penalty for extreme estimates of selectivity</p></td>
     </tr>
     </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>a NLL value</p>
-    
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>The Control options are:</p><dl class='dl-horizontal'>
- <dt><code>modtype</code></dt><dd><p>Model Type: either Growth-Type-Group Model (default: "GTG") or Age-Structured ("absel")</p></dd>
- <dt><code>maxsd</code></dt><dd><p>Maximum number of standard deviations for length-at-age distribution (default is 2)</p></dd>
- <dt><code>ngtg</code></dt><dd><p>Number of groups for the GTG model. Default is 13</p></dd>
- <dt><code>P</code></dt><dd><p>Proportion of survival of initial cohort for maximum age for Age-Structured model. Default is 0.01</p></dd>
- <dt><code>Nage</code></dt><dd><p>Number of pseudo-age classes in the Age Structured model. Default is 101</p></dd>
- <dt><code>maxFM</code></dt><dd><p>Maximum value for F/M. Estimated values higher than this are trunctated to <code>maxFM</code>. Default is 4</p></dd>
-</dl>
+    <p>negative log-likelihood value</p>
     
 
   </div>
@@ -141,8 +166,6 @@
       <li><a href="#arguments">Arguments</a></li>
       
       <li><a href="#value">Value</a></li>
-
-      <li><a href="#details">Details</a></li>
           </ul>
 
     <h2>Author</h2>

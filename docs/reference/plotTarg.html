@@ -25,12 +25,14 @@
 <script src="../pkgdown.js"></script>
 
 <!-- mathjax -->
-<script src='https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
+<script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
 <!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]-->
+
+
   </head>
 
   <body>
@@ -84,24 +86,52 @@
     <p>A function that plots the observed size structure against the expected size composition at the target SPR</p>
     
 
-    <pre><span class='fu'>plotTarg</span>(<span class='kw'>LB_pars</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>LB_lengths</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>yr</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>Cols</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>size.axtex</span> <span class='kw'>=</span> <span class='fl'>12</span>, <span class='kw'>size.title</span> <span class='kw'>=</span> <span class='fl'>14</span>)</pre>
+    <pre class="usage"><span class='fu'>plotTarg</span>(<span class='kw'>LB_pars</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>LB_lengths</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>yr</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>Cols</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>title</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>targtext</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>size.axtex</span> <span class='kw'>=</span> <span class='fl'>12</span>, <span class='kw'>size.title</span> <span class='kw'>=</span> <span class='fl'>14</span>,
+  <span class='kw'>scales</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"fixed"</span>, <span class='st'>"free_x"</span>, <span class='st'>"free_y"</span>, <span class='st'>"free"</span>))</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
-    <dl class="dl-horizontal">
-      <dt>LB_pars</dt>
-      <dd>an object of class <code>&#39;LB_pars&#39;</code> that contains the life history and fishing information</dd>
-      <dt>LB_lengths</dt>
-      <dd>an object of class <code>&#39;LB_lengths&#39;</code> that contains the observed size data</dd>
-      <dt>yr</dt>
-      <dd>index for sampled length data (defaults to 1)</dd>
-      <dt>Cols</dt>
-      <dd>optional character vector of colours for the plot</dd>
-      <dt>size.axtex</dt>
-      <dd>size of the axis text</dd>
-      <dt>size.title</dt>
-      <dd>size of axis title</dd>
-    </dl>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>LB_pars</th>
+      <td><p>an object of class <code>'LB_pars'</code> that contains the life history and fishing information</p></td>
+    </tr>
+    <tr>
+      <th>LB_lengths</th>
+      <td><p>an object of class <code>'LB_lengths'</code> that contains the observed size data</p></td>
+    </tr>
+    <tr>
+      <th>yr</th>
+      <td><p>index for sampled length data (defaults to 1)</p></td>
+    </tr>
+    <tr>
+      <th>Cols</th>
+      <td><p>optional character vector of colours for the plot</p></td>
+    </tr>
+    <tr>
+      <th>title</th>
+      <td><p>character - optional title for plot</p></td>
+    </tr>
+    <tr>
+      <th>targtext</th>
+      <td><p>logical - should the SPR target text be displayed as a subtitle?</p></td>
+    </tr>
+    <tr>
+      <th>size.axtex</th>
+      <td><p>size of the axis text</p></td>
+    </tr>
+    <tr>
+      <th>size.title</th>
+      <td><p>size of axis title</p></td>
+    </tr>
+    <tr>
+      <th>scales</th>
+      <td><p>argument to ggplot2 function. Are scales shared across all facets
+(the default, "fixed"), or do they vary across rows ("free_x"), columns ("free_y"),
+or both rows and columns ("free")</p></td>
+    </tr>
+    </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 

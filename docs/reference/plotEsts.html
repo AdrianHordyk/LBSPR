@@ -25,12 +25,14 @@
 <script src="../pkgdown.js"></script>
 
 <!-- mathjax -->
-<script src='https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
+<script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
 <!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]-->
+
+
   </head>
 
   <body>
@@ -84,33 +86,54 @@
     <p>A function that plots the estimates of the LBSPR with a smoother line</p>
     
 
-    <pre><span class='fu'>plotEsts</span>(<span class='kw'>LB_obj</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>pars</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"Sel"</span>, <span class='st'>"FM"</span>, <span class='st'>"SPR"</span>), <span class='kw'>Lwd</span> <span class='kw'>=</span> <span class='fl'>2.5</span>,
+    <pre class="usage"><span class='fu'>plotEsts</span>(<span class='kw'>LB_obj</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>pars</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"Sel"</span>, <span class='st'>"FM"</span>, <span class='st'>"SPR"</span>), <span class='kw'>Lwd</span> <span class='kw'>=</span> <span class='fl'>2.5</span>,
   <span class='kw'>ptCex</span> <span class='kw'>=</span> <span class='fl'>1.25</span>, <span class='kw'>axCex</span> <span class='kw'>=</span> <span class='fl'>1.45</span>, <span class='kw'>labCex</span> <span class='kw'>=</span> <span class='fl'>1.55</span>, <span class='kw'>doSmooth</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
   <span class='kw'>incL50</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>CIcol</span> <span class='kw'>=</span> <span class='st'>"darkgray"</span>, <span class='kw'>L50col</span> <span class='kw'>=</span> <span class='st'>"gray"</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
-    <dl class="dl-horizontal">
-      <dt>LB_obj</dt>
-      <dd>an object of class <code>&#39;LB_obj&#39;</code> that contains the life history and fishing information</dd>
-      <dt>pars</dt>
-      <dd>a character vectors specifying which plots to create</dd>
-      <dt>Lwd</dt>
-      <dd>line width</dd>
-      <dt>ptCex</dt>
-      <dd>size of plotted points</dd>
-      <dt>axCex</dt>
-      <dd>size of the axis</dd>
-      <dt>labCex</dt>
-      <dd>size of axis label</dd>
-      <dt>doSmooth</dt>
-      <dd>apply the smoother?</dd>
-      <dt>incL50</dt>
-      <dd>include L50 line?</dd>
-      <dt>CIcol</dt>
-      <dd>colour of the confidence interval bars</dd>
-      <dt>L50col</dt>
-      <dd>colour of L50 line (if included)</dd>
-    </dl>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>LB_obj</th>
+      <td><p>an object of class <code>'LB_obj'</code> that contains the life history and fishing information</p></td>
+    </tr>
+    <tr>
+      <th>pars</th>
+      <td><p>a character vectors specifying which plots to create</p></td>
+    </tr>
+    <tr>
+      <th>Lwd</th>
+      <td><p>line width</p></td>
+    </tr>
+    <tr>
+      <th>ptCex</th>
+      <td><p>size of plotted points</p></td>
+    </tr>
+    <tr>
+      <th>axCex</th>
+      <td><p>size of the axis</p></td>
+    </tr>
+    <tr>
+      <th>labCex</th>
+      <td><p>size of axis label</p></td>
+    </tr>
+    <tr>
+      <th>doSmooth</th>
+      <td><p>apply the smoother?</p></td>
+    </tr>
+    <tr>
+      <th>incL50</th>
+      <td><p>include L50 line?</p></td>
+    </tr>
+    <tr>
+      <th>CIcol</th>
+      <td><p>colour of the confidence interval bars</p></td>
+    </tr>
+    <tr>
+      <th>L50col</th>
+      <td><p>colour of L50 line (if included)</p></td>
+    </tr>
+    </table>
     
 
   </div>

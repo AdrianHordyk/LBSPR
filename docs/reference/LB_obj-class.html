@@ -25,12 +25,14 @@
 <script src="../pkgdown.js"></script>
 
 <!-- mathjax -->
-<script src='https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
+<script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
 <!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]-->
+
+
   </head>
 
   <body>
@@ -87,22 +89,25 @@
         
     <h2 class="hasAnchor" id="slots"><a class="anchor" href="#slots"></a>Slots</h2>
 
-    <p></p>
-    <p><dl class='dl-horizontal'>
-<dt><code>SPR</code></dt><dd>The Spawning Potential Ratio</dd></p>
-    <p><dt><code>Yield</code></dt><dd>Relative yield</dd></p>
-    <p><dt><code>YPR</code></dt><dd>Yield per recruit</dd></p>
-    <p><dt><code>SSB</code></dt><dd>Spawning stock biomass (relative only)</dd></p>
-    <p><dt><code>LMids</code></dt><dd>A numeric vector containing the mid-points of the length bins</dd></p>
-    <p><dt><code>pLCatch</code></dt><dd>A numeric vector containg expected proportion for each length class in the catch</dd></p>
-    <p><dt><code>pLPop</code></dt><dd>A numeric vector containg expected proportion for each length class in the population</dd></p>
-    <p><dt><code>RelRec</code></dt><dd>Relative recruitment</dd></p>
-    <p><dt><code>Ests</code></dt><dd>A matrix of estimated values</dd></p>
-    <p><dt><code>Vars</code></dt><dd>A vector of estimated variance for SL50, SL95, F/M and SPR</dd></p>
-    <p><dt><code>NLL</code></dt><dd>A numeric NLL values</dd></p>
-    <p><dt><code>maxFM</code></dt><dd>A numeric of maximum estimated F/M value (note this is apical F)</dd></p>
-    <p><dt><code>fitLog</code></dt><dd>A vector of error logs for each fit. 0 means everything is okay.</dd>
-</dl></p>
+    
+    <dl class='dl-horizontal'>
+<dt><code>SPR</code></dt><dd><p>The Spawning Potential Ratio</p></dd>
+    <dt><code>Yield</code></dt><dd><p>Relative yield</p></dd>
+    <dt><code>YPR</code></dt><dd><p>Yield per recruit</p></dd>
+    <dt><code>SSB</code></dt><dd><p>Spawning stock biomass (relative only)</p></dd>
+    <dt><code>SSB0</code></dt><dd><p>Unfished spawning stock biomass</p></dd>
+    <dt><code>B0</code></dt><dd><p>Unfished biomass</p></dd>
+    <dt><code>LMids</code></dt><dd><p>A numeric vector containing the mid-points of the length bins</p></dd>
+    <dt><code>pLCatch</code></dt><dd><p>A numeric vector containg expected proportion for each length class in the catch</p></dd>
+    <dt><code>pLPop</code></dt><dd><p>A numeric vector containg expected proportion for each length class in the population</p></dd>
+    <dt><code>RelRec</code></dt><dd><p>Relative recruitment</p></dd>
+    <dt><code>Ests</code></dt><dd><p>A matrix of estimated values</p></dd>
+    <dt><code>Vars</code></dt><dd><p>A vector of estimated variance for SL50, SL95, F/M and SPR</p></dd>
+    <dt><code>NLL</code></dt><dd><p>A numeric NLL values</p></dd>
+    <dt><code>maxFM</code></dt><dd><p>A numeric of maximum estimated F/M value (note this is apical F)</p></dd>
+    <dt><code>SPRatsize</code></dt><dd><p>A vector of cumulative SPR at length (currently only works for GTG model)</p></dd>
+    <dt><code>fitLog</code></dt><dd><p>A vector of error logs for each fit. 0 means everything is okay.</p></dd>
+</dl>
     
 
   </div>
