@@ -1,6 +1,6 @@
 #' General plotting function for simulated data
 #'
-#' A general function that plots the simulation object. Includes four different plots: 
+#' A general function that plots the simulation object. Includes four different plots:
 #' equilbrium size structure, maturity and selectivity curves, growth curves, and relative Yield, YPR, SPR, SSB, and Recruitment curves.
 #'
 #' @param LB_obj an object of class \code{'LB_obj'} that contains the life history and fishing information
@@ -53,12 +53,12 @@ plotSim <- function(LB_obj=NULL, type=c("all", "len.freq", "growth", "maturity.s
   if (lf.type == "catch") {
     ind <- match(round(LMids,2), round(PopSizeDat[,1],2))
     Dat <- data.frame(LMids=LMids, VulnUF=PopSizeDat[ind, "VulnUF"], pLCatch=pLCatch)
-	  longDat <- gather(Dat, "PopType", "PLength", 2:ncol(Dat))
+	  longDat <- gather(Dat, "PopType", "PLength", !! 2:ncol(Dat))
 	  Title <- "Catch"
 	  Leg <- c("Fished", "Unfished")
   }
   if (lf.type == "pop") {
-    longDat <- gather(PopSizeDat, "PopType", "PLength", 2:ncol(PopSizeDat))
+    longDat <- gather(PopSizeDat, "PopType", "PLength", !! 2:ncol(PopSizeDat))
     longDat <- dplyr::filter(longDat, PopType == "PopUF" | PopType == "PopF")
 	  Title <- "Population"
 	  Leg <- c("Fished", "Unfished")
@@ -74,7 +74,7 @@ plotSim <- function(LB_obj=NULL, type=c("all", "len.freq", "growth", "maturity.s
     ylab("Relative Number") +
 	theme_bw() +
 	theme(axis.text=element_text(size=size.axtex),
-        axis.title=element_text(size=size.title,face="bold"), 
+        axis.title=element_text(size=size.title,face="bold"),
 		legend.position="top", legend.text=element_text(size=size.leg),
 		legend.title=element_text(size=size.leg))
  if (all(is.null(Cols))) LF.Plot <- LF.Plot + scale_fill_discrete(Title, labels = Leg)
@@ -86,9 +86,9 @@ plotSim <- function(LB_obj=NULL, type=c("all", "len.freq", "growth", "maturity.s
 
 
  # Maturity & Selectivity
- MatSel.Plot <- plotMat(LB_obj, size.axtex=size.axtex, size.title=size.title, 
+ MatSel.Plot <- plotMat(LB_obj, size.axtex=size.axtex, size.title=size.title,
    size.leg=size.leg, useSmooth=TRUE, Title=NULL)
- 
+
  Age <- Length <- Weight <- Y <- Reference <- FM <- Value <- Type  <- NULL # hack to get past CRAN check
  # Length at Age
  P <- 0.01
@@ -127,18 +127,18 @@ plotSim <- function(LB_obj=NULL, type=c("all", "len.freq", "growth", "maturity.s
    theme_bw() +
    guides(color=guide_legend(title="")) +
    theme(axis.text=element_text(size=size.axtex),
-        axis.title=element_text(size=size.title,face="bold"), 
+        axis.title=element_text(size=size.title,face="bold"),
 		legend.position="top", legend.text=element_text(size=size.leg)) +
    xlab(XLab) + ylab(YLab)
-  if (inc.pts) LaA.Plot1 <-  LaA.Plot1 +  geom_point(data=matdat, aes(x=X, y=Y, colour=Reference), size=size.pt) 
+  if (inc.pts) LaA.Plot1 <-  LaA.Plot1 +  geom_point(data=matdat, aes(x=X, y=Y, colour=Reference), size=size.pt)
  WaA.Plot1 <- ggplot(lendat2, aes(x=Age, y=Weight)) + geom_line(size=1.5) +
    theme_bw() +
    guides(color=guide_legend(title="")) +
    theme(axis.text=element_text(size=size.axtex),
-        axis.title=element_text(size=size.title,face="bold"), legend.position="top", 
+        axis.title=element_text(size=size.title,face="bold"), legend.position="top",
 		legend.text=element_text(size=size.leg)) +
    xlab(XLab) + ylab(YLab)
-  if (inc.pts) WaA.Plot1 <- WaA.Plot1 +  geom_point(data=matdat2, aes(x=X, y=Y, colour=Reference), size=size.pt) 
+  if (inc.pts) WaA.Plot1 <- WaA.Plot1 +  geom_point(data=matdat2, aes(x=X, y=Y, colour=Reference), size=size.pt)
   if (growth.type=="LAA") LaA.Plot <- LaA.Plot1
   if (growth.type=="WAA") LaA.Plot <- WaA.Plot1
 
@@ -146,12 +146,12 @@ plotSim <- function(LB_obj=NULL, type=c("all", "len.freq", "growth", "maturity.s
  if ("yield.curve" %in% type | "all" %in% type) {
    if ("Yield" %in% y.type & perRec) y.type <- y.type[!y.type == "Yield"]
    if ("YPR" %in% y.type & !perRec) y.type <- y.type[!y.type == "YPR"]
-   Yield.Plot <- plotCurves(LB_obj, X=x.type, 
-     Y=y.type, size.axtex=size.axtex, size.title=size.title, 
+   Yield.Plot <- plotCurves(LB_obj, X=x.type,
+     Y=y.type, size.axtex=size.axtex, size.title=size.title,
      size.pt=size.pt, inc.pts=inc.pts, size.leg=size.leg)
  }
 
- 
+
  L <- list()
  if ("all" %in% type) {
    L[[1]] <- LF.Plot

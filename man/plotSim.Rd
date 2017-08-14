@@ -46,7 +46,7 @@ plotSim(LB_obj = NULL, type = c("all", "len.freq", "growth",
 a ggplot object
 }
 \description{
-A general function that plots the simulation object. Includes four different plots: 
+A general function that plots the simulation object. Includes four different plots:
 equilbrium size structure, maturity and selectivity curves, growth curves, and relative Yield, YPR, SPR, SSB, and Recruitment curves.
 }
 \author{

@@ -62,7 +62,7 @@ plotTarg <- function(LB_pars=NULL, LB_lengths=NULL, yr=1, Cols=NULL, title=NULL,
   }
 
   Dat <- data.frame(LMids=LMids, pLCatch=pLCatch, Sample=pLSample)
-  longDat <- tidyr::gather(Dat, "PopType", "PLength", 2:ncol(Dat))
+  longDat <- tidyr::gather(Dat, "PopType", "PLength", !! 2:ncol(Dat))
 
 
   longDat[grepl("pLCatch",longDat[,2]),2] <- "pLCatch"
