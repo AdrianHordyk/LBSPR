@@ -41,6 +41,13 @@ The Control options are:
  \item{\code{maxFM}}{Maximum value for F/M. Estimated values higher than this are trunctated to \code{maxFM}. Default is 4}
 }
 }
+\examples{
+\dontrun{
+MyFit <- LBSPRfit(LBparameters, LBlengths)
+MyFit@Ests
+}
+
+}
 \author{
 A. Hordyk
 }

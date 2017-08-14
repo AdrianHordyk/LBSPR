@@ -21,6 +21,11 @@
 #' }
 #' @return a object of class \code{'LB_obj'}
 #' @author A. Hordyk
+#' @examples
+#' \dontrun{
+#' MyFit <- LBSPRfit(LBparameters, LBlengths)
+#' MyFit@Ests
+#' }
 #'
 #' @importFrom utils flush.console
 #' @importFrom methods new slot slot<- slotNames validObject

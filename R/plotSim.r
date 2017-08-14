@@ -20,6 +20,18 @@
 #' @param size.pt size of the points on the plots
 #' @return a ggplot object
 #' @author A. Hordyk
+#' @examples
+#'  LB_pars <- new("LB_pars")
+#'  LB_pars@MK <- 1.5
+#'  LB_pars@Linf <- 100
+#'  LB_pars@L50 <- 50
+#'  LB_pars@L95 <- 55
+#'  LB_pars@SL50 <- 60
+#'  LB_pars@SL95 <- 65
+#'  LB_pars@FM <- 1
+#'  Sim <- LBSPRsim(LB_pars)
+#'  plotSim(Sim)
+#'
 #' @importFrom ggplot2 ggplot aes geom_line geom_point geom_bar scale_color_manual guides guide_legend xlab ylab theme theme_bw element_text scale_fill_manual scale_fill_discrete ggtitle
 #' @importFrom gridExtra arrangeGrob
 #' @export
