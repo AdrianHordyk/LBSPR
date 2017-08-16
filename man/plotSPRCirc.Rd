@@ -6,7 +6,7 @@
 \usage{
 plotSPRCirc(LB_obj = NULL, SPRTarg = 0.4, SPRLim = 0.2,
   useSmooth = TRUE, Title = FALSE, Leg = TRUE, limcol = "#ff1919",
-  targcol = "#ffb732", abtgcol = "#32ff36", labcol = NULL,
+  targcol = "#f2ff02", abtgcol = "#32ff36", labcol = NULL,
   bgcol = "#FAFAFA", labcex = 2, texcex = 1.3)
 }
 \arguments{
@@ -24,7 +24,7 @@ plotSPRCirc(LB_obj = NULL, SPRTarg = 0.4, SPRLim = 0.2,
 
 \item{limcol}{colour for SPR Limit (hex; default is red)}
 
-\item{targcol}{colour for SPR target (hex; default is orange)}
+\item{targcol}{colour for SPR target (hex; default is yellow)}
 
 \item{abtgcol}{colour for above SPR target (hex; default is green)}
 

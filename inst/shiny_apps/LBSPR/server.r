@@ -1,3 +1,8 @@
+libs <- c("shiny", "shinyBS", "Hmisc", "xtable", 'colourpicker')
+
+chk <- !libs %in% installed.packages()
+inst <- lapply(libs[chk], install.packages)
+
 library(shiny)
 library(shinyBS)
 library(LBSPR)
@@ -167,12 +172,12 @@ shinyServer(function(input, output, clientData, session) {
 	  Lens <- getLB_lens()
 	  if (Linf > max(Lens@LMids)) {
         createAlert(session,  "linfalert3", "linf2", title = "Error",
-          content = HTML(paste0("Maximum length bin (", round(max(Lens@LMids),2), 
+          content = HTML(paste0("Maximum length bin (", round(max(Lens@LMids),2),
 		    ") must be greater than ", tags$i("L"), tags$sub(HTML("&infin;")))),
 		  append = FALSE)
       } else {
-	    closeAlert(session, "linf2")		
-	  }	
+	    closeAlert(session, "linf2")
+	  }
 	}
 	if (!is.na(MK) & (MK < 0.2 | MK > 6)) {
       createAlert(session,  "mkalert", "mk1", title = "Warning",
@@ -280,7 +285,7 @@ shinyServer(function(input, output, clientData, session) {
 	if (ind2) return(FALSE)
 	return(TRUE)
   })
-  
+
   chkText <- reactive({
   if(is.null(data())) return(FALSE)
 	if(chkFileUp() == FALSE) return(FALSE)
@@ -293,8 +298,8 @@ shinyServer(function(input, output, clientData, session) {
   UpLoadMSG <- reactive({
     msg1 <- msg2 <- msg3 <- msg4 <- msg5 <- msg6 <- NULL
     if(chkFileUp() == FALSE) msg1 <- "Please upload a CSV data file"
-	if(!chkSep())  msg6 <- "Check File Separator" 
-	if(chkFileUp() == TRUE & chkSep()) { 
+	if(!chkSep())  msg6 <- "Check File Separator"
+	if(chkFileUp() == TRUE & chkSep()) {
 	  if(chkFreq() & input$dataType == "raw") {
 	    msg2 <- "It looks like you've uploaded length frequencies? Please change Data Type"
 	  }
@@ -727,7 +732,7 @@ shinyServer(function(input, output, clientData, session) {
 	# Results <- round(ModelFit@Ests,2)
 	Results <- matrix(c(ModelFit@SL50, ModelFit@SL95, ModelFit@FM, ModelFit@SPR),
 	  ncol=4, byrow=FALSE)
-	
+
 	# 95% confidence intervals #
 	CIlower <- Results[,1:4] - 1.96 * sqrt(ModelFit@Vars)
     CIupper <- Results[,1:4] + 1.96 * sqrt(ModelFit@Vars)
@@ -740,19 +745,19 @@ shinyServer(function(input, output, clientData, session) {
     CIlower[CIlower[,3]<0,3] <- 0
     CIupper[CIupper[,4]>1,4] <- 1
     CIlower[CIlower[,4]<0,4] <- 0
-	
+
 	CIlower <- round(CIlower,2)
 	CIupper <- round(CIupper,2)
-	
+
 	#chk <- is.finite(CIlower)
-	#if (any(!chk)) CIlower[!chk] <- 0 
-	
+	#if (any(!chk)) CIlower[!chk] <- 0
+
 	DF <- data.frame(Years=ModelFit@Years,
   	  SPR=paste0(round(ModelFit@SPR, 2), " (", CIlower[,4], " - ", CIupper[,4], ")"),
 	  SL50=paste0(round(ModelFit@SL50, 2), " (", CIlower[,1], " - ", CIupper[,1], ")"),
 	  SL95=paste0(round(ModelFit@SL95, 2), " (", CIlower[,2], " - ", CIupper[,2], ")"),
 	  FM=paste0(round(ModelFit@FM, 2), " (", CIlower[,3], " - ", CIupper[,3], ")"))
-	
+
 	rownames(DF) <- 1:nrow(DF)# ModelFit@Years
 	names(DF) <- c('Years',
 	  # 'M/K',
@@ -839,29 +844,29 @@ shinyServer(function(input, output, clientData, session) {
   ### Plot SPR Circle ####
   output$SPRCircle <- renderPlot({
     if (!values$DoneAssess) return("")
-	if (!"spr" %in% input$pTypes) return("")
-	if (input$smooth == "TRUE") smooth=TRUE
-	if (input$smooth != "TRUE") smooth=FALSE
-	labcol <- input$labcol
-	if (labcol=="#FFFFFF") labcol <- NULL
-    plotSPRCirc(doAssess(), SPRTarg=input$sprtarg, SPRLim=input$sprlim, 
-	  useSmooth=smooth, bgcol=input$bgcol, limcol=input$limcol, 
-	  targcol=input$targcol, abtgcol=input$abtgcol,
-      labcol=labcol, labcex=input$labcex, texcex=input$texcex)
+    if (!"spr" %in% input$pTypes) return("")
+    if (input$smooth == "TRUE") smooth=TRUE
+    if (input$smooth != "TRUE") smooth=FALSE
+    labcol <- input$labcol
+    if (labcol=="#FFFFFF") labcol <- NULL
+    plotSPRCirc(doAssess(), SPRTarg=input$sprtarg, SPRLim=input$sprlim,
+                useSmooth=smooth, bgcol=input$bgcol, limcol=input$limcol,
+                targcol=input$targcol, abtgcol=input$abtgcol,
+                labcol=labcol, labcex=input$labcex, texcex=input$texcex)
   })
-  
+
   output$PSPRCirc <- renderUI({
     if (!values$DoneAssess) return("")
-	if (!"spr" %in% input$pTypes) return("")
+    if (!"spr" %in% input$pTypes) return("")
 
-	if (input$smooth == "TRUE") smooth=TRUE
-	if (input$smooth != "TRUE") smooth=FALSE
+    if (input$smooth == "TRUE") smooth=TRUE
+    if (input$smooth != "TRUE") smooth=FALSE
     fluidRow(
-	  h4("Estimated Spawning Potential and Reference Points"),
-	  h5("Note: if multiple years, only the estimate from the last year is shown"),
+      h4("Estimated Spawning Potential and Reference Points"),
+      h5("Note: if multiple years, only the estimate from the last year is shown"),
       plotOutput("SPRCircle"),
-	  downloadButton("downloadSPRcirc2", label = "Download", class = NULL),
-	  style="padding-top: 25px;")
+      downloadButton("downloadSPRcirc2", label = "Download", class = NULL),
+      style="padding-top: 25px;")
   })
 
   plotOut1 <- function(){
@@ -869,8 +874,8 @@ shinyServer(function(input, output, clientData, session) {
 	if (input$smooth != "TRUE") smooth=FALSE
 	labcol <- input$labcol
 	if (labcol=="#FFFFFF") labcol <- NULL
-    plotSPRCirc(doAssess(), SPRTarg=input$sprtarg, SPRLim=input$sprlim, 
-	  useSmooth=smooth, bgcol=input$bgcol, limcol=input$limcol, 
+    plotSPRCirc(doAssess(), SPRTarg=input$sprtarg, SPRLim=input$sprlim,
+	  useSmooth=smooth, bgcol=input$bgcol, limcol=input$limcol,
 	  targcol=input$targcol, abtgcol=input$abtgcol,
       labcol=labcol, labcex=input$labcex, texcex=input$texcex)
   }
@@ -918,8 +923,8 @@ shinyServer(function(input, output, clientData, session) {
 	if (input$smooth == "TRUE") smooth <- TRUE
 	if (input$smooth != "TRUE") smooth <- FALSE
 	if (input$incL50 == "TRUE") incL50 <- TRUE
-	if (input$incL50 != "TRUE") incL50 <- FALSE	
-    plotEsts(doAssess(), doSmooth=smooth, CIcol=input$CIcol, axCex=input$axCex, 
+	if (input$incL50 != "TRUE") incL50 <- FALSE
+    plotEsts(doAssess(), doSmooth=smooth, CIcol=input$CIcol, axCex=input$axCex,
 	  labCex=input$labCex, ptCex=input$ptCex, incL50=incL50, L50col=input$L50col)
   }
   output$dnloadEsts <- downloadHandler(
