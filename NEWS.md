@@ -1,5 +1,6 @@
-# LBSPR 0.1.2.99 Development Version
+# LBSPR 0.1.3 
 ## Minor Changes
+- fix bug in Shiny app reading in data
 - modify SPR circle plot used in the Shiny app.
 
 # LBSPR 0.1.2
