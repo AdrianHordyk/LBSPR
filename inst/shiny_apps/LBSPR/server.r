@@ -326,34 +326,35 @@ shinyServer(function(input, output, clientData, session) {
 
   chkFreq <- reactive({ # Check if data appears to be length frequencies
     if(!chkFileUp()) return(NULL)
-	if(!chkSep()) return(NULL)
+    if(!chkSep()) return(NULL)
     lendat <- as.matrix(data())
-	if (ncol(lendat) == 1) return (FALSE)
-	fst <- lendat[,1]
+    if (ncol(lendat) == 1) return (FALSE)
+    fst <- lendat[,1]
     fst <- fst[is.finite(fst)]
-	if (all(diff(fst) == median(diff(fst)))) return(TRUE)
-	FALSE
+    if (all(diff(fst) == median(diff(fst)))) return(TRUE)
+    FALSE
   })
 
   chkHeader <- reactive({ # Check if there appears to be a header
-  if(!chkFileUp()) return(NULL)
-  if(!chkSep()) return(NULL)
-	if(input$header) return(TRUE)
+    if(!chkFileUp()) return(NULL)
+    if(!chkSep()) return(NULL)
+    if(input$header) return(TRUE)
+
     lendat <- as.matrix(data())
-  topRow <- lendat[1,, drop=FALSE]
-	if (class(topRow) == "character") return(TRUE)
-	if (chkFreq() & is.na(topRow[1])) return(TRUE)
-	lendat <- as.matrix(lendat)
-	topRow <- as.numeric(lendat[1,, drop=FALSE])
-	if (!chkFreq()) {
-	  if (ncol(lendat) > 1) {
-	    if (all(diff(topRow) == 1))  return(TRUE)
-	    if (all(topRow > 1900 & topRow < 2100)) return(TRUE)
-	  }
-	  if (ncol(lendat) == 1) {
-	    if (topRow[1] > 1900 & topRow[1] < 2100) return(TRUE)
-	  }
-	}
+    topRow <- lendat[1,, drop=FALSE]
+    if (class(topRow[1]) == "character") return(TRUE)
+    if (chkFreq() & is.na(topRow[1])) return(TRUE)
+    lendat <- as.matrix(lendat)
+    topRow <- as.numeric(lendat[1,, drop=FALSE])
+    if (!chkFreq()) {
+      if (ncol(lendat) > 1) {
+        if (all(diff(topRow) == 1))  return(TRUE)
+        if (all(topRow > 1900 & topRow < 2100)) return(TRUE)
+      }
+      if (ncol(lendat) == 1) {
+        if (topRow[1] > 1900 & topRow[1] < 2100) return(TRUE)
+      }
+    }
     FALSE
   })
 

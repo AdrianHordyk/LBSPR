@@ -24,7 +24,7 @@
 #' @author A. Hordyk
 #' @export
 LBSPR_NLLabsel <- function(starts, x, P, LMids, LBins, LDat, MK, Linf, FecB, L50, L95, maxsd, CVLinf, Nage, usePen) {
-    .Call('LBSPR_LBSPR_NLLabsel', PACKAGE = 'LBSPR', starts, x, P, LMids, LBins, LDat, MK, Linf, FecB, L50, L95, maxsd, CVLinf, Nage, usePen)
+    .Call('_LBSPR_LBSPR_NLLabsel', PACKAGE = 'LBSPR', starts, x, P, LMids, LBins, LDat, MK, Linf, FecB, L50, L95, maxsd, CVLinf, Nage, usePen)
 }
 
 #' LBSPR Optimization function for GTG model
@@ -46,6 +46,6 @@ LBSPR_NLLabsel <- function(starts, x, P, LMids, LBins, LDat, MK, Linf, FecB, L50
 #' @author A. Hordyk
 #' @export
 LBSPR_NLLgtg <- function(starts, LMids, LBins, LDat, gtgLinfs, MKMat, MK, Linf, ngtg, recP, usePen) {
-    .Call('LBSPR_LBSPR_NLLgtg', PACKAGE = 'LBSPR', starts, LMids, LBins, LDat, gtgLinfs, MKMat, MK, Linf, ngtg, recP, usePen)
+    .Call('_LBSPR_LBSPR_NLLgtg', PACKAGE = 'LBSPR', starts, LMids, LBins, LDat, gtgLinfs, MKMat, MK, Linf, ngtg, recP, usePen)
 }
 

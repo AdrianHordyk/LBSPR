@@ -7,7 +7,7 @@ using namespace Rcpp;
 
 // LBSPR_NLLabsel
 double LBSPR_NLLabsel(NumericVector starts, NumericVector x, double P, NumericVector LMids, NumericVector LBins, NumericVector LDat, double MK, double Linf, double FecB, double L50, double L95, double maxsd, double CVLinf, int Nage, int usePen);
-RcppExport SEXP LBSPR_LBSPR_NLLabsel(SEXP startsSEXP, SEXP xSEXP, SEXP PSEXP, SEXP LMidsSEXP, SEXP LBinsSEXP, SEXP LDatSEXP, SEXP MKSEXP, SEXP LinfSEXP, SEXP FecBSEXP, SEXP L50SEXP, SEXP L95SEXP, SEXP maxsdSEXP, SEXP CVLinfSEXP, SEXP NageSEXP, SEXP usePenSEXP) {
+RcppExport SEXP _LBSPR_LBSPR_NLLabsel(SEXP startsSEXP, SEXP xSEXP, SEXP PSEXP, SEXP LMidsSEXP, SEXP LBinsSEXP, SEXP LDatSEXP, SEXP MKSEXP, SEXP LinfSEXP, SEXP FecBSEXP, SEXP L50SEXP, SEXP L95SEXP, SEXP maxsdSEXP, SEXP CVLinfSEXP, SEXP NageSEXP, SEXP usePenSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -32,7 +32,7 @@ END_RCPP
 }
 // LBSPR_NLLgtg
 double LBSPR_NLLgtg(NumericVector starts, NumericVector LMids, NumericVector LBins, NumericVector LDat, NumericVector gtgLinfs, NumericMatrix MKMat, double MK, double Linf, int ngtg, NumericVector recP, int usePen);
-RcppExport SEXP LBSPR_LBSPR_NLLgtg(SEXP startsSEXP, SEXP LMidsSEXP, SEXP LBinsSEXP, SEXP LDatSEXP, SEXP gtgLinfsSEXP, SEXP MKMatSEXP, SEXP MKSEXP, SEXP LinfSEXP, SEXP ngtgSEXP, SEXP recPSEXP, SEXP usePenSEXP) {
+RcppExport SEXP _LBSPR_LBSPR_NLLgtg(SEXP startsSEXP, SEXP LMidsSEXP, SEXP LBinsSEXP, SEXP LDatSEXP, SEXP gtgLinfsSEXP, SEXP MKMatSEXP, SEXP MKSEXP, SEXP LinfSEXP, SEXP ngtgSEXP, SEXP recPSEXP, SEXP usePenSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -53,8 +53,8 @@ END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
-    {"LBSPR_LBSPR_NLLabsel", (DL_FUNC) &LBSPR_LBSPR_NLLabsel, 15},
-    {"LBSPR_LBSPR_NLLgtg", (DL_FUNC) &LBSPR_LBSPR_NLLgtg, 11},
+    {"_LBSPR_LBSPR_NLLabsel", (DL_FUNC) &_LBSPR_LBSPR_NLLabsel, 15},
+    {"_LBSPR_LBSPR_NLLgtg", (DL_FUNC) &_LBSPR_LBSPR_NLLgtg, 11},
     {NULL, NULL, 0}
 };
 
