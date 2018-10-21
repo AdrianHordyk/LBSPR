@@ -77,7 +77,14 @@ LBSPRfit_ <- function(yr=1, LB_pars=NULL, LB_lengths=NULL, Control=list(),
 	  if (modType=="GTG") {
 	    SDLinf <- LB_pars@CVLinf * LB_pars@Linf
 	    gtgLinfs <- seq(from= LB_pars@Linf-maxsd*SDLinf, to= LB_pars@Linf+maxsd*SDLinf, length=ngtg)
-	    MKMat <- matrix(LB_pars@MK, nrow=length(LBins), ncol=ngtg)
+
+      ## Variable MK at length if allometric exponent of M-length relationship (Mpow) >0:
+      MKL <- LB_pars@MK *
+          (LB_pars@Linf / (LBins + 0.5*By))^ ifelse(is.null(LB_pars@Mpow) || length(LB_pars@Mpow) < 1,
+                                                    0, LB_pars@Mpow[1]) # Mpow from LB_pars or 0 if not defined.
+
+      ## ..formated as a matrix, one column by GTG (MKL of same length as LBins):
+	    MKMat <- matrix(rep(MKL, ngtg), nrow=length(LBins), ncol=ngtg)
 	    recP <- dnorm(gtgLinfs, LB_pars@Linf, sd=SDLinf) / sum(dnorm(gtgLinfs, LB_pars@Linf, sd=SDLinf))
 	    usePen <- 1
 	    if (!pen) usePen <- 0
