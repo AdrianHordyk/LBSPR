@@ -4,8 +4,8 @@
 \alias{LBSPR_NLLgtg}
 \title{LBSPR Optimization function for GTG model}
 \usage{
-LBSPR_NLLgtg(starts, LMids, LBins, LDat, gtgLinfs, MKMat, MK, Linf, ngtg, recP,
-  usePen)
+LBSPR_NLLgtg(starts, LMids, LBins, LDat, gtgLinfs, MKMat, MK, Linf, ngtg,
+  recP, usePen)
 }
 \arguments{
 \item{starts}{a vector of starting parameters, relative SL50 (SL50/Linf), deltaSL (SL95-SL50)/Linf, and F/M (in log space)}

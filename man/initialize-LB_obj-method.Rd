@@ -5,7 +5,8 @@
 \alias{initialize,LB_obj-method}
 \title{Create a new LB_obj object}
 \usage{
-\S4method{initialize}{LB_obj}(.Object, defaults = FALSE, verbose = FALSE)
+\S4method{initialize}{LB_obj}(.Object, defaults = FALSE,
+  verbose = FALSE)
 }
 \arguments{
 \item{.Object}{class of object to be created}

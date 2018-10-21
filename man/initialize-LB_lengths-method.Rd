@@ -5,8 +5,9 @@
 \alias{initialize,LB_lengths-method}
 \title{Create a new LB_lengths object}
 \usage{
-\S4method{initialize}{LB_lengths}(.Object, file = "none", LB_pars = NULL,
-  dataType = c("raw", "freq"), header = FALSE, verbose = TRUE, ...)
+\S4method{initialize}{LB_lengths}(.Object, file = "none",
+  LB_pars = NULL, dataType = c("raw", "freq"), header = FALSE,
+  verbose = TRUE, ...)
 }
 \arguments{
 \item{.Object}{class of object to be created}

@@ -6,10 +6,10 @@
 \usage{
 plotSim(LB_obj = NULL, type = c("all", "len.freq", "growth",
   "maturity.select", "yield.curve"), lf.type = c("catch", "pop"),
-  growth.type = c("LAA", "WAA"), y.type = c("SPR", "SSB", "Yield", "YPR"),
-  x.type = c("FM", "SSB", "SPR"), perRec = FALSE, inc.SPR = TRUE,
-  Cols = NULL, size.axtex = 12, size.title = 14, size.SPR = 4,
-  size.leg = 12, inc.pts = TRUE, size.pt = 4)
+  growth.type = c("LAA", "WAA"), y.type = c("SPR", "SSB", "Yield",
+  "YPR"), x.type = c("FM", "SSB", "SPR"), perRec = FALSE,
+  inc.SPR = TRUE, Cols = NULL, size.axtex = 12, size.title = 14,
+  size.SPR = 4, size.leg = 12, inc.pts = TRUE, size.pt = 4)
 }
 \arguments{
 \item{LB_obj}{an object of class \code{'LB_obj'} that contains the life history and fishing information}

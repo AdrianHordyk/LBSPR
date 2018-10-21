@@ -4,8 +4,8 @@
 \alias{LBSPRfit}
 \title{Fit LBSPR model to length data}
 \usage{
-LBSPRfit(LB_pars = NULL, LB_lengths = NULL, yrs = NA, Control = list(),
-  pen = TRUE, verbose = TRUE, useCPP = TRUE, ...)
+LBSPRfit(LB_pars = NULL, LB_lengths = NULL, yrs = NA,
+  Control = list(), pen = TRUE, verbose = TRUE, useCPP = TRUE, ...)
 }
 \arguments{
 \item{LB_pars}{an object of class \code{'LB_pars'} that contains the life history information}

@@ -4,8 +4,8 @@
 \alias{plotMat}
 \title{Plot the maturity-at-length and selectivity-at-length curves}
 \usage{
-plotMat(LB_obj = NULL, size.axtex = 12, size.title = 14, size.leg = 12,
-  useSmooth = TRUE, Title = NULL)
+plotMat(LB_obj = NULL, size.axtex = 12, size.title = 14,
+  size.leg = 12, useSmooth = TRUE, Title = NULL)
 }
 \arguments{
 \item{LB_obj}{an object of class \code{'LB_obj'} that contains the life history and fishing information}
