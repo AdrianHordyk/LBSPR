@@ -66,7 +66,7 @@ double LBSPR_NLLabsel(NumericVector starts, NumericVector x, double P,  NumericV
 
   for (int age=0; age<Nage; age++) {
     for (int L=0; L<(Nlen-1); L++) {
-      if (abs((LMids(L) - EL(age))/SDL(age)) >= maxsd)  Prob(age, L) = 0;
+      if (fabs((LMids(L) - EL(age))/SDL(age)) >= maxsd)  Prob(age, L) = 0;
     }
   }
 

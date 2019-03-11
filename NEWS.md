@@ -3,6 +3,11 @@
 - fix bug in Shiny app reading in data
 - modify SPR circle plot used in the Shiny app.
 
+## Bug Fixes
+
+- fix issue in cpp code that was being flagged by CRAN checks
+- fix missing variable M-at-length in LBSPRfit function (thanks to Yves Reecht for picking this up)
+
 # LBSPR 0.1.2
 ## Minor Changes
 - add option to specify scales for axes in plotSize
