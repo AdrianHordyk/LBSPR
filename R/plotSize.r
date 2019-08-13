@@ -16,8 +16,8 @@
 #' @importFrom ggplot2 facet_wrap geom_text
 #' @export
 plotSize <- function(LB_obj=NULL, size.axtex=12, size.title=14, Title=NULL,
-                     scales=c("fixed", "free_x", "free_y", "free"), inc.text=TRUE,
-                     warn.size=2) {
+                     scales=c("fixed", "free_x", "free_y", "free"), inc.text=FALSE,
+                     warn.size=0.8) {
 
   scales <- match.arg(scales)
   if (class(LB_obj) != "LB_obj" & class(LB_obj) != "LB_lengths") stop("Require LB_lengths or LB_obj object", call. = FALSE)
@@ -105,7 +105,7 @@ plotSize <- function(LB_obj=NULL, size.axtex=12, size.title=14, Title=NULL,
         yrs <- unique(longDat$Year)[which(fitLog == 4)]
         if (length(yrs) > 0) {
           text_dat <- data.frame(Year=factor(yrs, levels=levels(longDat$Year)),
-                                 LMids=longDat$LMids[0.5*length(longDat$LMids)],
+                                 LMids=longDat$LMids[0.1*length(longDat$LMids)],
                                  LBSPR_len=0.99 * max(longDat$LBSPR_len),
                                  lab="Estimated selectivity\n and F/M may be unrealistically high")
           bplot <- bplot + geom_text(data=text_dat, aes(label=lab), size=warn.size)
