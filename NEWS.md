@@ -1,3 +1,9 @@
+# LBSPR 0.1.4
+
+## Minor Changes
+- Reduce font size for warnings of high F/M etc in `plotSize` and add
+argument to control font size
+
 # LBSPR 0.1.3 
 ## Minor Changes
 - fix bug in Shiny app reading in data
