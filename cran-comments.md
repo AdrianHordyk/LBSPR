@@ -4,7 +4,6 @@
 - Ubuntu (on travis-ci) R:oldrel, R:release, R:devel
 
 ## R CMD check results
-There were NO ERRORs, or WARNINGs
+There were NO ERRORS, WARNINGs or NOTES
 
-There was one NOTE stating that this is a New submission
 

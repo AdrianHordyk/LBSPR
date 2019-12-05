@@ -1,3 +1,6 @@
+# LBSPR 0.1.5
+Minor patch to comply with new R standard of `class(matrix(1:4,2,2))` = `matrix` and `array`
+
 # LBSPR 0.1.4
 
 ## Minor Changes
