@@ -10,13 +10,15 @@
 #' (the default, "fixed"), or do they vary across rows ("free_x"), columns ("free_y"),
 #' or both rows and columns ("free")
 #' @param inc.text Include text on plotting warning of high F or selectivity estimates?
+#' @param warn.size numeric. Size of font for the warnings
 #' @return a ggplot object
 #' @author A. Hordyk
 #' @importFrom ggplot2 facet_wrap geom_text
 #' @export
 plotSize <- function(LB_obj=NULL, size.axtex=12, size.title=14, Title=NULL,
-                     scales=c("fixed", "free_x", "free_y", "free"), inc.text=TRUE) {
-  
+                     scales=c("fixed", "free_x", "free_y", "free"), inc.text=FALSE,
+                     warn.size=0.8) {
+
   scales <- match.arg(scales)
   if (class(LB_obj) != "LB_obj" & class(LB_obj) != "LB_lengths") stop("Require LB_lengths or LB_obj object", call. = FALSE)
   scales <- match.arg(scales)
@@ -29,7 +31,7 @@ plotSize <- function(LB_obj=NULL, size.axtex=12, size.title=14, Title=NULL,
     options(warn=1)
     if (all(is.na(LB_obj@Years))) LB_obj@Years <- 1:length(LB_obj@Years)
   }
-  
+
   NYrs <- max(1, length(LB_obj@Years))
   Years <- LB_obj@Years
   Ldat <- LB_obj@LData
@@ -55,9 +57,9 @@ plotSize <- function(LB_obj=NULL, size.axtex=12, size.title=14, Title=NULL,
     theme(axis.text=element_text(size=size.axtex),
           axis.title=element_text(size=size.title,face="bold"),
           plot.title = element_text(lineheight=.8, face="bold"))
-  
+
   if (!(is.null(Title)) & class(Title)=="character") bplot <- bplot + ggtitle(Title)
-  
+
   chk <- ("pLCatch" %in% slotNames(LB_obj))
   chk2 <- FALSE
   if (chk) if (length(LB_obj@pLCatch) > 0) chk2 <- TRUE
@@ -70,7 +72,7 @@ plotSize <- function(LB_obj=NULL, size.axtex=12, size.title=14, Title=NULL,
       geom_line(aes(x=longDat2$LMids, y=longDat2$PredLen), colour="black", size=1.25)
     fitLog <- LB_obj@fitLog
     ind <- which(fitLog > 0)
-    
+
     if (inc.text) {
       if (length(ind) > 0) {
         # Didn't converge
@@ -79,7 +81,7 @@ plotSize <- function(LB_obj=NULL, size.axtex=12, size.title=14, Title=NULL,
           text_dat <- data.frame(Year=factor(yrs, levels=levels(longDat$Year)),
                                  LMids=longDat$LMids[0.5*length(longDat$LMids)],
                                  LBSPR_len=0.99 * max(longDat$LBSPR_len), lab="Model didn't converge")
-          bplot <- bplot + geom_text(data=text_dat, aes(label=lab), size=6)
+          bplot <- bplot + geom_text(data=text_dat, aes(label=lab), size=warn.size)
         }
         # High Selectivity
         yrs <- unique(longDat$Year)[which(fitLog == 2)]
@@ -88,7 +90,7 @@ plotSize <- function(LB_obj=NULL, size.axtex=12, size.title=14, Title=NULL,
                                  LMids=longDat$LMids[0.5*length(longDat$LMids)],
                                  LBSPR_len=0.99 * max(longDat$LBSPR_len),
                                  lab="Estimated selectivity\n may be unrealistically high")
-          bplot <- bplot + geom_text(data=text_dat, aes(label=lab), size=6)
+          bplot <- bplot + geom_text(data=text_dat, aes(label=lab), size=warn.size)
         }
         # High F/M
         yrs <- unique(longDat$Year)[which(fitLog == 3)]
@@ -97,21 +99,21 @@ plotSize <- function(LB_obj=NULL, size.axtex=12, size.title=14, Title=NULL,
                                  LMids=longDat$LMids[0.5*length(longDat$LMids)],
                                  LBSPR_len=0.99 * max(longDat$LBSPR_len),
                                  lab="Estimated F/M appears\n to be unrealistically high")
-          bplot <- bplot + geom_text(data=text_dat, aes(label=lab), size=6)
+          bplot <- bplot + geom_text(data=text_dat, aes(label=lab), size=warn.size)
         }
         # High F/M & Selectivity
         yrs <- unique(longDat$Year)[which(fitLog == 4)]
         if (length(yrs) > 0) {
           text_dat <- data.frame(Year=factor(yrs, levels=levels(longDat$Year)),
-                                 LMids=longDat$LMids[0.5*length(longDat$LMids)],
+                                 LMids=longDat$LMids[0.1*length(longDat$LMids)],
                                  LBSPR_len=0.99 * max(longDat$LBSPR_len),
                                  lab="Estimated selectivity\n and F/M may be unrealistically high")
-          bplot <- bplot + geom_text(data=text_dat, aes(label=lab), size=6)
-        }  
+          bplot <- bplot + geom_text(data=text_dat, aes(label=lab), size=warn.size)
+        }
       }
-      
+
     }
   }
-  
+
   bplot
 }
