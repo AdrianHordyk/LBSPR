@@ -93,12 +93,12 @@ LBSPRfit_ <- function(yr=1, LB_pars=NULL, LB_lengths=NULL, Control=list(),
 	                     ngtg=ngtg, recP=recP,usePen=usePen, hessian=TRUE, method=Control$method),
 	               silent=TRUE)
 	    varcov <- try(solve(opt$hessian), silent=TRUE)
-	    if (class(varcov) == "try-error") class(opt) <- "try-error"
-	    if (class(varcov) != "try-error" && any(diag(varcov) < 0)) class(opt) <- "try-error"
+	    if (inherits(varcov,"try-error")) class(opt) <- "try-error"
+	    if (!inherits(varcov,"try-error") && any(diag(varcov) < 0)) class(opt) <- "try-error"
 	    count <- 0
 	    countmax <- 10
 	    quants <- seq(from=0, to=0.95, length.out=countmax)
-	    while (class(opt) == "try-error" & count < countmax) { # optim crashed - try different starts
+	    while (inherits(opt,"try-error") & count < countmax) { # optim crashed - try different starts
 	      count <- count + 1
 	      sSL50 <- quantile(c(LMids[min(which(ldat>0))]/LB_pars@Linf,
 	                          LMids[which.max(ldat)]/LB_pars@Linf), probs=quants)[count]
@@ -109,12 +109,12 @@ LBSPRfit_ <- function(yr=1, LB_pars=NULL, LB_lengths=NULL, Control=list(),
 	                       ngtg=ngtg, recP=recP,usePen=usePen, hessian=TRUE, method=Control$method),
 	                 silent=TRUE)
 	      varcov <- try(solve(opt$hessian), silent=TRUE)
-	      if (class(varcov) == "try-error") class(opt) <- "try-error"
-	      if (class(varcov) != "try-error" && any(diag(varcov) < 0))
+	      if (inherits(varcov,"try-error")) class(opt) <- "try-error"
+	      if (!inherits(varcov,"try-error") && any(diag(varcov) < 0))
 	        class(opt) <- "try-error"
 	    }
 
-	    if (class(opt) == "try-error") { # optim crashed - try without hessian
+	    if (inherits(opt,"try-error")) { # optim crashed - try without hessian
 	      opt <- try(optim(Start, LBSPR_NLLgtg, LMids=LMids, LBins=LBins, LDat=LDat,
 	                       gtgLinfs=gtgLinfs, MKMat=MKMat,  MK=LB_pars@MK, Linf=LB_pars@Linf,
 	                       ngtg=ngtg, recP=recP,usePen=usePen, hessian=FALSE, method=Control$method))
@@ -135,12 +135,12 @@ LBSPRfit_ <- function(yr=1, LB_pars=NULL, LB_lengths=NULL, Control=list(),
 	                     usePen=TRUE, hessian=TRUE, method=Control$method), silent=TRUE)
 
 	    varcov <- try(solve(opt$hessian), silent=TRUE)
-	    if (class(varcov) == "try-error") class(opt) <- "try-error"
-	    if (class(varcov) != "try-error" && any(diag(varcov) < 0)) class(opt) <- "try-error"
+	    if (inherits(varcov,"try-error")) class(opt) <- "try-error"
+	    if (!inherits(varcov, "try-error") && any(diag(varcov) < 0)) class(opt) <- "try-error"
 	    count <- 0
 	    countmax <- 10
 	    quants <- seq(from=0, to=0.95, length.out=countmax)
-	    while (class(opt) == "try-error" & count < countmax) { # optim crashed - try different starts
+	    while (inherits(opt,"try-error") & count < countmax) { # optim crashed - try different starts
 	      count <- count + 1
 	      sSL50 <- quantile(c(LMids[min(which(ldat>0))]/LB_pars@Linf,
 	                          LMids[which.max(ldat)]/LB_pars@Linf), probs=quants)[count]
@@ -152,8 +152,8 @@ LBSPRfit_ <- function(yr=1, LB_pars=NULL, LB_lengths=NULL, Control=list(),
 	                       usePen=TRUE, hessian=TRUE, method=Control$method),
 	                 silent=TRUE)
 	      varcov <- try(solve(opt$hessian), silent=TRUE)
-	      if (class(varcov) == "try-error") class(opt) <- "try-error"
-	      if (class(varcov) != "try-error" && any(diag(varcov) < 0))
+	      if (inherits(varcov, "try-error")) class(opt) <- "try-error"
+	      if (!inherits(varcov,"try-error") && any(diag(varcov) < 0))
 	        class(opt) <- "try-error"
 	    }
 

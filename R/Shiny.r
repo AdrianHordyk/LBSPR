@@ -14,7 +14,7 @@ Shiny <- function(app) {
   if (length(ind) > 0) {
     install.packages(pkgs[ind])
   }
-  if (class(temp) == "try-error") app <- deparse(substitute(app))
+  if (inherits(temp,"try-error")) app <- deparse(substitute(app))
   Apps <- list.files(system.file("shiny_apps", package = "LBSPR"))
   validAppMsg <- paste0("Valid examples are:\n '", paste(Apps, collapse = "', '"), "'")
   if (missing(app) || !nzchar(app) || !app %in% Apps) {

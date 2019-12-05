@@ -228,7 +228,7 @@ setMethod("initialize", "LB_lengths", function(.Object, file="none", LB_pars=NUL
 	  if (any(apply(dat, 1, class) == "character")) stop("Text in data file. Do you have header?", call. = FALSE)
 	  # dat <- as.data.frame(dat)
 	  # remove NAs
-	  if (class(dat) == "data.frame" | class(dat) == "matrix") {
+	  if (inherits(dat,"data.frame") | inherits(dat, "matrix")) {
 	    if (ncol(dat) > 1) {
 		  chkNAs <- apply(dat, 2, is.na) # check NAs
 		  dat <- dat[!apply(chkNAs, 1, prod),, drop=FALSE]
@@ -315,7 +315,7 @@ setMethod("initialize", "LB_lengths", function(.Object, file="none", LB_pars=NUL
       message(file, " loaded")
     }
   }
-  if(class(file)=="matrix" | class(file)=="numeric" | class(file)=="integer") {
+  if(inherits(file,"matrix") | inherits(file,"numeric") | inherits(file,"integer")) {
     dat <- file
 	dat <- as.data.frame(dat)
     dataType <- match.arg(dataType)

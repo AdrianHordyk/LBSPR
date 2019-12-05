@@ -3,7 +3,7 @@
 
 library(shiny)
 library(shinyBS)
-# library(LBSPR)
+library(LBSPR)
 library(gridExtra)
 library(ggplot2)
 library(dplyr)

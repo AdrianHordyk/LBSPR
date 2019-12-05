@@ -196,7 +196,7 @@ shinyServer(function(input, output, clientData, session) {
 	}
 	templen <- NULL
 	if (chkPars()) templen <- getLB_lens()
-	if (class(templen) != "NULL") {
+	if (!inherits(templen,"NULL")) {
 	if (!is.na(Linf) & Linf > max(templen@LMids)) {
       createAlert(session,  "linfalert2", "linf2", title = "Error",
         content = HTML(paste0(tags$i("L"), tags$sub(HTML("&infin;")), "(", Linf, ") must be lower than the largest length bin (", max(templen@LMids), ")")),
@@ -213,16 +213,28 @@ shinyServer(function(input, output, clientData, session) {
   ### Check that data is ok ###
   #############################
 
+#   ExampleDataFile <- reactive({
+#     switch(input$exampData,
+# 	  rawSingHead = "../../LRaw_SingYrHead.csv",
+# 	  rawSing = "../../LRaw_SingYr.csv",
+# 	  rawMultiHead = "../../LRaw_MultiYrHead.csv",
+# 	  rawMulti = "../../LRaw_MultiYr.csv",
+# 	  freqSingHead = "../../LFreq_SingYrHead.csv",
+# 	  freqSing = "../../LFreq_SingYr.csv",
+# 	  freqMultiHead = "../../LFreq_MultiYrHead.csv",
+# 	  freqMulti = "../../LFreq_MultiYr.csv")
+#   })
+
   ExampleDataFile <- reactive({
     switch(input$exampData,
-	  rawSingHead = "../../LRaw_SingYrHead.csv",
-	  rawSing = "../../LRaw_SingYr.csv",
-	  rawMultiHead = "../../LRaw_MultiYrHead.csv",
-	  rawMulti = "../../LRaw_MultiYr.csv",
-	  freqSingHead = "../../LFreq_SingYrHead.csv",
-	  freqSing = "../../LFreq_SingYr.csv",
-	  freqMultiHead = "../../LFreq_MultiYrHead.csv",
-	  freqMulti = "../../LFreq_MultiYr.csv")
+           rawSingHead = "LRaw_SingYrHead.csv",
+           rawSing = "LRaw_SingYr.csv",
+           rawMultiHead = "LRaw_MultiYrHead.csv",
+           rawMulti = "LRaw_MultiYr.csv",
+           freqSingHead = "LFreq_SingYrHead.csv",
+           freqSing = "LFreq_SingYr.csv",
+           freqMultiHead = "LFreq_MultiYrHead.csv",
+           freqMulti = "LFreq_MultiYr.csv")
   })
 
   output$downloadExample <- renderUI({
@@ -256,14 +268,14 @@ shinyServer(function(input, output, clientData, session) {
 	  if (is.null(file1)) return(NULL)
 	  dat <- read.csv(file1$datapath, header = input$header,
                sep = input$sep, stringsAsFactors=FALSE, check.names=FALSE)
-	  if (class(dat) == "data.frame" | class(dat) == "matrix") {
+	  if (inherits(dat, "data.frame") | inherits(dat, "matrix")) {
 	    if (ncol(dat) > 1) {
 	      chkNAs <- apply(dat, 2, is.na) # check NAs
 	      dat <- dat[!apply(chkNAs, 1, prod),, drop=FALSE]
 	      dat <- dat[,!apply(chkNAs, 2, prod), drop=FALSE]
 	    }
 	  }
-	  if (class(dat) == "numeric" | class(dat) == "integer") {
+	  if (inherits(dat"numeric") | inherits(dat,"integer")) {
 	    dat <- dat[!is.na(dat)]
 	  }
 	  dat

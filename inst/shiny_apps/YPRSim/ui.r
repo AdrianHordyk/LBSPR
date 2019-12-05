@@ -2,7 +2,7 @@ library(shiny)
 library(shinyBS)
 
 shinyUI(tagList(tags$head(includeScript("google-analytics.js")),
-  fluidPage(titlePanel("LBSPR Simulation Modeling"),
+  fluidPage(titlePanel("Simulation Modeling"),
   # navbarPage("LBSPR Simulation Modeling", id="navbar",
   # tabPanel("Instructions",
 	  # h3("Instructions")
