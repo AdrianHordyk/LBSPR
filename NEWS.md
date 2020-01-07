@@ -1,3 +1,8 @@
+# LBSPR 0.1.6 - Current Dev Version (not on CRAN)
+
+## Bug Fixes
+- fixed minor bugs in Shiny app
+
 # LBSPR 0.1.5
 Minor patch to comply with new R standard of `class(matrix(1:4,2,2))` = `matrix` and `array`
 
