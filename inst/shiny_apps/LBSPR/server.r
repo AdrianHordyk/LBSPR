@@ -275,7 +275,7 @@ shinyServer(function(input, output, clientData, session) {
 	      dat <- dat[,!apply(chkNAs, 2, prod), drop=FALSE]
 	    }
 	  }
-	  if (inherits(dat"numeric") | inherits(dat,"integer")) {
+	  if (inherits(dat, "numeric") | inherits(dat,"integer")) {
 	    dat <- dat[!is.na(dat)]
 	  }
 	  dat
