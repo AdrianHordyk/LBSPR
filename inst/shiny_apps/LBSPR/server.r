@@ -1,4 +1,4 @@
-libs <- c("shiny", "shinyBS", "Hmisc", "xtable", 'colourpicker')
+libs <- c("shiny", "shinyBS", "Hmisc", "xtable", 'colourpicker', "DT")
 
 chk <- !libs %in% installed.packages()
 inst <- lapply(libs[chk], install.packages)
@@ -8,6 +8,7 @@ library(shinyBS)
 library(LBSPR)
 library(Hmisc)
 library(xtable)
+library(DT)
 
 shinyServer(function(input, output, clientData, session) {
 
