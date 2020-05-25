@@ -2,6 +2,7 @@
 
 ## Bug Fixes
 - fixed minor bugs in Shiny app
+- fix issue with `plotSize` introduced with latest version of `ggplot2`
 
 # LBSPR 0.1.5
 Minor patch to comply with new R standard of `class(matrix(1:4,2,2))` = `matrix` and `array`

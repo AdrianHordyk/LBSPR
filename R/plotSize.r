@@ -39,7 +39,7 @@ plotSize <- function(LB_obj=NULL, size.axtex=12, size.title=14, Title=NULL,
   LMids <- LB_obj@LMids
   Ldat <- data.frame(Ldat, check.names=FALSE)
   colnames(Ldat) <- as.character(Years)
-  longDat <- gather(Ldat, "Year", "LBSPR_len")
+  longDat <- tidyr::gather(Ldat, "Year", "LBSPR_len")
   longDat$LMids <- LMids
   longDat$Year <- factor(longDat$Year, levels=colnames(Ldat))
   NCol <- ceiling(sqrt(NYrs))
@@ -48,9 +48,10 @@ plotSize <- function(LB_obj=NULL, size.axtex=12, size.title=14, Title=NULL,
   if (length(LB_obj@L_units) > 0) {
     XLab <- paste0("Length (", LB_obj@L_units, ")")
   } else XLab <- "Length"
+
   bplot <- ggplot(longDat, aes(x=LMids, y=LBSPR_len)) +
     facet_wrap(~Year, ncol=NCol, scales=scales) +
-    geom_bar(stat="identity") +
+    geom_bar(stat="identity", orientation = 'x') +
     xlab(XLab) +
     ylab("Count") +
     theme_bw() +
