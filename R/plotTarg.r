@@ -101,6 +101,6 @@ plotTarg <- function(LB_pars=NULL, LB_lengths=NULL, yr=1, Cols=NULL, title=NULL,
   if (!is.null(title)) Plot <- Plot + ggtitle(label=title)
   if (targtext) Plot <- Plot + ggtitle(label=title, subtitle=targ)
 
-  print(Plot)
-  return(invisible(longDat))
+  Plot
+  
 }
