@@ -4,8 +4,23 @@
 \alias{LBSPR_NLLabsel}
 \title{LBSPR Optimization function for age-based selectivity model}
 \usage{
-LBSPR_NLLabsel(starts, x, P, LMids, LBins, LDat, MK, Linf, FecB, L50, L95,
-  maxsd, CVLinf, Nage, usePen)
+LBSPR_NLLabsel(
+  starts,
+  x,
+  P,
+  LMids,
+  LBins,
+  LDat,
+  MK,
+  Linf,
+  FecB,
+  L50,
+  L95,
+  maxsd,
+  CVLinf,
+  Nage,
+  usePen
+)
 }
 \arguments{
 \item{starts}{a vector of starting parameters, relative SL50 (SL50/Linf), deltaSL (SL95-SL50)/Linf, and F/M (in log space)}

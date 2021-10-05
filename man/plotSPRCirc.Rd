@@ -4,10 +4,21 @@
 \alias{plotSPRCirc}
 \title{Circle of estimated SPR and target and limit points}
 \usage{
-plotSPRCirc(LB_obj = NULL, SPRTarg = 0.4, SPRLim = 0.2,
-  useSmooth = TRUE, Title = FALSE, Leg = TRUE, limcol = "#ff1919",
-  targcol = "#f2ff02", abtgcol = "#32ff36", labcol = NULL,
-  bgcol = "#FAFAFA", labcex = 2, texcex = 1.3)
+plotSPRCirc(
+  LB_obj = NULL,
+  SPRTarg = 0.4,
+  SPRLim = 0.2,
+  useSmooth = TRUE,
+  Title = FALSE,
+  Leg = TRUE,
+  limcol = "#ff1919",
+  targcol = "#f2ff02",
+  abtgcol = "#32ff36",
+  labcol = NULL,
+  bgcol = "#FAFAFA",
+  labcex = 2,
+  texcex = 1.3
+)
 }
 \arguments{
 \item{LB_obj}{an object of class \code{'LB_obj'} that contains the life history and fishing information}

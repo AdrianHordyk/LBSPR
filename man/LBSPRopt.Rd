@@ -4,8 +4,14 @@
 \alias{LBSPRopt}
 \title{Optimisation Routine for fitting LBSPR}
 \usage{
-LBSPRopt(trypars, yr = 1, LB_pars = NULL, LB_lengths = NULL,
-  Control = list(), pen = TRUE)
+LBSPRopt(
+  trypars,
+  yr = 1,
+  LB_pars = NULL,
+  LB_lengths = NULL,
+  Control = list(),
+  pen = TRUE
+)
 }
 \arguments{
 \item{trypars}{a vector of exploitation parameters in log space}

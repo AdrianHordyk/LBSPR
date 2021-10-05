@@ -4,9 +4,16 @@
 \alias{plotCurves}
 \title{Plot the Relative Yield, YPR, SPR, SSB, and Recruitment curves}
 \usage{
-plotCurves(LB_obj, X = c("FM", "SSB", "SPR"), Y = c("SPR", "SSB",
-  "Yield"), size.axtex = 12, size.title = 14, size.leg = 12,
-  size.pt = 4, inc.pts = TRUE)
+plotCurves(
+  LB_obj,
+  X = c("FM", "SSB", "SPR"),
+  Y = c("SPR", "SSB", "Yield"),
+  size.axtex = 12,
+  size.title = 14,
+  size.leg = 12,
+  size.pt = 4,
+  inc.pts = TRUE
+)
 }
 \arguments{
 \item{LB_obj}{An object of class \code{'LB_obj'} that contains the life history and fishing information}

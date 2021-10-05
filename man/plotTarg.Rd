@@ -4,9 +4,17 @@
 \alias{plotTarg}
 \title{Plot sampled length structure against target simulated size composition}
 \usage{
-plotTarg(LB_pars = NULL, LB_lengths = NULL, yr = 1, Cols = NULL,
-  title = NULL, targtext = TRUE, size.axtex = 12, size.title = 14,
-  scales = c("fixed", "free_x", "free_y", "free"))
+plotTarg(
+  LB_pars = NULL,
+  LB_lengths = NULL,
+  yr = 1,
+  Cols = NULL,
+  title = NULL,
+  targtext = TRUE,
+  size.axtex = 12,
+  size.title = 14,
+  scales = c("fixed", "free_x", "free_y", "free")
+)
 }
 \arguments{
 \item{LB_pars}{an object of class \code{'LB_pars'} that contains the life history and fishing information}

@@ -5,6 +5,11 @@
 
 using namespace Rcpp;
 
+#ifdef RCPP_USE_GLOBAL_ROSTREAM
+Rcpp::Rostream<true>&  Rcpp::Rcout = Rcpp::Rcpp_cout_get();
+Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
+#endif
+
 // LBSPR_NLLabsel
 double LBSPR_NLLabsel(NumericVector starts, NumericVector x, double P, NumericVector LMids, NumericVector LBins, NumericVector LDat, double MK, double Linf, double FecB, double L50, double L95, double maxsd, double CVLinf, int Nage, int usePen);
 RcppExport SEXP _LBSPR_LBSPR_NLLabsel(SEXP startsSEXP, SEXP xSEXP, SEXP PSEXP, SEXP LMidsSEXP, SEXP LBinsSEXP, SEXP LDatSEXP, SEXP MKSEXP, SEXP LinfSEXP, SEXP FecBSEXP, SEXP L50SEXP, SEXP L95SEXP, SEXP maxsdSEXP, SEXP CVLinfSEXP, SEXP NageSEXP, SEXP usePenSEXP) {

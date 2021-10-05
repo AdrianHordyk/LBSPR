@@ -4,9 +4,18 @@
 \alias{plotEsts}
 \title{Plot LBSPR model estimates}
 \usage{
-plotEsts(LB_obj = NULL, pars = c("Sel", "FM", "SPR"), Lwd = 2.5,
-  ptCex = 1.25, axCex = 1.45, labCex = 1.55, doSmooth = TRUE,
-  incL50 = FALSE, CIcol = "darkgray", L50col = "gray")
+plotEsts(
+  LB_obj = NULL,
+  pars = c("Sel", "FM", "SPR"),
+  Lwd = 2.5,
+  ptCex = 1.25,
+  axCex = 1.45,
+  labCex = 1.55,
+  doSmooth = TRUE,
+  incL50 = FALSE,
+  CIcol = "darkgray",
+  L50col = "gray"
+)
 }
 \arguments{
 \item{LB_obj}{an object of class \code{'LB_obj'} that contains the life history and fishing information}

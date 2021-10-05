@@ -4,8 +4,7 @@
 \alias{LBSPRsim_}
 \title{Internal LBSPR Simulation Model}
 \usage{
-LBSPRsim_(LB_pars = NULL, Control = list(), verbose = TRUE,
-  doCheck = TRUE)
+LBSPRsim_(LB_pars = NULL, Control = list(), verbose = TRUE, doCheck = TRUE)
 }
 \arguments{
 \item{LB_pars}{an object of class \code{'LB_pars'} that contains the life history

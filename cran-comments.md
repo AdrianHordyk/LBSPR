@@ -1,3 +1,6 @@
+## Note to CRAN Maintainers
+This is a fix for CRAN package check warning related to building the vignette.
+
 
 ## Test environments
 - Windows (local, ci.appveyor, win-builder (devel and release))

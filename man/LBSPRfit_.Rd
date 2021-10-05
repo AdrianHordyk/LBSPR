@@ -4,8 +4,15 @@
 \alias{LBSPRfit_}
 \title{Internal function to fit LBSPR model to length data}
 \usage{
-LBSPRfit_(yr = 1, LB_pars = NULL, LB_lengths = NULL,
-  Control = list(), pen = TRUE, useCPP = TRUE, verbose = TRUE)
+LBSPRfit_(
+  yr = 1,
+  LB_pars = NULL,
+  LB_lengths = NULL,
+  Control = list(),
+  pen = TRUE,
+  useCPP = TRUE,
+  verbose = TRUE
+)
 }
 \arguments{
 \item{yr}{index of the year column to fit model to}

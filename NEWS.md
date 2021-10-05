@@ -1,8 +1,9 @@
-# LBSPR 0.1.6 - Current Dev Version (not on CRAN)
+# LBSPR 0.1.6 
 
 ## Bug Fixes
 - fixed minor bugs in Shiny app
 - fix issue with `plotSize` introduced with latest version of `ggplot2`
+- fix typo in vignette causing a warning on CRAN
 
 # LBSPR 0.1.5
 Minor patch to comply with new R standard of `class(matrix(1:4,2,2))` = `matrix` and `array`

@@ -193,7 +193,7 @@ round(MySim@SPR, 2) # SPR
 ```
 
 Change selectivity parameters:
-````{r}
+```{r}
 MyPars@MK <- 1.5 
 MyPars@SL50 <- 10
 MyPars@SL95 <- 15 
