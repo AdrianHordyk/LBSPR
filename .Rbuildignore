@@ -10,3 +10,4 @@ README.MD
 docs
 cran-comments.md
 NEWS.md
+^CRAN-RELEASE$

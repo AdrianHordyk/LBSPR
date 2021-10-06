@@ -1,4 +1,6 @@
 ## Note to CRAN Maintainers
+Fixed the invalid URLs.
+
 This is a fix for CRAN package check warning related to building the vignette.
 
 

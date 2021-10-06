@@ -3,7 +3,7 @@
 #' \code{Shiny} runs one of the Shiny Applications that are included in the package
 #'
 #' @param app The name of the Shiny application to run. Currently the available Shiny apps are "LBSPR" and "Sim"
-#' @references Modified from Deal Attali's code: \url{http://deanattali.com/2015/04/21/r-package-shiny-app/}
+#' @references Modified from Deal Attali's code: \url{https://deanattali.com/2015/04/21/r-package-shiny-app/}
 #' @importFrom utils install.packages installed.packages
 #' @export
 Shiny <- function(app) {

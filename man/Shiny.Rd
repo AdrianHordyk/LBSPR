@@ -13,5 +13,5 @@ Shiny(app)
 \code{Shiny} runs one of the Shiny Applications that are included in the package
 }
 \references{
-Modified from Deal Attali's code: \url{http://deanattali.com/2015/04/21/r-package-shiny-app/}
+Modified from Deal Attali's code: \url{https://deanattali.com/2015/04/21/r-package-shiny-app/}
 }

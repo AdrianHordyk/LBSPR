@@ -413,7 +413,7 @@ plotTarg(MyPars, LenDat, yr=yr)
 ```
 
 # Shiny Applications
-The [Shiny](http://shiny.rstudio.com/) package has made it possible to create user-friendly applications that use the computational power of R together with the interactivity of modern web browsers. A major advantage of this approach is that it allows a simple, user-friendly interface for using models built in R without having to interact directly with the R software.
+The [Shiny](https://shiny.rstudio.com/) package has made it possible to create user-friendly applications that use the computational power of R together with the interactivity of modern web browsers. A major advantage of this approach is that it allows a simple, user-friendly interface for using models built in R without having to interact directly with the R software.
 
 Several of the functions in the `LBSPR` package have been developed into interactive applications, which are included in the latest version of the package. 
 
