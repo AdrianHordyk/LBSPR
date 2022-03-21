@@ -59,7 +59,7 @@ shinyUI(tagList(tags$head(includeScript("google-analytics.js")),
 					  "Frequency - multi year no header" = "freqMulti",
 					  "Frequency - multi year header" = "freqMultiHead")
 					  ),
-		  actionButton("exmpData", "Load Example Data", icon("cloud-upload")),
+		  actionButton("exmpData", "Load Example Data", icon("cloud-upload-alt")),
 		  p(),
 		  uiOutput("downloadExample")
 		 ),
@@ -199,7 +199,7 @@ shinyUI(tagList(tags$head(includeScript("google-analytics.js")),
 	    uiOutput("ResultsText"),
 
 		h4(uiOutput("TableHeader")),
-		DT::dataTableOutput("Estimates"),
+		uiOutput("Estimates"),
 		uiOutput("downloadEsts"),
 
 		uiOutput("PSPRCirc"),

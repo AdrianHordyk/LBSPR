@@ -381,7 +381,7 @@ shinyServer(function(input, output, clientData, session) {
 	FALSE
   })
 
-  output$FileTable <- renderDataTable({
+  output$FileTable <- DT::renderDataTable({
 	if(!chkFileUp()) return(NULL)
     if(values$useExamp) {
 	  DF <- data.frame(Filename=ExampleDataFile(),
@@ -396,11 +396,7 @@ shinyServer(function(input, output, clientData, session) {
     }
     return(DF)
   }, options=list(pageLength=-1, searching = FALSE, paging = FALSE,
-     ordering=FALSE, info=FALSE, rowCallback = I(
-    'function(row, data) {
-        $("td", row).css("text-align", "center");
-      }'
-  )))
+     ordering=FALSE, info=FALSE))
 
   output$metadata <- renderUI({
     if(values$useExamp) return()
@@ -409,7 +405,7 @@ shinyServer(function(input, output, clientData, session) {
 	p("Does everything look right?"),
 	h4("File Metadata")))
   })
-  output$topdata <- renderDataTable({
+  output$topdata <- DT::renderDataTable({
     # Print out first 6 observations
     if(!chkFileUp()) return(NULL)
 	dat <- data()
@@ -729,13 +725,14 @@ shinyServer(function(input, output, clientData, session) {
   ### Results Tab ###
   output$ResultsText <- renderUI({
     if (values$DoneAssess == FALSE) {
-	  h4(HTML("Model hasn't been fitted"), style = "color:red")
-	} else {
-	  # fluidRow(
-	    # h3("Heading"),
-	    # p("Use the controls on the left to select ")
-	  # , style="padding: 0px 0px 0px 15px;")
-	}
+      # print(values$DoneAssess)
+      h4(HTML("Model hasn't been fitted"), style = "color:red")
+    } else {
+      # fluidRow(
+      # h3("Heading"),
+      # p("Use the controls on the left to select ")
+      # , style="padding: 0px 0px 0px 15px;")
+    }
   })
 
   ### Table of Estimates ###
@@ -803,18 +800,23 @@ shinyServer(function(input, output, clientData, session) {
 	DF
   })
 
-  output$Estimates <- renderDataTable({
+  output$Estimates <- renderUI({
     if (!values$DoneAssess) return("")
     if (!"table" %in% input$pTypes) return("")
-	GetEstimates()
+    DT::dataTableOutput("Estimates_Table")
+  })
+
+  output$Estimates_Table <- DT::renderDataTable({
+    GetEstimates()
   }, options=list(pageLength=-1, searching = FALSE, paging = FALSE,
-     ordering=FALSE, info=FALSE)
+                  ordering=FALSE, info=FALSE)
   # }, options=list(pageLength=-1, searching = FALSE, paging = FALSE,
-     # ordering=FALSE, info=FALSE, rowCallback = I(
-    # 'function(row, data) {
-        # $("td", row).css("text-align", "center");
-      # }'))
-	)
+  # ordering=FALSE, info=FALSE, rowCallback = I(
+  # 'function(row, data) {
+  # $("td", row).css("text-align", "center");
+  # }'))
+  )
+
 
   output$downloadEsts <- renderUI({
     if (!values$DoneAssess) return("")
