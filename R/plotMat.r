@@ -39,7 +39,7 @@ plotMat <- function(LB_obj=NULL, size.axtex=12, size.title=14, size.leg=12, useS
 	plot.title = element_text(lineheight=.8, face="bold"),
 	legend.text=element_text(size=size.leg),
 	legend.title=element_text(size=size.leg))
-	
+
   if (class(LB_obj) == "LB_obj") {
     if (length(LB_obj@Ests)>0 & (class(LB_obj@Years) != "numeric" & class(LB_obj@Years) != "integer")) {
       warning("Years must be numeric values", call. = FALSE)
@@ -62,38 +62,44 @@ plotMat <- function(LB_obj=NULL, size.axtex=12, size.title=14, size.leg=12, useS
       SL50 <- LB_obj@SL50
       SL95 <- LB_obj@SL95
     }
+
+    colourCount <- length(years)
+    getPalette <- colorRampPalette(brewer.pal(12, "Set3"))
+    cols <- rep(getPalette(min(12, colourCount)),5)[1:colourCount]
+
     if (length(SL50) > 0 & (length(years) == 1 | length(SL50) < 2)) {
       LenSel <- 1.0/(1+exp(-log(19)*(Lens-(SL50))/((SL95)-(SL50))))
       longSel <- data.frame(Lens=Lens, Selectivity=LenSel, Maturity=LenMat)
-	  longSel <- gather(longSel, "Line", "Proportion", 2:3)
-	  mplot <- ggplot(longSel, aes(x=Lens, y=Proportion)) +
+      longSel <- gather(longSel, "Line", "Proportion", 2:3)
+      longSel$Line <- factor(longSel$Line, levels=c('Selectivity', 'Maturity'), ordered=TRUE)
+      mplot <- ggplot(longSel, aes(x=Lens, y=Proportion)) +
         geom_line(aes(color=Line), size=1.5) +
-	    xlab(XLab) +
+        xlab(XLab) +
         ylab("Proportion") +
-	    guides(color=guide_legend(title="")) +
-	    theme_bw() +
-	    theme(axis.text=element_text(size=size.axtex),
-        axis.title=element_text(size=size.title,face="bold"), legend.position="top",
-	    plot.title = element_text(lineheight=.8, face="bold"),
-	    legend.text=element_text(size=size.leg),
-	    legend.title=element_text(size=size.leg))
+        guides(color=guide_legend(title="")) +
+        theme_bw() +
+        scale_color_manual(values = c(cols, "black")) +
+        theme(axis.text=element_text(size=size.axtex),
+              axis.title=element_text(size=size.title,face="bold"), legend.position="top",
+              plot.title = element_text(lineheight=.8, face="bold"),
+              legend.text=element_text(size=size.leg),
+              legend.title=element_text(size=size.leg))
     }
     if (length(SL50) > 0 & (length(years) > 1 | length(SL50) > 1)) { # Multiple years exist
       LenSel <- sapply(1:length(years), function(X)
-	    1.0/(1+exp(-log(19)*(Lens-(SL50[X]))/((SL95[X])-(SL50[X])))))
+        1.0/(1+exp(-log(19)*(Lens-(SL50[X]))/((SL95[X])-(SL50[X])))))
       LenSel <- data.frame(LenSel, check.names=FALSE)
-	  colnames(LenSel) <- years
+      colnames(LenSel) <- years
       longSel <- gather(LenSel, "Year", "SelDat")
-	  colourCount <- length(years)
-	  getPalette <- colorRampPalette(brewer.pal(12, "Set3"))
-	  cols <- rep(getPalette(min(12, colourCount)),5)[1:colourCount]
-	  longSel$Lens <- DF$Lens
-	  suppressMessages(
-	    mplot <-  mplot +
-	      guides(color=guide_legend(title="Est. Selectivity")) +
-	      scale_color_manual(values = c(cols, "black")) +
-	      geom_line(aes(x=Lens, y=SelDat, color=Year), longSel, size=1)
-	  )
+      colourCount <- length(years)
+      cols <- rep(getPalette(min(12, colourCount)),5)[1:colourCount]
+      longSel$Lens <- DF$Lens
+      suppressMessages(
+        mplot <-  mplot +
+          guides(color=guide_legend(title="Est. Selectivity")) +
+          scale_color_manual(values = c(cols, "black")) +
+          geom_line(aes(x=Lens, y=SelDat, color=Year), longSel, size=1)
+      )
     }
   }
   if (!(is.null(Title)) & class(Title)=="character")  mplot <- mplot + ggtitle(Title)

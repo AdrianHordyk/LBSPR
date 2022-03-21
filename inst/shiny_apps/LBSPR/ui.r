@@ -130,7 +130,7 @@ shinyUI(tagList(tags$head(includeScript("google-analytics.js")),
 		  tags$li("If you are happy with everything, go to the 'Examine Results' tab")
 		),
 		uiOutput("Histogram"),
-	    uiOutput("MatSelPlot")
+		uiOutput("MatSelPlot")
 	  )
 	)
   ),
