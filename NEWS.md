@@ -1,3 +1,10 @@
+# LBSPR 0.1.7
+
+## Minor Changes
+- LBSPR Shiny App: Made colors the same on both maturity plots
+- fix minor issue with table showing metadata for loaded dataset
+- fix minor UI error in Examine Results tab before data is loaded and model has been fit
+
 # LBSPR 0.1.6 
 
 ## Bug Fixes
