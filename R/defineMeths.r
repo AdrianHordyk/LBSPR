@@ -398,6 +398,7 @@ setMethod("initialize", "LB_lengths", function(.Object, file="none", LB_pars=NUL
 #' @slot NLL A numeric NLL values
 #' @slot maxFM A numeric of maximum estimated F/M value (note this is apical F)
 #' @slot SPRatsize A vector of cumulative SPR at length (currently only works for GTG model)
+#' @slot Select Selectivities - gear, MLL, and realized (with discard mortality)
 #' @slot fitLog A vector of error logs for each fit. 0 means everything is okay.
 #' @export
 setClass("LB_obj", representation(
@@ -416,6 +417,7 @@ setClass("LB_obj", representation(
   NLL = "vector",
   maxFM = "numeric",
   SPRatsize = "vector",
+  Select='data.frame',
   fitLog = "vector"
   ), contains=c("LB_pars", "LB_lengths"))
 

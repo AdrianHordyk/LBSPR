@@ -211,13 +211,15 @@ LBSPRsim_ <- function(LB_pars=NULL, Control=list(), verbose=TRUE, doCheck=TRUE) 
     for (L in 1:length(LMids)) { # integrate over time in each size class
       NatLUF[L, ] <- (NPRUnfished[L,] - NPRUnfished[L+1,])/MKMat[L, ]
       NatLF[L, ] <- (NPRFished[L,] - NPRFished[L+1,])/ZKLMat[L, ]
-	  FecGTG[L, ] <- NatLUF[L, ] * FecLengtg[L, ]
+	    FecGTG[L, ] <- NatLUF[L, ] * FecLengtg[L, ]
     }
 
-    SelLen2 <- 1.0/(1+exp(-log(19)*(LMids-SL50)/(SL95-SL50))) # Selectivity-at-Length
+    SelLen2a <- 1.0/(1+exp(-log(19)*(LMids-SL50)/(SL95-SL50))) # Selectivity-at-Length
+    # add MLL
+    SelLen2 <- SelLen2a* (plegal2 + (1-plegal2) * LB_pars@fDisc)
+
     NatLV <- NatLUF * SelLen2 # Unfished Vul Pop
     NatLC <- NatLF * SelLen2 # Catch Vul Pop
-
 
     # Aggregate across GTGs
     Nc <- apply(NatLC, 1, sum)/sum(apply(NatLC, 1, sum))
@@ -357,5 +359,6 @@ LBSPRsim_ <- function(LB_pars=NULL, Control=list(), verbose=TRUE, doCheck=TRUE) 
                                              "VulnF"))), 6)
   LBobj@maxFM <- maxFM
   LBobj@SPRatsize <- SPRatsize
+  LBobj@Select <- data.frame(Gear.Select=SelLen2a, MLL=plegal2, Exploit.Select=SelLen2)
   LBobj
 }
