@@ -1,3 +1,8 @@
+# LBSPR 0.1.8
+
+## Bug Fixes
+- fix plotting for the minimum legal length in LBSPRsim
+
 # LBSPR 0.1.7
 
 ## Minor Changes
