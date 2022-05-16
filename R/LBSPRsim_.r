@@ -216,6 +216,7 @@ LBSPRsim_ <- function(LB_pars=NULL, Control=list(), verbose=TRUE, doCheck=TRUE) 
 
     SelLen2a <- 1.0/(1+exp(-log(19)*(LMids-SL50)/(SL95-SL50))) # Selectivity-at-Length
     # add MLL
+    if(length(LB_pars@fDisc)<1) LB_pars@fDisc <- 0
     SelLen2 <- SelLen2a* (plegal2 + (1-plegal2) * LB_pars@fDisc)
 
     NatLV <- NatLUF * SelLen2 # Unfished Vul Pop
