@@ -179,6 +179,7 @@ LBSPRsim_ <- function(LB_pars=NULL, Control=list(), verbose=TRUE, doCheck=TRUE) 
     if (length(LB_pars@MLL)>0) {
       if (!is.finite((LB_pars@MLL))) stop("MLL slot is not finite", call.=FALSE)
       if (!is.finite((LB_pars@sdLegal))) stop("sdLegal slot is not finite", call.=FALSE)
+      if (!is.finite((LB_pars@fDisc))) stop("fDisc slot is not finite", call.=FALSE)
       plegal <- 1/(1+exp(-(LBins-LB_pars@MLL)/LB_pars@sdLegal))
       plegal2 <- 1/(1+exp(-(LMids-LB_pars@MLL)/LB_pars@sdLegal))
       FKL <- FKL * (plegal + (1-plegal) * LB_pars@fDisc)

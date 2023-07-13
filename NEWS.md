@@ -1,3 +1,8 @@
+# LBSPR 0.1.9
+
+## Minor Changes
+- add check if `fDisc` is missing when minimum legal length is used
+
 # LBSPR 0.1.8
 
 ## Bug Fixes
